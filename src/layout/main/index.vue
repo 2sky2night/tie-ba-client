@@ -16,7 +16,7 @@ import type { ScrollbarInst } from 'naive-ui'
 const route = useRoute()
 const scrollIns = ref<ScrollbarInst | null>(null)
 
-// 监听路由url更新时页面滚动置顶部
+// 监听路由url更新时Main组件视图滚动置顶部
 watch(() => route.fullPath, () => {
   if (scrollIns.value) {
     scrollIns.value.scrollTo({
@@ -33,7 +33,6 @@ watch(() => route.fullPath, () => {
 .main-container {
   margin: 0 auto;
   width: var(--main-width);
-  background-color: skyblue;
   overflow-y: auto;
   overflow-x: hidden;
   height: calc(100vh - var(--header-hight));

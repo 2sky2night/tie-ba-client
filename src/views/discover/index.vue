@@ -1,17 +1,15 @@
 <template>
-  <div class="header-container">
-
+  <div class="page-container">
+    发现
   </div>
 </template>
 
 <script lang='ts' setup>
 defineOptions({
-  name:'Header'
+  name:'Discover'
 })
 </script>
 
 <style scoped lang='scss'>
-.header-container{
-  width: var(--main-width);
-}
+
 </style>

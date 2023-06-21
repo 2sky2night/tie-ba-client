@@ -13,6 +13,5 @@ defineOptions({
 <style scoped lang='scss'>
 .tab-bar-container{
   height: 100%;
-  background-color: yellow;
 }
 </style>

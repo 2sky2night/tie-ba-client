@@ -1,13 +1,18 @@
-
-:root{
+:root {
   /*-----layout布局------*/
   /*顶部导航栏的高度*/
-  --header-hight:55px;
+  --header-hight: 55px;
   /*主视图宽度*/
-  --main-width:1400px;
+  --main-width: 1400px;
   /*底部TabBar高度*/
-  --footer-hight:60px;
-  /*-----layout布局------*/
+  --footer-hight: 60px;
+
+  /*------颜色------*/
+  --primary-color: #2080f0;
+  --border-color-1:rgb(224, 224, 230);
+  --shadow-color-1:#eee;
+
+  /*----时间-----*/
+  --time-normal:.3s;
+
 }
-
-

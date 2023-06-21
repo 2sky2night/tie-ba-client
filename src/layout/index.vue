@@ -39,6 +39,7 @@ defineOptions({
     display: flex;
     justify-content: center;
     min-height: var(--header-hight);
+    border-bottom: 1px solid var(--border-color-1);
   }
 
   .main-content {
@@ -47,7 +48,9 @@ defineOptions({
   }
 
   .footer-content {
+    border-top: 1px solid var(--border-color-1);
     display: none;
+    box-shadow: 0 -5px 10px var(--shadow-color-1);
     min-height: var(--footer-hight);
   }
 }

@@ -1,17 +1,15 @@
 <template>
-  <div class="header-container">
-
+  <div class="page-container">
+    登录
   </div>
 </template>
 
 <script lang='ts' setup>
 defineOptions({
-  name:'Header'
+  name:'Login'
 })
 </script>
 
 <style scoped lang='scss'>
-.header-container{
-  width: var(--main-width);
-}
+
 </style>
