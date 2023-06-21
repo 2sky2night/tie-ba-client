@@ -3,6 +3,10 @@ lockfileVersion: 5.4
 specifiers:
   '@types/node': ^20.3.1
   '@types/nprogress': ^0.2.0
+  '@vicons/antd': ^0.12.0
+  '@vicons/fa': ^0.12.0
+  '@vicons/ionicons4': ^0.12.0
+  '@vicons/ionicons5': ^0.12.0
   '@vitejs/plugin-vue': ^4.1.0
   axios: ^1.4.0
   naive-ui: ^2.34.4
@@ -28,6 +32,10 @@ dependencies:
 devDependencies:
   '@types/node': 20.3.1
   '@types/nprogress': 0.2.0
+  '@vicons/antd': 0.12.0
+  '@vicons/fa': 0.12.0
+  '@vicons/ionicons4': 0.12.0
+  '@vicons/ionicons5': 0.12.0
   '@vitejs/plugin-vue': 4.2.3_vite@4.3.9+vue@3.3.4
   naive-ui: 2.34.4_vue@3.3.4
   sass: 1.63.4
@@ -358,6 +366,22 @@ packages:
 
   /@types/nprogress/0.2.0:
     resolution: {integrity: sha512-1cYJrqq9GezNFPsWTZpFut/d4CjpZqA0vhqDUPFWYKF1oIyBz5qnoYMzR+0C/T96t3ebLAC1SSnwrVOm5/j74A==}
+    dev: true
+
+  /@vicons/antd/0.12.0:
+    resolution: {integrity: sha512-C0p6aO1EmGG1QHrqgUWQS1No20934OdWSRQshM5NIDK5H1On6tC26U0hT6Rmp40KfUsvhvX5YW8BoWJdNFifPg==}
+    dev: true
+
+  /@vicons/fa/0.12.0:
+    resolution: {integrity: sha512-g2PIeJLsTHUjt6bK63LxqC0uYQB7iu+xViJOxvp1s8b9/akpXVPVWjDTTsP980/0KYyMMe4U7F/aUo7wY+MsXA==}
+    dev: true
+
+  /@vicons/ionicons4/0.12.0:
+    resolution: {integrity: sha512-i+7YwlpCrqD6m9esbZLy1bpVQlh4CKugtS3OzgfNw6BLTQQK6HT7drktaJgcESj/BTr4avdNbAtMQXx56wSVMg==}
+    dev: true
+
+  /@vicons/ionicons5/0.12.0:
+    resolution: {integrity: sha512-Iy1EUVRpX0WWxeu1VIReR1zsZLMc4fqpt223czR+Rpnrwu7pt46nbnC2ycO7ItI/uqDLJxnbcMC7FujKs9IfFA==}
     dev: true
 
   /@vitejs/plugin-vue/4.2.3_vite@4.3.9+vue@3.3.4:

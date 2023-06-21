@@ -1,12 +1,10 @@
 <template>
-  <div class="page-container">
-    搜索
-  </div>
+  <div class="logo-container"></div>
 </template>
 
 <script lang='ts' setup>
 defineOptions({
-  name:'Search'
+  name:'Logo'
 })
 </script>
 

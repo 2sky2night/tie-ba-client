@@ -17,7 +17,37 @@ const routes: RouteRecordRaw[] = [
     meta: {
       needAuth: false,
       title:'发现'
-    }
+    },
+    redirect:'/discover/hot',
+    children: [
+      {
+        path: '/discover/hot',
+        name:'discover-hot',
+        component: () => import("@/views/discover/children/hot/index.vue"),
+        meta: {
+          needAuth: false,
+          title:'发现热帖'
+        },
+      },
+      {
+        path: '/discover/bar',
+        name:'discover-bar',
+        component: () => import("@/views/discover/children/bar/index.vue"),
+        meta: {
+          needAuth: false,
+          title:'发现吧'
+        },
+      },
+      {
+        path: '/discover/comment',
+        name:'discover-comment',
+        component: () => import("@/views/discover/children/comment/index.vue"),
+        meta: {
+          needAuth: false,
+          title:'发现热评'
+        },
+      }
+    ]
   },
   {
     path: '/login',

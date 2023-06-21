@@ -1,12 +1,10 @@
 <template>
-  <div class="page-container">
-    搜索
-  </div>
+  <div>发现吧</div>
 </template>
 
 <script lang='ts' setup>
 defineOptions({
-  name:'Search'
+  name:'DiscoverBar'
 })
 </script>
 
