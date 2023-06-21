@@ -1,18 +1,13 @@
 <template>
-
+  <n-message-provider>
+    <Layout />
+  </n-message-provider>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import User from './apis/user';
-onMounted(() => {
-  User.LoginAPI({
-    username: '123',
-    password:'123132'
-  })
-})
+import Layout from '@/layout/index.vue'
 </script>
 
-<style scoped lang="scss">
-
+<style  lang="scss">
+@import url('@/styles/reset.scss');
 </style>

@@ -10,6 +10,8 @@ declare module 'vue' {
     A: typeof import('./src/components/A.vue')['default']
     NButton: typeof import('naive-ui')['NButton']
     NIcon: typeof import('naive-ui')['NIcon']
+    NMessageProvider: typeof import('naive-ui')['NMessageProvider']
+    NScrollbar: typeof import('naive-ui')['NScrollbar']
     NSpace: typeof import('naive-ui')['NSpace']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

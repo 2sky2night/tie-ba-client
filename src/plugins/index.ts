@@ -10,7 +10,8 @@ import 'vfonts/Lato.css'
 import 'vfonts/FiraCode.css'
 // 引入进度条nprogress样式
 import 'nprogress/nprogress.css'
-
+// 引入全局样式
+import '@/styles/index.css'
 export default  {
   install(app){
     app.use(store)

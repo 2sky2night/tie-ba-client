@@ -1,11 +1,11 @@
 /**
  * 基础请求响应体
  */
-export default interface BaseResponse <T=any> {
-    /**
-   * 请求的结果
-   */
-    data:T
+export default interface BaseResponse<T = any> {
+  /**
+ * 请求的结果
+ */
+  data: T
   /**
    * 业务状态码
    */
