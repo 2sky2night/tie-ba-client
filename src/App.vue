@@ -1,5 +1,5 @@
 <template>
-   <n-config-provider :theme-overrides="theme">  
+  <n-config-provider :theme-overrides="theme">
     <n-message-provider>
       <Layout />
     </n-message-provider>
@@ -15,4 +15,14 @@ import theme from './config/theme'
 
 <style  lang="scss">
 @import url('@/styles/reset.scss');
+
+.page-container {
+  min-height: calc(100vh - var(--header-hight));
+}
+
+@media screen and (max-width:650px) {
+  .page-container {
+    min-height: calc(100vh - var(--header-hight) - var(--footer-hight));
+  }
+}
 </style>

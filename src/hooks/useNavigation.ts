@@ -23,11 +23,21 @@ export default function () {
     router.push('/user')
   }
 
+  function goLogin () {
+    router.push('/login')
+  }
+
+  function goRegister () {
+    router.push('/register')
+  }
+
   return {
     goHome,
     goDiscover,
     goMy,
-    goUser
+    goUser,
+    goLogin,
+    goRegister
   }
 
 }

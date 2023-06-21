@@ -303,3 +303,34 @@ ts.config.json
 成功：
 
 ![image-20230620172706891](D:\program_ym\tie-ba\static\image-20230620172706891.png)
+
+3.在ts项目中给window全局对象添加属性
+
+这样定义后，访问window对象上的该属性时就会有正确的ts支持
+
+```ts
+import type { MessageApi } from 'naive-ui'
+export { };
+
+declare global {
+  interface Window {
+    /**
+     * naive-ui的消息组件api
+     */
+    $message: MessageApi
+  }
+}
+```
+
+
+
+4.scss的新写法
+
+​	原先v-deep的写法会生效，但是会报警告
+
+![image-20230621173759351](C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\image-20230621173759351.png)
+
+三、页面
+
+1.登录
+
