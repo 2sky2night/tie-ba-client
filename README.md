@@ -209,7 +209,39 @@ defineOptions({
 </style>
 ```
 
+1.3搭建tabbar
 
+在登录和未登录状态下有不同的tabbar项，后期根据仓库用户信息来判断是否登录来动态渲染tabbar
+
+```ts
+<template>
+  <div class="tab-bar-container">
+    <TabBarItem v-for="item in tabBarList" :path="item.path" :title="item.title" :icon="item.icon" :key="item.path"></TabBarItem>
+  </div>
+</template>
+
+<script lang='ts' setup>
+// hooks
+import {reactive} from 'vue'
+// components
+import TabBarItem from './components/TabBarItem.vue';
+// configs
+import { authTabBar, noAuthTabBar } from './configs'
+
+const tabBarList = reactive(Object.assign([],noAuthTabBar))
+
+defineOptions({
+  name: 'TabBar'
+})
+</script>
+
+<style scoped lang='scss'>
+.tab-bar-container {
+  height: 100%;
+  display: flex;
+}
+</style>
+```
 
 
 

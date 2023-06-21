@@ -39,7 +39,7 @@ watch(() => route.fullPath, () => {
 }
 
 // 显示tabbar
-@media screen and (max-width:800px) {
+@media screen and (max-width:650px) {
   .main-container {
     height: calc(100vh - var(--header-hight) - var(--footer-hight));
   }

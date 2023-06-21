@@ -1,17 +1,27 @@
 <template>
   <div class="tab-bar-container">
-
+    <TabBarItem v-for="item in tabBarList" :path="item.path" :title="item.title" :icon="item.icon" :key="item.path"></TabBarItem>
   </div>
 </template>
 
 <script lang='ts' setup>
+// hooks
+import {reactive} from 'vue'
+// components
+import TabBarItem from './components/TabBarItem.vue';
+// configs
+import { authTabBar, noAuthTabBar } from './configs'
+
+const tabBarList = reactive(Object.assign([],noAuthTabBar))
+
 defineOptions({
-  name:'TabBar'
+  name: 'TabBar'
 })
 </script>
 
 <style scoped lang='scss'>
-.tab-bar-container{
+.tab-bar-container {
   height: 100%;
+  display: flex;
 }
 </style>
