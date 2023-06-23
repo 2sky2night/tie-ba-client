@@ -31,13 +31,18 @@ export default function () {
     router.push('/register')
   }
 
+  function goEdit() {
+    router.push('/edit')
+  }
+
   return {
     goHome,
     goDiscover,
     goMy,
     goUser,
     goLogin,
-    goRegister
+    goRegister,
+    goEdit
   }
 
 }

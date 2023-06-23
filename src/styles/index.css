@@ -21,6 +21,15 @@
   user-select: none;
 }
 
+/*文字悬浮高亮*/
+.text{
+  transition: var(--time-normal);
+  cursor: pointer;
+}
+.text:hover{
+  color:var(--primary-color);
+}
+
 .mb-5{
   margin-bottom: 5px;
 }
@@ -44,5 +53,5 @@
   margin-right: 10px;
 }
 .ml-10{
-  margin-left: 10;
+  margin-left: 10px;
 }

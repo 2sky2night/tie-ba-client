@@ -1,5 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router';
-import { loginRoutesHook } from './guards'
+import { loginRoutesHook, userRoutesHooks } from './guards'
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -85,6 +86,25 @@ const routes: RouteRecordRaw[] = [
       needAuth: true,
       title: '我的'
     }
+  },
+  {
+    path: '/edit',
+    name: 'edit',
+    component: () => import("@/views/edit/index.vue"),
+    meta: {
+      needAuth: true,
+      title: '编辑'
+    }
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: () => import("@/views/user/index.vue"),
+    meta: {
+      needAuth: false,
+      title: '用户'
+    },
+    beforeEnter: userRoutesHooks
   }
 ]
 

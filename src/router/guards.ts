@@ -62,3 +62,22 @@ export const loginRoutesHook: NavigationGuardWithThis<undefined> = (to, from, ne
     next()
   }
 }
+
+export const userRoutesHooks: NavigationGuardWithThis<undefined> = (to, from, next) => {
+  const userStore = useUserStore()
+  if (to.query.uid) {
+    const uid = + to.query.uid
+    if (isNaN(uid)) {
+      window.$message.error('参数非法!')
+      next(false)
+    } else if (uid === userStore.userData.uid) {
+      // 当前登陆的用户不能访问用户页
+      next('/my')
+    } else {
+      next()
+    }
+  } else {
+    window.$message.error('未参数携带!')
+    next('/')
+  }
+}
