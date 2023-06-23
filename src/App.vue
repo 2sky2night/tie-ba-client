@@ -1,7 +1,8 @@
 <template>
-  <n-config-provider :theme-overrides="theme">
+  <n-config-provider :theme-overrides="theme" :theme="themeStore.theme">
     <n-message-provider>
       <Layout />
+      <n-global-style />
     </n-message-provider>
   </n-config-provider>
 </template>
@@ -11,6 +12,16 @@
 import Layout from '@/layout/index.vue'
 // configs
 import theme from './config/theme'
+// hooks
+import useThemeStore from '@/store/theme'
+
+const themeStore = useThemeStore()
+
+// 若当前为深色主题 则设置对应深色主题
+if (themeStore.isDark) {
+  themeStore.setDarkTheme()
+}
+
 </script>
 
 <style  lang="scss">

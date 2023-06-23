@@ -9,7 +9,7 @@ import { UserEdit,UserRegular,UserPlus } from '@vicons/fa'
  * @param icon 对应图标组件
  * @returns 
  */
-const renderIcon = (icon: Component) => {
+export const renderIcon = (icon: Component) => {
   return () => {
     return h(NIcon, null, {
       default: () => h(icon)

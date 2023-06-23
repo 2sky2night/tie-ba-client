@@ -1,7 +1,7 @@
 <template>
   <div class="nav-container">
     <template v-for="item in routesList">
-      
+
       <template v-if="item.children">
         <NavigationItem :key="item.path" :path="item.path" :title="item.title" :children="item.children" />
       </template>
@@ -20,9 +20,26 @@ import { authNavigations, noAuthNavigations } from './configs'
 // components
 import NavigationItem from './components/NavigationItem.vue';
 // hooks
-import { reactive } from 'vue'
+import { reactive,watch } from 'vue'
+import useUserStore from '@/store/user'
+//types 
+import type { NavigationItemProps } from '@/types/components/layout'
 
-const routesList = reactive(JSON.parse(JSON.stringify(noAuthNavigations)))
+const userStore = useUserStore()
+
+const routesList = reactive<NavigationItemProps[]>([])
+
+// 根据登录状态动态渲染导航栏
+watch(() => userStore.isLogin, (v) => {
+  routesList.length = 0
+  if (v) {
+    // 登录了
+    authNavigations.forEach(ele=>routesList.push(ele))
+  } else {
+    // 未登录
+    noAuthNavigations.forEach(ele => routesList.push(ele))
+  }
+},{immediate:true})
 
 defineOptions({
   name: 'Navigations'
