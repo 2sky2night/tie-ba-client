@@ -108,7 +108,7 @@ const onHandleSubmit = async () => {
       await formRef.value.validate()
       await userStore.toLogin(userData.username, userData.password)
       // 登录成功进入我的页面
-      router.push('/my')
+      router.replace('/my')
       message.success('登录成功!')
     }
   } catch (error) {

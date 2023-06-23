@@ -21,7 +21,7 @@
 <script lang='ts' setup>
 // hooks
 import { useRouter } from 'vue-router';
-import { reactive, watch, h } from 'vue'
+import { reactive, watch } from 'vue'
 import useUserStore from '@/store/user';
 import useThemeStore from '@/store/theme'
 import { storeToRefs } from 'pinia';
@@ -58,7 +58,7 @@ const onHandleSelect = (key: string) => {
     console.log(key)
     switch (key as Actions) {
       case 'theme': themeStore.toToggleTheme(); break;
-      case 'logout': break;
+      case 'logout': userStore.toLogout(); break;
     }
   }
 }
@@ -95,6 +95,24 @@ watch(() => userStore.isLogin, (v: boolean) => {
   }
   addThemeBtn()
 }, { immediate: true })
+
+
+// 主题发生变化时,重新渲染菜单栏中的主题按钮
+watch(() => themeStore.isDark, (v) => {
+
+  menu.some(ele => {
+    if (ele.key === 'theme') {
+      if (v) {
+        ele.label = '深色模式'
+        ele.icon = renderIcon(Moon)
+      } else {
+        ele.label = '浅色模式'
+        ele.icon = renderIcon(SunnyOutline)
+      }
+      return true
+    }
+  })
+})
 
 defineOptions({
   name: 'Menu'

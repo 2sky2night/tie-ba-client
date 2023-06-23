@@ -46,19 +46,19 @@ export const authNavigations: NavigationItemProps[] = [
     children: [
       {
         path: '/discover/hot',
-        title:'发现热帖'
+        title:'热帖'
       },
       {
         path: '/discover/bar',
-        title:'发现吧'
+        title:'吧'
       },
       {
         path: '/discover/comment',
-        title:'发现评论'
+        title:'评论'
       },
       {
         path: '/discover/article',
-        title:'发现帖子'
+        title:'帖子'
       }
     ]
   },

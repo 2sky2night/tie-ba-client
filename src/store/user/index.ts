@@ -1,6 +1,7 @@
 // hooks
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import useNavigation from '@/hooks/useNavigation'
 // apis
 import { loginAPI } from '@/apis/login'
 import { getUserInfoAPI } from '@/apis/my/index'
@@ -27,6 +28,8 @@ const useUserStore = defineStore(
             username: '',
             createTime: ''
         })
+
+        const { goLogin } = useNavigation()
 
         /**
          * 用户登录
@@ -64,10 +67,23 @@ const useUserStore = defineStore(
         }
 
         /**
+         * 清空用户数据并清除本地数据(token和用户数据) 返回登陆页
+         */
+        const toLogout = () => {
+            token.value = null
+            userData.value.avatar = ''
+            userData.value.createTime = ''
+            userData.value.username = ''
+            userData.value.uid = 0
+            goLogin()
+            Token.removeToken()
+        }
+
+        /**
          * 用户是否登录
          */
         const isLogin = computed(() => {
-            return token.value&&userData.value.uid&&userData.value.username?true:false
+            return token.value && userData.value.uid && userData.value.username ? true : false
         })
 
 
@@ -76,7 +92,8 @@ const useUserStore = defineStore(
             userData,
             isLogin,
             toLogin,
-            toGetUserInfo
+            toGetUserInfo,
+            toLogout
         }
     },
     {
