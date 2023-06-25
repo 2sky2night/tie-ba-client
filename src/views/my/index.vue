@@ -18,7 +18,7 @@
             <div class="text mr-10 data-item">粉丝: <span>{{ userInfor.fans_count }}</span></div>
             <div class="text mr-10 data-item">帖子: <span>{{ userInfor.article.article_count }}</span></div>
           </div>
-          <n-button size="small" text style="font-size: 13px;">更多信息</n-button>
+          <n-button size="small" text style="font-size: 13px;" @click="onHandleShowMore">更多信息</n-button>
         </div>
         <div class="edit">
           <n-button @click="goEdit" size="small" type="primary">
@@ -45,6 +45,7 @@ import { ref, onBeforeMount, computed } from 'vue'
 import useNavigation from '@/hooks/useNavigation'
 // components
 import { AngleRight } from '@vicons/fa'
+import userDataModel from '@/render/modal/message/userData'
 
 // 用户信息
 const userInfor = ref<UserInfoResponse | null>(null)
@@ -57,9 +58,21 @@ const total = computed(() => {
   }
   return 0
 })
+
+/**
+ * 展示用户更多信息
+ */
+const onHandleShowMore = () => {
+  userDataModel()
+}
+
 onBeforeMount(async () => {
-  const res = await getUserInfoAPI()
-  userInfor.value = res.data
+  try {
+    const res = await getUserInfoAPI()
+    userInfor.value = res.data
+  } catch (error) {
+    console.log(error)
+  }
 })
 
 defineOptions({
@@ -81,6 +94,11 @@ defineOptions({
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+
+      .desc {
+        box-sizing: border-box;
+        padding-right: 90px;
+      }
 
       .username {
         .title {
@@ -133,7 +151,8 @@ defineOptions({
         width: 100%;
         height: 150px;
         font-size: 13px;
-        .data{
+
+        .data {
           .data-item {
             font-size: 13px;
           }
@@ -141,5 +160,4 @@ defineOptions({
       }
     }
   }
-}
-</style>
+}</style>@/render/modal/message/userData

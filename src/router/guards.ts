@@ -63,7 +63,7 @@ export const loginRoutesHook: NavigationGuardWithThis<undefined> = (to, from, ne
   }
 }
 
-export const userRoutesHooks: NavigationGuardWithThis<undefined> = (to, from, next) => {
+export const userRoutesHooks: NavigationGuardWithThis<undefined> = (to, _from, next) => {
   const userStore = useUserStore()
   if (to.query.uid) {
     const uid = + to.query.uid

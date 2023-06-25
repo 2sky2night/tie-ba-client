@@ -2,6 +2,8 @@ import { star, end } from '@/plugins/nprogress'
 import axios, { type AxiosError, type AxiosRequestConfig, type AxiosResponse } from 'axios'
 import type BaseResponse from './types'
 import Token from '../token'
+import router from '@/router'
+import useUserStore from '@/store/user'
 
 // axios实例
 const http = axios.create({
@@ -45,6 +47,17 @@ http.interceptors.response.use(
   (error: AxiosError<BaseResponse>) => {
     end()
     console.log('响应拦截器走的是失败的回调', error)
+    if (error.response && error.response.status === 401) {
+      // token过期或没有token出现的错误 返回登陆页并注销用户
+      const userStore = useUserStore()
+      if (userStore.isLogin) {
+        // 若用户登陆 则注销用户信息
+        userStore.toLogout()
+      } else {
+        // 未登录 返回登陆页
+        router.replace('/login')
+      }
+    }
     if (error.response) {
       window.$message.error(error.response.data.message)
     } else {

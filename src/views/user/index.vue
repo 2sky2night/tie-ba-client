@@ -21,8 +21,8 @@
           <n-button size="small" text style="font-size: 13px;">更多信息</n-button>
         </div>
         <div class="edit">
-          <n-button :title="userInfor.is_followed?'取消关注':'关注'" :loading="followLoading" @click="toToggleFollowUser" size="small"
-            :type="status ? 'primary' : 'default'">
+          <n-button :title="userInfor.is_followed ? '取消关注' : '关注'" :loading="followLoading" @click="toToggleFollowUser"
+            size="small" :type="status ? 'primary' : 'default'">
             <span style="font-size: 12px; ">
               {{ status === 1 ? '互相关注' : status === 2 ? '已关注' : '关注' }}
             </span>
@@ -178,6 +178,11 @@ defineOptions({
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+
+      .desc {
+        box-sizing: border-box;
+        padding-right: 80px;
+      }
 
       .username {
         .title {

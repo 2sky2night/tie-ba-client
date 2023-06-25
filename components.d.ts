@@ -7,11 +7,11 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    FollowBtn: typeof import('./src/components/common/followBtn/index.vue')['default']
     Logo: typeof import('./src/components/common/Logo/index.vue')['default']
+    Message: typeof import('./src/components/modal/message/index.vue')['default']
+    Modal: typeof import('./src/components/modal/index.vue')['default']
     NAvatar: typeof import('naive-ui')['NAvatar']
     NButton: typeof import('naive-ui')['NButton']
-    NCheckbox: typeof import('naive-ui')['NCheckbox']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
     NDropdown: typeof import('naive-ui')['NDropdown']
     NForm: typeof import('naive-ui')['NForm']
@@ -26,5 +26,6 @@ declare module 'vue' {
     NTabs: typeof import('naive-ui')['NTabs']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    UserData: typeof import('./src/components/common/UserData/index.vue')['default']
   }
 }
