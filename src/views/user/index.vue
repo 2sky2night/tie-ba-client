@@ -21,9 +21,10 @@
           <n-button size="small" text style="font-size: 13px;">更多信息</n-button>
         </div>
         <div class="edit">
-          <n-button @click="" size="small" :type="status?'primary':'default'">
+          <n-button :title="userInfor.is_followed?'取消关注':'关注'" :loading="followLoading" @click="toToggleFollowUser" size="small"
+            :type="status ? 'primary' : 'default'">
             <span style="font-size: 12px; ">
-              {{ status===1?'互相关注':status===2?'已关注':'关注' }}
+              {{ status === 1 ? '互相关注' : status === 2 ? '已关注' : '关注' }}
             </span>
           </n-button>
         </div>
@@ -35,21 +36,17 @@
 <script lang='ts' setup>
 // apis
 import { getUserProfileAPI } from '@/apis/user'
+import { followUserAPI, cancelFollowUserAPI } from '@/apis/public/user'
 // types
 import { UserProfileResponse } from '@/apis/user/types'
 // hooks
 import { ref, onBeforeMount, computed } from 'vue'
-import useNavigation from '@/hooks/useNavigation'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 import { useMessage } from 'naive-ui'
 import useUserStore from '@/store/user'
-// components
-import { AngleRight } from '@vicons/fa'
 
 // 用户信息
 const userInfor = ref<UserProfileResponse | null>(null)
-// 导航
-const {  } = useNavigation()
 // 路由元数据
 const route = useRoute()
 // 路由对象
@@ -65,6 +62,7 @@ const total = computed(() => {
 const message = useMessage()
 // 正在加载
 const isLoading = ref(true)
+const followLoading = ref(false)
 // 用户仓库
 const userStore = useUserStore()
 // 关注状态
@@ -109,10 +107,47 @@ const toGetUserData = async (uidString: string) => {
   }
 }
 
+/**
+ * 关注和取消关注用户
+ */
+const toToggleFollowUser = async () => {
+  try {
+
+    followLoading.value = true
+
+    if (!userStore.isLogin) {
+      message.warning('请先登录!')
+      return
+    }
+
+    if (userInfor.value) {
+      const uid = userInfor.value.uid
+      if (userInfor.value.is_followed) {
+        // 当前关注了用户 则取消关注
+        const res = await cancelFollowUserAPI(uid)
+        if (res.code === 200) {
+          // 取关成功 设置关注状态
+          userInfor.value.is_followed = false
+          message.success('取消关注成功!')
+        }
+      } else {
+        // 当前未关注用户 则关注用户
+        const res = await followUserAPI(uid)
+        if (res.code === 200) {
+          // 关注成功 设置关注状态
+          userInfor.value.is_followed = true
+          message.success('关注成功!')
+        }
+      }
+    }
+
+  } finally {
+    followLoading.value = false
+  }
+}
+
 // 初始化加载
-onBeforeMount(() => {
-  toGetUserData(route.query.uid as string)
-})
+onBeforeMount(() => toGetUserData(route.query.uid as string))
 
 // 路由更新时
 onBeforeRouteUpdate((to) => {

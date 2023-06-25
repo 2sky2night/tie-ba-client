@@ -33,7 +33,6 @@ const routesList = reactive<NavigationItemProps[]>([])
 // 根据登录状态动态渲染导航栏
 watch(() => userStore.isLogin, (v) => {
   routesList.length = 0
-  console.log('123')
   if (v) {
     // 登录了
     authNavigations.forEach(ele => routesList.push(ele))

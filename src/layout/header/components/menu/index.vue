@@ -26,7 +26,7 @@ import useUserStore from '@/store/user';
 import useThemeStore from '@/store/theme'
 import { storeToRefs } from 'pinia';
 // configs
-import { authMenu, noAuthMenu, renderIcon } from './configs'
+import { authMenu, noAuthMenu, renderIcon, renderGuestTitle, renderUserTitle } from './configs'
 // types
 import { DropdownOption, NIcon } from 'naive-ui';
 import { Actions } from './types'
@@ -59,6 +59,7 @@ const onHandleSelect = (key: string) => {
     switch (key as Actions) {
       case 'theme': themeStore.toToggleTheme(); break;
       case 'logout': userStore.toLogout(); break;
+      default: console.log(key)
     }
   }
 }
@@ -89,9 +90,19 @@ watch(() => userStore.isLogin, (v: boolean) => {
     // 若为登录状态 则渲染用户菜单
     // @ts-ignore
     authMenu.forEach(ele => menu.push(ele))
+    menu.unshift({
+      key: 'header',
+      type: 'render',
+      render: () => renderUserTitle(userStore.userData.username, userStore.userData.avatar)
+    })
   } else {
     // 若不为登录状态 渲染游客菜单
     noAuthMenu.forEach(ele => menu.push(ele))
+    menu.unshift({
+      key: 'header',
+      type: 'render',
+      render: renderGuestTitle
+    })
   }
   addThemeBtn()
 }, { immediate: true })

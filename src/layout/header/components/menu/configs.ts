@@ -1,8 +1,11 @@
+// types 
 import { type DropdownOption, NIcon } from 'naive-ui'
 import { type Component, h } from 'vue'
-import { LogInOutline, Star,LogOutOutline } from '@vicons/ionicons5'
+// components
+import { LogInOutline, Star, LogOutOutline } from '@vicons/ionicons5'
 import { HistoryOutlined } from '@vicons/antd'
-import { UserEdit,UserRegular,UserPlus } from '@vicons/fa'
+import { UserEdit, UserRegular, UserPlus, UserCircleRegular } from '@vicons/fa'
+import { NAvatar } from 'naive-ui'
 
 /**
  * 渲染icon虚拟DOM
@@ -29,12 +32,12 @@ export const noAuthMenu: DropdownOption[] = [
   {
     label: '注册',
     key: '/register',
-    icon:renderIcon(UserPlus)
+    icon: renderIcon(UserPlus)
   },
   {
     label: '浏览的历史',
     key: '/history',
-    icon:renderIcon(HistoryOutlined)
+    icon: renderIcon(HistoryOutlined)
   },
 ]
 
@@ -45,7 +48,7 @@ export const authMenu: DropdownOption[] = [
   {
     label: '我的',
     key: '/my',
-    icon:renderIcon(UserRegular)
+    icon: renderIcon(UserRegular)
   },
   {
     label: '编辑用户资料',
@@ -60,11 +63,41 @@ export const authMenu: DropdownOption[] = [
   {
     label: '浏览的历史',
     key: '/history',
-    icon:renderIcon(HistoryOutlined)
+    icon: renderIcon(HistoryOutlined)
   },
   {
     label: '登出',
     key: 'logout',
-    icon:renderIcon(LogOutOutline)
+    icon: renderIcon(LogOutOutline)
   },
 ]
+
+/**
+ * 渲染用户头部菜单
+ * @param username 
+ * @param avatar 
+ * @returns 
+ */
+export const renderUserTitle = (username: string, avatar: string) => {
+  return h('div', { style: 'display:flex;align-items:center;padding:0 5px;margin:5px 0;padding-bottom:8px;border-bottom:1px solid var(--border-color-1);' }, [
+    h(NAvatar, { size:'small',src: avatar, round: true, class: 'mr-10' }),
+    h('div', username)
+  ])
+}
+
+/**
+ * 渲染游客头部菜单
+ * @returns 
+ */
+export const renderGuestTitle = () => {
+  return h(
+    'div',
+    {
+      style: 'display:flex;align-items:center;box-sizing:border-box;padding:0 10px;padding-bottom:5px;margin:5px 0;border-bottom:1px solid var(--border-color-1);'
+    },
+    [
+      h(NIcon, { size: 18 }, { default: () => h(UserCircleRegular) }),
+      h('div',{style:'margin-left:8px'}, '未登录')
+    ]
+  )
+}

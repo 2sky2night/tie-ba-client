@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    FollowBtn: typeof import('./src/components/common/followBtn/index.vue')['default']
     Logo: typeof import('./src/components/common/Logo/index.vue')['default']
     NAvatar: typeof import('naive-ui')['NAvatar']
     NButton: typeof import('naive-ui')['NButton']
