@@ -18,7 +18,7 @@
             <div class="text mr-10 data-item">粉丝: <span>{{ userInfor.fans_count }}</span></div>
             <div class="text mr-10 data-item">帖子: <span>{{ userInfor.article.article_count }}</span></div>
           </div>
-          <n-button size="small" text style="font-size: 13px;">更多信息</n-button>
+          <n-button size="small" text style="font-size: 13px;" @click="onHandleShowMore">更多信息</n-button>
         </div>
         <div class="edit">
           <n-button :title="userInfor.is_followed ? '取消关注' : '关注'" :loading="followLoading" @click="toToggleFollowUser"
@@ -44,6 +44,7 @@ import { ref, onBeforeMount, computed } from 'vue'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 import { useMessage } from 'naive-ui'
 import useUserStore from '@/store/user'
+import userDataModal from '@/render/modal/message/userData'
 
 // 用户信息
 const userInfor = ref<UserProfileResponse | null>(null)
@@ -104,6 +105,19 @@ const toGetUserData = async (uidString: string) => {
     isLoading.value = false
   } catch (error) {
     router.push({ path: '/', replace: true })
+  }
+}
+
+/**
+ * 展示用户更多信息
+ */
+const onHandleShowMore = () => {
+  if (userInfor.value) {
+    userDataModal({
+      article: userInfor.value.article,
+      bar: userInfor.value.bar,
+      comment: userInfor.value.comment
+    })
   }
 }
 

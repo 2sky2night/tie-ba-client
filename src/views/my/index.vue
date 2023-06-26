@@ -45,7 +45,7 @@ import { ref, onBeforeMount, computed } from 'vue'
 import useNavigation from '@/hooks/useNavigation'
 // components
 import { AngleRight } from '@vicons/fa'
-import userDataModel from '@/render/modal/message/userData'
+import userDataModal from '@/render/modal/message/userData'
 
 // 用户信息
 const userInfor = ref<UserInfoResponse | null>(null)
@@ -63,7 +63,13 @@ const total = computed(() => {
  * 展示用户更多信息
  */
 const onHandleShowMore = () => {
-  userDataModel()
+  if (userInfor.value) {    
+    userDataModal({
+      article: userInfor.value.article,
+      bar: userInfor.value.bar,
+      comment: userInfor.value.comment
+    })
+  }
 }
 
 onBeforeMount(async () => {

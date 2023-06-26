@@ -43,6 +43,9 @@ defineExpose<{ isShow: Ref<boolean> }>({isShow})
         display: flex;
         align-items: center;
         justify-content: space-between;
+        span{
+            font-size: 18px;
+        }
     }
 }
 
