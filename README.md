@@ -483,6 +483,18 @@ export const loginRoutesHook: NavigationGuardWithThis<undefined> = (to, from, ne
 
 
 
+## 四、render渲染组件函数
+
+#### 1.modal-message模态框消息组件
+
+​	是模态框，但是功能没有模态框这么复杂，只提供简单的数据展示的模态框，没有取消、确认等功能，但比message提示更重，是全局提示的一种，占满整个屏幕，提供默认插槽供使用时传入自定义模板内容。布局为上下结构，上为message的标题和关闭按钮，下为默认插槽的内容，供展示数据。调用函数时需要传入标题、渲染默认插槽的函数
+
+![image-20230626212128318](C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20230626212128318.png)
+
+### 2.用户信息渲染组件
+
+​	底层调用modal-message函数，传入渲染函数内容作为modalMessage的内容呈现。
+
 零、time
 
 6.23

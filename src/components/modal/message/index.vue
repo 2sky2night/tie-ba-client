@@ -20,13 +20,11 @@
 import { ref, type Ref } from 'vue'
 import { NIcon } from 'naive-ui';
 import { Close } from '@vicons/ionicons5';
+import type { modalMessageProps } from '@/types/components/modal';
 
 const isShow = ref(true)
 
-defineProps<{
-    title: string;
-    closeHandler: () => void
-}>()
+defineProps<modalMessageProps>()
 defineExpose<{ isShow: Ref<boolean> }>({isShow})
 
 </script>
@@ -43,6 +41,9 @@ defineExpose<{ isShow: Ref<boolean> }>({isShow})
         display: flex;
         align-items: center;
         justify-content: space-between;
+        span{
+            font-size: 18px;
+        }
     }
 }
 
