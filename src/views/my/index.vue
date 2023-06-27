@@ -1,37 +1,40 @@
 <template>
   <div class="page-container">
-    <div class="user-info-container" v-if="userInfor">
-      <div class="image">
-        <n-image :src="userInfor.avatar" />
-      </div>
-      <div class="user-data">
-        <div class="username">
-          <div class="title">{{ userInfor.username }}</div>
-          <div>收到的赞:{{ total }}</div>
+    <template v-if="userInfor">
+      <div class="user-info-container">
+        <div class="image">
+          <n-image :src="userInfor.avatar" />
         </div>
-        <div class="desc">
-          简介:这个人很懒,连简介都不写~
-        </div>
-        <div class="data">
-          <div style="display: flex;">
-            <div class="text mr-10 data-item">关注: <span>{{ userInfor.follow_count }}</span></div>
-            <div class="text mr-10 data-item">粉丝: <span>{{ userInfor.fans_count }}</span></div>
-            <div class="text mr-10 data-item">帖子: <span>{{ userInfor.article.article_count }}</span></div>
+        <div class="user-data">
+          <div class="username">
+            <div class="title">{{ userInfor.username }}</div>
+            <div>收到的赞:{{ total }}</div>
           </div>
-          <n-button size="small" text style="font-size: 13px;" @click="onHandleShowMore">更多信息</n-button>
-        </div>
-        <div class="edit">
-          <n-button @click="goEdit" size="small" type="primary">
-            <span style="font-size: 12px; ">
-              修改信息
-            </span>
-            <n-icon style="position: relative;top:0px;left: 5px;">
-              <AngleRight />
-            </n-icon>
-          </n-button>
+          <div class="desc">
+            简介:这个人很懒,连简介都不写~
+          </div>
+          <div class="data">
+            <div style="display: flex;">
+              <div class="text mr-10 data-item">关注: <span>{{ userInfor.follow_count }}</span></div>
+              <div class="text mr-10 data-item">粉丝: <span>{{ userInfor.fans_count }}</span></div>
+              <div class="text mr-10 data-item">帖子: <span>{{ userInfor.article.article_count }}</span></div>
+            </div>
+            <n-button size="small" text style="font-size: 13px;" @click="onHandleShowMore">更多信息</n-button>
+          </div>
+          <div class="edit">
+            <n-button @click="goEdit" size="small" type="primary">
+              <span style="font-size: 12px; ">
+                修改信息
+              </span>
+              <n-icon style="position: relative;top:0px;left: 5px;">
+                <AngleRight />
+              </n-icon>
+            </n-button>
+          </div>
         </div>
       </div>
-    </div>
+      <UserViews :uid="userInfor.uid" />
+    </template>
   </div>
 </template>
 
@@ -46,6 +49,7 @@ import useNavigation from '@/hooks/useNavigation'
 // components
 import { AngleRight } from '@vicons/fa'
 import userDataModal from '@/render/modal/message/userData'
+import UserViews from '@/components/common/UserViews/index.vue'
 
 // 用户信息
 const userInfor = ref<UserInfoResponse | null>(null)
@@ -63,7 +67,7 @@ const total = computed(() => {
  * 展示用户更多信息
  */
 const onHandleShowMore = () => {
-  if (userInfor.value) {    
+  if (userInfor.value) {
     userDataModal({
       article: userInfor.value.article,
       bar: userInfor.value.bar,
@@ -92,6 +96,8 @@ defineOptions({
 
   .user-info-container {
     display: flex;
+    border-bottom: 1px solid var(--border-color-1);
+    padding-bottom: 20px;
 
     .user-data {
       position: relative;
@@ -147,6 +153,8 @@ defineOptions({
     .user-info-container {
       flex-direction: column;
       align-items: center;
+      border-bottom: none;
+      padding-bottom: 0;
 
       .image {
         border-radius: 50%;
@@ -166,4 +174,5 @@ defineOptions({
       }
     }
   }
-}</style>@/render/modal/message/userData
+}
+</style>

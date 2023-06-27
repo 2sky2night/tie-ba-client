@@ -26,7 +26,9 @@ watch(() => route.fullPath, () => {
     })
   }
 })
-
+defineOptions({
+  name:'Main'
+})
 </script>
 
 <style scoped lang='scss'>
