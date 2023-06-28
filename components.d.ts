@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     ArticleItem: typeof import('./src/components/item/ArticleItem.vue')['default']
     ArticleList: typeof import('./src/components/list/load/ArticleList.vue')['default']
+    FollowBtn: typeof import('./src/components/common/FollowBtn/index.vue')['default']
     Logo: typeof import('./src/components/common/Logo/index.vue')['default']
     Message: typeof import('./src/components/modal/message/index.vue')['default']
     Modal: typeof import('./src/components/modal/index.vue')['default']

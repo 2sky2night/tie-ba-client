@@ -1,6 +1,12 @@
+import type { BarBriefInfo } from './bar';
+import type { UserBrieflyInfo } from './user';
+import type { ListResponse } from '.';
+/**
+ * 帖子项信息
+ */
 export interface ArticleItem {
   aid: number;
-  bar: Bar;
+  bar: BarBriefInfo;
   bid: number;
   comment_count: number;
   content: string;
@@ -12,24 +18,10 @@ export interface ArticleItem {
   star_count: number;
   title: string;
   uid: number;
-  user: User;
+  user: UserBrieflyInfo;
 }
 
-export interface Bar {
-  bdesc: string;
-  bid: number;
-  bname: string;
-  createTime: string;
-  is_followed: boolean;
-  photo: string;
-  uid: number;
-}
-
-export interface User {
-  avatar: string;
-  createTime: string;
-  is_fans: boolean;
-  is_followed: boolean;
-  uid: number;
-  username: string;
-}
+/**
+ * 帖子列表的响应结果
+ */
+export type ArticleListResponse = ListResponse<ArticleItem>

@@ -50,6 +50,7 @@ import useNavigation from '@/hooks/useNavigation'
 import { AngleRight } from '@vicons/fa'
 import userDataModal from '@/render/modal/message/userData'
 import UserViews from '@/components/common/UserViews/index.vue'
+import FollowBtn from '@/components/common/FollowBtn/index.vue'
 
 // 用户信息
 const userInfor = ref<UserInfoResponse | null>(null)
@@ -93,7 +94,6 @@ defineOptions({
 <style scoped lang='scss'>
 .page-container {
   padding: 20px;
-
   .user-info-container {
     display: flex;
     border-bottom: 1px solid var(--border-color-1);

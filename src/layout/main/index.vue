@@ -1,33 +1,13 @@
 <template>
   <div class="main-container">
-    <n-scrollbar ref="scrollIns" style="max-height: 100%">
-      <RouterView />
-    </n-scrollbar>
+    <RouterView />
   </div>
 </template>
 
 <script lang='ts' setup>
-// hooks
-import { useRoute } from 'vue-router';
-import { watch, ref } from 'vue';
-// types 
-import type { ScrollbarInst } from 'naive-ui'
 
-const route = useRoute()
-const scrollIns = ref<ScrollbarInst | null>(null)
-
-// 监听路由url更新时Main组件视图滚动置顶部
-watch(() => route.fullPath, () => {
-  if (scrollIns.value) {
-    scrollIns.value.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth'
-    })
-  }
-})
 defineOptions({
-  name:'Main'
+  name: 'Main'
 })
 </script>
 
@@ -35,9 +15,6 @@ defineOptions({
 .main-container {
   margin: 0 auto;
   width: var(--main-width);
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: calc(100vh - var(--header-hight));
 }
 
 // 显示tabbar

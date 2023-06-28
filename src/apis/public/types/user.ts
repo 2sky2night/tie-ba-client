@@ -25,3 +25,15 @@ export interface UserCommentCount {
     comment_like_count: number;
     comment_liked_count: number;
 }
+
+/**
+ * 用户简要信息
+ */
+export interface UserBrieflyInfo {
+    avatar: string;
+    createTime: string;
+    is_fans: boolean;
+    is_followed: boolean;
+    uid: number;
+    username: string;
+}

@@ -1,5 +1,5 @@
 /**
- * 加载列表数据的响应结果
+ * 列表接口的响应结果
  */
 export interface ListResponse<T> {
   desc: boolean;

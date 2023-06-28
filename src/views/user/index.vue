@@ -21,12 +21,7 @@
           <n-button size="small" text style="font-size: 13px;" @click="onHandleShowMore">更多信息</n-button>
         </div>
         <div class="edit">
-          <n-button :title="userInfor.is_followed ? '取消关注' : '关注'" :loading="followLoading" @click="toToggleFollowUser"
-            size="small" :type="status ? 'primary' : 'default'">
-            <span style="font-size: 12px; ">
-              {{ status === 1 ? '互相关注' : status === 2 ? '已关注' : '关注' }}
-            </span>
-          </n-button>
+          <FollowBtn :uid="userInfor.uid" size="small" :is-fans="userInfor.is_fans" v-model:isFollowed="userInfor.is_followed"/>
         </div>
       </div>
     </div>
@@ -36,7 +31,6 @@
 <script lang='ts' setup>
 // apis
 import { getUserProfileAPI } from '@/apis/user'
-import { followUserAPI, cancelFollowUserAPI } from '@/apis/public/user'
 // types
 import { UserProfileResponse } from '@/apis/user/types'
 // hooks
@@ -45,6 +39,8 @@ import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 import { useMessage } from 'naive-ui'
 import useUserStore from '@/store/user'
 import userDataModal from '@/render/modal/message/userData'
+// components
+import FollowBtn from '@/components/common/FollowBtn/index.vue'
 
 // 用户信息
 const userInfor = ref<UserProfileResponse | null>(null)
@@ -63,26 +59,9 @@ const total = computed(() => {
 const message = useMessage()
 // 正在加载
 const isLoading = ref(true)
-const followLoading = ref(false)
 // 用户仓库
 const userStore = useUserStore()
-// 关注状态
-const status = computed(() => {
-  if (userInfor.value) {
-    if (userInfor.value.is_fans && userInfor.value.is_followed) {
-      // 互相关注
-      return 1
-    } else if (userInfor.value.is_followed) {
-      // 已关注
-      return 2
-    } else {
-      return 0
-    }
 
-  } else {
-    return 0
-  }
-})
 
 /**
  * 获取用户信息
@@ -118,45 +97,6 @@ const onHandleShowMore = () => {
       bar: userInfor.value.bar,
       comment: userInfor.value.comment
     })
-  }
-}
-
-/**
- * 关注和取消关注用户
- */
-const toToggleFollowUser = async () => {
-  try {
-
-    followLoading.value = true
-
-    if (!userStore.isLogin) {
-      message.warning('请先登录!')
-      return
-    }
-
-    if (userInfor.value) {
-      const uid = userInfor.value.uid
-      if (userInfor.value.is_followed) {
-        // 当前关注了用户 则取消关注
-        const res = await cancelFollowUserAPI(uid)
-        if (res.code === 200) {
-          // 取关成功 设置关注状态
-          userInfor.value.is_followed = false
-          message.success('取消关注成功!')
-        }
-      } else {
-        // 当前未关注用户 则关注用户
-        const res = await followUserAPI(uid)
-        if (res.code === 200) {
-          // 关注成功 设置关注状态
-          userInfor.value.is_followed = true
-          message.success('关注成功!')
-        }
-      }
-    }
-
-  } finally {
-    followLoading.value = false
   }
 }
 

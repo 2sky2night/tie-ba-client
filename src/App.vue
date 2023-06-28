@@ -28,6 +28,8 @@ if (themeStore.isDark) {
 @import url('@/styles/reset.scss');
 
 .page-container {
+  max-width: 100vw;
+  box-sizing: border-box;
   min-height: calc(100vh - var(--header-hight));
 }
 

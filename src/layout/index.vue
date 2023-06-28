@@ -4,7 +4,9 @@
       <Header />
     </div>
     <div class="main-content">
-      <Main />
+      <n-scrollbar ref="scrollIns" style="max-height: 100%;">
+        <Main />
+      </n-scrollbar>
     </div>
     <div class="footer-content">
       <Footer />
@@ -19,6 +21,24 @@ import Main from './main/index.vue'
 import Footer from './footer/index.vue'
 // hooks
 import { useMessage } from 'naive-ui'
+import { useRoute } from 'vue-router';
+import { watch, ref } from 'vue';
+// types 
+import type { ScrollbarInst } from 'naive-ui'
+
+const route = useRoute()
+const scrollIns = ref<ScrollbarInst | null>(null)
+
+// 监听路由url更新时Main组件视图滚动置顶部
+watch(() => route.fullPath, () => {
+  if (scrollIns.value) {
+    scrollIns.value.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    })
+  }
+})
 
 // 给window属性挂在消息组件API
 window.$message = useMessage()
@@ -44,7 +64,11 @@ defineOptions({
 
   .main-content {
     display: flex;
-    flex-grow: 1;
+    height: calc(100vh - var(--header-hight));
+    overflow: hidden;
+    :deep(.n-scrollbar-content) {
+      display: flex;
+    }
   }
 
   .footer-content {
