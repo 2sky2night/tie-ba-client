@@ -7,7 +7,8 @@
         <span class="ml-10">{{ article.user.username }}</span>
       </div>
       <div class="action">
-        
+        <FollowBtn :is-followed="article.user.is_followed" :is-fans="article.user.is_fans" :uid="article.user.uid"
+          size="small" />
       </div>
     </div>
 
@@ -16,7 +17,7 @@
       <div class="content mb-10">{{ article.content }}</div>
       <template v-if="article.photo">
         <div class="photo-container mb-10" :class="{ 'three': article.photo.length === 3 }">
-          <img v-for="    img     in article.photo" :src="img">
+          <img v-for=" img   in article.photo" :src="img">
         </div>
       </template>
       <div class="bar">
@@ -28,13 +29,13 @@
 
       <div class="btns">
         <div class="item mr-10">
-          <n-icon size="20">
-            <StarOutlined />
+          <n-icon size="20" :color="isStar?'#ffcb6b':''">
+            <component :is="isStar?'StarFilled':'StarOutlined'"></component>
           </n-icon>
           <span>{{ article.star_count }}</span>
         </div>
         <div class="item">
-          <n-icon size="20">
+          <n-icon size="18">
             <CommentRegular />
           </n-icon>
           <span>{{ article.comment_count }}</span>
@@ -43,8 +44,8 @@
 
       <div class="btns">
         <div class="item">
-          <n-icon size="20">
-            <LikeOutlined />
+          <n-icon size="18" :color="isLiked?'red':''">
+            <component :is="isLiked?'LikeFilled':'LikeOutlined'"></component>
           </n-icon>
           <span>{{ article.like_count }}</span>
         </div>
@@ -58,14 +59,29 @@
 <script lang='ts' setup>
 // hooks
 import { computed, ref } from 'vue'
+import useUserStore from '@/store/user'
 // types
 import type { ArticleItemProps } from '@/types/components/item';
 // components
-import { LikeOutlined, StarOutlined } from '@vicons/antd'
+import { LikeOutlined, StarOutlined,StarFilled,LikeFilled } from '@vicons/antd'
 import { CommentRegular } from '@vicons/fa'
+import FollowBtn from '@/components/common/FollowBtn/index.vue'
 
 const props = defineProps<ArticleItemProps>()
+// 是否收藏
+const isStar = ref(props.article.is_star)
+// 是否点赞
+const isLiked = ref(props.article.is_liked)
 
+
+defineOptions({
+  components: {
+    StarOutlined,
+    StarFilled,
+    LikeOutlined,
+    LikeFilled
+  }
+})
 </script>
 
 <style scoped lang='scss'>
@@ -135,11 +151,11 @@ const props = defineProps<ArticleItemProps>()
         display: flex;
         justify-content: center;
         align-items: center;
-
         span {
           margin-left: 5px;
         }
       }
     }
   }
-}</style>
+}
+</style>
