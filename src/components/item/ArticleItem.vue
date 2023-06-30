@@ -65,7 +65,8 @@ import type { ArticleItemProps } from '@/types/components/item';
 // components
 import { LikeOutlined, StarOutlined,StarFilled,LikeFilled } from '@vicons/antd'
 import { CommentRegular } from '@vicons/fa'
-import FollowBtn from '@/components/common/FollowBtn/index.vue'
+// apis
+import { likeArticleAPI,cancelLikeArticleAPI,starArticleAPI,cancelStarArticleAPI } from '@/apis/public/article';
 
 const props = defineProps<ArticleItemProps>()
 // 是否收藏

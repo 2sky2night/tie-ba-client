@@ -12,9 +12,12 @@ import 'vfonts/FiraCode.css'
 import 'nprogress/nprogress.css'
 // 引入全局样式
 import '@/styles/index.css'
+// 全局组件
+import globalComponents from './globalComponents';
 export default  {
   install(app){
     app.use(store)
     app.use(router)
+    app.use(globalComponents)
   }
 } as Plugin

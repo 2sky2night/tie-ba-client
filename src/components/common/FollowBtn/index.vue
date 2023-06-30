@@ -1,5 +1,8 @@
 <template>
-  <n-button :title="isFollowed?'取消关注':'关注'" :type="isFollowed?'primary':'default'" :loading="isLoading" :size="size" @click="onHandleClick">{{ followFormat }}</n-button>
+  <auth-btn>
+    <n-button :title="isFollowed ? '取消关注' : '关注'" :type="isFollowed ? 'primary' : 'default'" :loading="isLoading"
+      :size="size" @click="onHandleClick">{{ followFormat }}</n-button>
+  </auth-btn>
 </template>
 
 <script lang='ts' setup>
@@ -61,32 +64,29 @@ const isLoading = ref(false)
  * 点击关注按钮的回调
  */
 const onHandleClick = async () => {
-  if (userStore.isLogin) {
-    try {
-      if (userStore.userData && userStore.userData.uid === props.uid) {
-        return message.warning(tips.canNotFollowUserSelf)
-      }
-      isLoading.value = true
-      if (props.isFollowed) {
-        // 关注了用户 点击则取消关注
-        await toCancelFollowUser()
-        message.success(tips.successCancelFollow)
-      } else {
-        // 未关注 点击则关注用户
-        await toFollowUser()
-        message.success(tips.succeessFollow)
-      }
-      // 关注或取消关注成功 更新关注状态
-      emit('update:isFollowed', !props.isFollowed)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      isLoading.value = false
+  try {
+    if (userStore.userData && userStore.userData.uid === props.uid) {
+      return message.warning(tips.canNotFollowUserSelf)
     }
-  } else {
-    message.success(tips.pleaseLogin)
+    isLoading.value = true
+    if (props.isFollowed) {
+      // 关注了用户 点击则取消关注
+      await toCancelFollowUser()
+      message.success(tips.successCancelFollow)
+    } else {
+      // 未关注 点击则关注用户
+      await toFollowUser()
+      message.success(tips.succeessFollow)
+    }
+    // 关注或取消关注成功 更新关注状态
+    emit('update:isFollowed', !props.isFollowed)
+  } catch (error) {
+    console.log(error)
+  } finally {
+    isLoading.value = false
   }
 }
+
 
 /**
  * 关注用户

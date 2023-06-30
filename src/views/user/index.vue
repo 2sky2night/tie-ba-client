@@ -1,30 +1,33 @@
 <template>
   <div class="page-container">
-    <div class="user-info-container" v-if="!isLoading && userInfor">
-      <div class="image">
-        <n-image :src="userInfor.avatar" />
-      </div>
-      <div class="user-data">
-        <div class="username">
-          <div class="title">{{ userInfor.username }}</div>
-          <div>收到的赞:{{ total }}</div>
+    <template v-if="!isLoading && userInfor">
+      <div class="user-info-container" >
+        <div class="image">
+          <n-image :src="userInfor.avatar" />
         </div>
-        <div class="desc">
-          简介:这个人很懒,连简介都不写~
-        </div>
-        <div class="data">
-          <div style="display: flex;">
-            <div class="text mr-10 data-item">关注: <span>{{ userInfor.follow_count }}</span></div>
-            <div class="text mr-10 data-item">粉丝: <span>{{ userInfor.fans_count }}</span></div>
-            <div class="text mr-10 data-item">帖子: <span>{{ userInfor.article.article_count }}</span></div>
+        <div class="user-data">
+          <div class="username">
+            <div class="title">{{ userInfor.username }}</div>
+            <div>收到的赞:{{ total }}</div>
           </div>
-          <n-button size="small" text style="font-size: 13px;" @click="onHandleShowMore">更多信息</n-button>
-        </div>
-        <div class="edit">
-          <FollowBtn :uid="userInfor.uid" size="small" :is-fans="userInfor.is_fans" v-model:isFollowed="userInfor.is_followed"/>
+          <div class="desc">
+            简介:这个人很懒,连简介都不写~
+          </div>
+          <div class="data">
+            <div style="display: flex;">
+              <div class="text mr-10 data-item">关注: <span>{{ userInfor.follow_count }}</span></div>
+              <div class="text mr-10 data-item">粉丝: <span>{{ userInfor.fans_count }}</span></div>
+              <div class="text mr-10 data-item">帖子: <span>{{ userInfor.article.article_count }}</span></div>
+            </div>
+            <n-button size="small" text style="font-size: 13px;" @click="onHandleShowMore">更多信息</n-button>
+          </div>
+          <div class="edit">
+            <FollowBtn :uid="userInfor.uid" size="small" :is-fans="userInfor.is_fans" v-model:isFollowed="userInfor.is_followed"/>
+          </div>
         </div>
       </div>
-    </div>
+      <UserViews :uid="userInfor.uid" />
+    </template>
   </div>
 </template>
 
@@ -41,6 +44,7 @@ import useUserStore from '@/store/user'
 import userDataModal from '@/render/modal/message/userData'
 // components
 import FollowBtn from '@/components/common/FollowBtn/index.vue'
+import UserViews from '@/components/common/UserViews/index.vue'
 
 // 用户信息
 const userInfor = ref<UserProfileResponse | null>(null)
