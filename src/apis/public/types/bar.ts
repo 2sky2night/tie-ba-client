@@ -22,6 +22,7 @@ export interface BarItem {
   bid: number;
   bname: string;
   createTime: string;
+  is_followed: boolean;
   photo: string;
   uid: number;
   user: UserBrieflyInfo;

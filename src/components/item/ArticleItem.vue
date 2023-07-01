@@ -7,7 +7,7 @@
         <span class="ml-10 text" @click.stop="() => goUser(article.uid)">{{ article.user.username }}</span>
       </div>
       <div class="action">
-        <FollowBtn :is-followed="article.user.is_followed" :is-fans="article.user.is_fans" :uid="article.user.uid"
+        <FollowBtn v-model:is-followed="article.user.is_followed"  :is-fans="article.user.is_fans" :uid="article.user.uid"
           size="small" />
       </div>
     </div>

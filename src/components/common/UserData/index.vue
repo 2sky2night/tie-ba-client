@@ -1,7 +1,5 @@
 <template>
     <div class="user-data-container">
-        用户信息
-
         <div class="item">
             <div class="title">
                 <n-icon size="20">
@@ -11,23 +9,23 @@
             </div>
             <div class="info">
                 <div>
-                    <span>{{ article.article_count }}</span>
+                    <n-number-animation :from="0" :to="article.article_count" />
                     <span>发送</span>
                 </div>
                 <div>
-                    <span>{{ article.article_liked_count }}</span>
+                    <n-number-animation :from="0" :to="article.article_liked_count" />
                     <span>被赞</span>
                 </div>
                 <div>
-                    <span>{{ article.article_like_count }}</span>
+                    <n-number-animation :from="0" :to="article.article_like_count" />
                     <span>点赞</span>
                 </div>
                 <div>
-                    <span>{{ article.article_star_count }}</span>
+                    <n-number-animation :from="0" :to="article.article_star_count" />
                     <span>收藏</span>
                 </div>
                 <div>
-                    <span>{{ article.article_stared_count }}</span>
+                    <n-number-animation :from="0" :to="article.article_stared_count" />
                     <span>被收藏</span>
                 </div>
             </div>
@@ -42,11 +40,11 @@
             </div>
             <div class="info">
                 <div>
-                    <span>{{ bar.create_bar_count }}</span>
+                    <n-number-animation :from="0" :to="bar.create_bar_count" />
                     <span>创建</span>
                 </div>
                 <div>
-                    <span>{{ bar.follow_bar_count }}</span>
+                    <n-number-animation :from="0" :to="bar.follow_bar_count" />
                     <span>关注</span>
                 </div>
             </div>
@@ -61,15 +59,15 @@
             </div>
             <div class="info">
                 <div>
-                    <span> {{ comment.comment_count }}</span>
+                    <n-number-animation :from="0" :to="comment.comment_count" />
                     <span>发送</span>
                 </div>
                 <div>
-                    <span>{{ comment.comment_liked_count }}</span>
+                    <n-number-animation :from="0" :to="comment.comment_liked_count" />
                     <span>被赞</span>
                 </div>
                 <div>
-                    <span>{{ comment.comment_like_count }}</span>
+                    <n-number-animation :from="0" :to="comment.comment_like_count" />
                     <span>点赞</span>
                 </div>
             </div>

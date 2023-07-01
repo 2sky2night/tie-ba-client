@@ -130,7 +130,8 @@ defineOptions({
 
   .user-info-container {
     display: flex;
-
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color-1);
     .user-data {
       position: relative;
       padding: 10px 0;

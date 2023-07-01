@@ -1,6 +1,6 @@
-import { Size } from "naive-ui/es/button/src/interface";
+import type { Size } from "naive-ui/es/button/src/interface";
 import type { UserArticleCount, UserBarCount, UserCommentCount } from '@/apis/public/types/user'
-
+import type { EChartsOption } from 'echarts'
 
 /**
  * 关注用户按钮props
@@ -35,7 +35,7 @@ export interface UserDataProps {
 }
 
 /**
- * 用户收藏、发送、点赞帖子等数据展示组件的自定义属性
+ * 用户收藏、发送、点赞帖子等数据展示组件的props
  */
 export interface UserViewsProps {
     /**
@@ -45,7 +45,7 @@ export interface UserViewsProps {
 }
 
 /**
- * 图片预览组件
+ * 图片预览组件的props
  */
 export interface ImgPreviewProps {
     /**
@@ -56,5 +56,33 @@ export interface ImgPreviewProps {
      * 销毁图片预览组件
      * @returns 
      */
-    toClose:()=>void
+    toClose: () => void
+}
+
+/**
+ * 图表组件的props
+ */
+export interface EchartsProps {
+    option: EChartsOption;
+    width: number;
+    height: number;
+}
+
+export interface FollowBarBtnProps {
+    /**
+     * 吧的id
+     */
+    bid: number;
+    /**
+     * 是否关注了该吧
+     */
+    isFollowed: boolean;
+    /**
+     * 按钮大小
+     */
+    size: Size;
+    /**
+     * 关注数量
+     */
+    followCount: number;
 }
