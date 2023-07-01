@@ -28,7 +28,7 @@
   cursor: pointer;
 }
 .text:hover{
-  color:var(--primary-color);
+  color:var(--primary-color) !important;
 }
 
 .mb-5{

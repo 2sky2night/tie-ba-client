@@ -23,11 +23,14 @@ const onHandleClick =  (e:Event) => {
   if (!userStore.isLogin) {
     message.warning(tips.pleaseLogin)
     // 停止事件捕获 阻止继续事件捕获
-    e.stopImmediatePropagation()
+    e.stopPropagation()
   }
 }
 
 defineSlots<{
   default:()=>VNode[]
 }>()
+defineOptions({
+  name:'AuthBtn'
+})
 </script>

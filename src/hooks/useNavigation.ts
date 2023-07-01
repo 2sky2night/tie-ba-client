@@ -19,8 +19,8 @@ export default function () {
     router.push('/my')
   }
 
-  function goUser () {
-    router.push('/user')
+  function goUser(uid: number) {
+    router.push(`/user/${uid}`)
   }
 
   function goLogin () {
@@ -35,6 +35,14 @@ export default function () {
     router.push('/edit')
   }
 
+  function goArticle(aid: number) {
+    router.push(`/article/${aid}`)
+  }
+
+  function goBar(bid: number) {
+    router.push(`/bar/${bid}`)
+  }
+
   return {
     goHome,
     goDiscover,
@@ -42,7 +50,9 @@ export default function () {
     goUser,
     goLogin,
     goRegister,
-    goEdit
+    goEdit,
+    goArticle,
+    goBar
   }
 
 }

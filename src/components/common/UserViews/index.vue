@@ -8,7 +8,7 @@
           </span>
         </template>
         <template #default>
-          <ArticleItemVue v-for=" item  in articleList" :article="item" :key="item.aid" />
+          <ArticleItemVue v-for=" item  in articleList" :article="item" :key="item.aid" v-model:isLiked="item.is_liked" v-model:likeCount="item.like_count" v-model:starCount="item.star_count" v-model:isStar="item.is_star" />
         </template>
       </n-tab-pane>
       <n-tab-pane name="like-article">
@@ -75,7 +75,7 @@
 // hooks
 import { ref, onMounted, onUnmounted, onBeforeMount, reactive } from 'vue'
 // types
-import type UserViewsProps from '@/types/components/common/userViews';
+import type { UserViewsProps } from '@/types/components/common'
 import { getUserPostArticleListAPI } from '@/apis/public/user';
 import type { ArticleItem } from '@/apis/public/types/article';
 import ArticleItemVue from '@/components/item/ArticleItem.vue';
@@ -130,4 +130,5 @@ defineOptions({
       font-size: 15px;
     }
   }
-}</style>
+}
+</style>

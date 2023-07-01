@@ -1,7 +1,7 @@
 <template>
   <auth-btn>
     <n-button :title="isFollowed ? '取消关注' : '关注'" :type="isFollowed ? 'primary' : 'default'" :loading="isLoading"
-      :size="size" @click="onHandleClick">{{ followFormat }}</n-button>
+      :size="size" @click.stop="onHandleClick">{{ followFormat }}</n-button>
   </auth-btn>
 </template>
 
@@ -11,31 +11,14 @@ import { computed, ref } from 'vue'
 import useUserStore from '@/store/user';
 import { useMessage } from 'naive-ui';
 // types
-import { Size } from 'naive-ui/es/button/src/interface';
+import type { FollowBtnProps } from '@/types/components/common'; 
 // apis
 import { followUserAPI, cancelFollowUserAPI } from '@/apis/public/user';
 // configs
 import tips from '@/config/tips'
 
 // props
-const props = defineProps<{
-  /**
-   * 是否关注
-   */
-  isFollowed: boolean;
-  /**
-   * 他关注我了吗
-   */
-  isFans: boolean;
-  /**
-   * 目标用户id
-   */
-  uid: number;
-  /**
-   * 按钮大小
-   */
-  size: Size
-}>()
+const props = defineProps<FollowBtnProps>()
 // emit
 const emit = defineEmits<{
   /**

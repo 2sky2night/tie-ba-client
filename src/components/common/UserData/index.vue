@@ -80,7 +80,7 @@
 
 <script lang='ts' setup>
 // types
-import type UserDataProps from '@/types/components/common/userData'
+import type { UserDataProps } from '@/types/components/common'
 // component
 import { NIcon } from 'naive-ui';
 import { CommentOutlined } from '@vicons/antd'
@@ -92,6 +92,7 @@ defineProps<UserDataProps>()
 .user-data-container {
     .item {
         padding: 10px 0;
+
         .title {
             display: flex;
             align-items: center;
@@ -100,6 +101,7 @@ defineProps<UserDataProps>()
         .info {
             display: flex;
             flex-wrap: wrap;
+
             div {
                 height: 70px;
                 width: 70px;
@@ -107,7 +109,8 @@ defineProps<UserDataProps>()
                 flex-direction: column;
                 align-items: center;
                 padding: 20px 10px;
-                span:last-child{
+
+                span:last-child {
                     font-size: 12px;
                 }
             }

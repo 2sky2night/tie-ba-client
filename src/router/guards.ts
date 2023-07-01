@@ -1,5 +1,6 @@
 import type { NavigationGuardWithThis, NavigationHookAfter } from 'vue-router'
 import useUserStore from '@/store/user'
+import tips from '@/config/tips'
 
 /**
  * 全局路由前置守卫
@@ -7,7 +8,7 @@ import useUserStore from '@/store/user'
  * @param from 
  * @param next 
  */
-export const beforeEachHook: NavigationGuardWithThis<undefined> = (to, from, next) => {
+export const beforeEachHook: NavigationGuardWithThis<undefined> = (to, _from, next) => {
   const userStore = useUserStore()
   if (to.meta) {
     // 是否有meta配置项
@@ -18,7 +19,7 @@ export const beforeEachHook: NavigationGuardWithThis<undefined> = (to, from, nex
         next()
       } else {
         // 未登录
-        window.$message.warning('请先登录!')
+        window.$message.warning(tips.pleaseLogin)
         next('/login')
       }
     } else {
@@ -48,11 +49,11 @@ export const afterHook: NavigationHookAfter = (to) => {
  * @param from 
  * @param next 
  */
-export const loginRoutesHook: NavigationGuardWithThis<undefined> = (to, from, next) => {
+export const loginRoutesHook: NavigationGuardWithThis<undefined> = (_to, from, next) => {
   const userStore = useUserStore()
   if (userStore.isLogin) {
     // 跳转回上一个页面
-    window.$message.warning('请勿重复登录!')
+    window.$message.warning(tips.pleaseDoNotRepeatLogin)
     if (from.path === '/') {
       next('/')
     } else {
@@ -65,10 +66,10 @@ export const loginRoutesHook: NavigationGuardWithThis<undefined> = (to, from, ne
 
 export const userRoutesHooks: NavigationGuardWithThis<undefined> = (to, _from, next) => {
   const userStore = useUserStore()
-  if (to.query.uid) {
-    const uid = + to.query.uid
+  if (to.params.uid) {
+    const uid = + to.params.uid
     if (isNaN(uid)) {
-      window.$message.error('参数非法!')
+      window.$message.error(tips.errorParams)
       next(false)
     } else if (uid === userStore.userData.uid) {
       // 当前登陆的用户不能访问用户页
@@ -77,7 +78,7 @@ export const userRoutesHooks: NavigationGuardWithThis<undefined> = (to, _from, n
       next()
     }
   } else {
-    window.$message.error('未参数携带!')
+    window.$message.error(tips.emptyParams)
     next('/')
   }
 }

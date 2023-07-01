@@ -1,10 +1,10 @@
 <template>
-  <div class="article-item-container">
+  <div class="article-item-container" @click="() => goArticle(article.aid)">
 
     <div class="title mb-10">
       <div class="user-info">
-        <img :src="article.user.avatar">
-        <span class="ml-10">{{ article.user.username }}</span>
+        <img v-lazyImg="article.user.avatar" @click.stop="() => goUser(article.uid)">
+        <span class="ml-10 text" @click.stop="() => goUser(article.uid)">{{ article.user.username }}</span>
       </div>
       <div class="action">
         <FollowBtn :is-followed="article.user.is_followed" :is-fans="article.user.is_fans" :uid="article.user.uid"
@@ -17,38 +17,44 @@
       <div class="content mb-10">{{ article.content }}</div>
       <template v-if="article.photo">
         <div class="photo-container mb-10" :class="{ 'three': article.photo.length === 3 }">
-          <img v-for=" img   in article.photo" :src="img">
+          <img v-lazyImg="img" v-for="img in article.photo"  v-imgPre="img" >
         </div>
       </template>
       <div class="bar">
-        <n-button size="tiny" strong secondary>{{ article.bar.bname }}吧</n-button>
+        <n-button size="tiny" strong secondary @click.stop="() => goBar(article.bid)">{{ article.bar.bname }}吧</n-button>
       </div>
     </div>
 
     <div class="btn-container">
 
       <div class="btns">
-        <div class="item mr-10">
-          <n-icon size="20" :color="isStar?'#ffcb6b':''">
-            <component :is="isStar?'StarFilled':'StarOutlined'"></component>
-          </n-icon>
-          <span>{{ article.star_count }}</span>
-        </div>
+
+        <auth-btn>
+          <div class="item mr-10" @click.stop="onHandleStarArticle">
+            <n-icon size="20" :color="isStar ? '#ffcb6b' : ''">
+              <component :is="isStar?'StarFilled':'StarOutlined'"></component>
+            </n-icon>
+            <span class="count">{{ article.star_count }}</span>
+          </div>
+        </auth-btn>
+
         <div class="item">
           <n-icon size="18">
             <CommentRegular />
           </n-icon>
-          <span>{{ article.comment_count }}</span>
+          <span class="count">{{ article.comment_count }}</span>
         </div>
       </div>
 
       <div class="btns">
-        <div class="item">
-          <n-icon size="18" :color="isLiked?'red':''">
-            <component :is="isLiked?'LikeFilled':'LikeOutlined'"></component>
-          </n-icon>
-          <span>{{ article.like_count }}</span>
-        </div>
+        <auth-btn>
+          <div class="item" @click.stop="onHandleLikeArticle">
+            <n-icon size="18" :color="isLiked ? 'red' : ''">
+              <component :is="isLiked?'LikeFilled':'LikeOutlined'"></component>
+            </n-icon>
+            <span class="count">{{ article.like_count }}</span>
+          </div>
+        </auth-btn>
       </div>
 
     </div>
@@ -58,22 +64,71 @@
 
 <script lang='ts' setup>
 // hooks
-import { computed, ref } from 'vue'
-import useUserStore from '@/store/user'
+import { useMessage } from 'naive-ui';
+import useNavigation from '@/hooks/useNavigation';
 // types
 import type { ArticleItemProps } from '@/types/components/item';
 // components
-import { LikeOutlined, StarOutlined,StarFilled,LikeFilled } from '@vicons/antd'
+import { LikeOutlined, StarOutlined, StarFilled, LikeFilled } from '@vicons/antd'
 import { CommentRegular } from '@vicons/fa'
 // apis
-import { likeArticleAPI,cancelLikeArticleAPI,starArticleAPI,cancelStarArticleAPI } from '@/apis/public/article';
+import { likeArticleAPI, cancelLikeArticleAPI, starArticleAPI, cancelStarArticleAPI } from '@/apis/public/article';
+// config
+import tips from '@/config/tips'
 
 const props = defineProps<ArticleItemProps>()
-// 是否收藏
-const isStar = ref(props.article.is_star)
-// 是否点赞
-const isLiked = ref(props.article.is_liked)
-
+const emit = defineEmits<{
+  'update:isLiked': [value: boolean];
+  'update:isStar': [value: boolean];
+  'update:starCount': [value: number];
+  'update:likeCount': [value: number];
+}>()
+const message = useMessage()
+const { goArticle, goUser, goBar } = useNavigation()
+/**
+ * 点击收藏帖子的回调
+ */
+const onHandleStarArticle = async () => {
+  try {
+    if (props.isStar) {
+      // 已经收藏了 点击取消收藏
+      await cancelStarArticleAPI(props.article.aid)
+      message.success(tips.successCancelStarArticle)
+      emit('update:starCount', props.starCount - 1)
+    } else {
+      // 当前未收藏 点击收藏帖子
+      await starArticleAPI(props.article.aid)
+      message.success(tips.successStarArticle)
+      emit('update:starCount', props.starCount + 1)
+    }
+    // 操作成功 更新本地收藏值
+    emit('update:isStar', !props.isStar)
+  } catch (error) {
+    console.log(error)
+  }
+}
+/**
+ * 点击点赞帖子的帖子
+ */
+const onHandleLikeArticle = async () => {
+  try {
+    if (props.isLiked) {
+      // 已经点赞了 取消点赞帖子
+      await cancelLikeArticleAPI(props.article.aid)
+      message.success(tips.successCancelLikeArticle)
+      emit('update:likeCount', props.likeCount - 1)
+    } else {
+      // 未点赞 点赞帖子
+      await likeArticleAPI(props.article.aid)
+      message.success(tips.successLikeArticle)
+      emit('update:likeCount', props.likeCount + 1)
+    }
+    // 更新状态
+    emit('update:isLiked', !props.isLiked)
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 defineOptions({
   components: {
@@ -105,6 +160,7 @@ defineOptions({
         width: 40px;
         height: 40px;
         border-radius: 50%;
+        cursor: pointer;
       }
     }
   }
@@ -132,6 +188,7 @@ defineOptions({
         max-width: 30%;
         max-height: 30%;
         flex-grow: 1;
+        cursor: pointer;
       }
 
       &.three {
@@ -146,12 +203,21 @@ defineOptions({
 
     .btns {
       display: flex;
+      align-items: center;
 
       .item {
         cursor: pointer;
         display: flex;
         justify-content: center;
         align-items: center;
+        color: var(--text-color-2);
+
+        .count {
+          font-size: 12px;
+          position: relative;
+          top: 2px;
+        }
+
         span {
           margin-left: 5px;
         }

@@ -14,10 +14,13 @@ import 'nprogress/nprogress.css'
 import '@/styles/index.css'
 // 全局组件
 import globalComponents from './globalComponents';
-export default  {
-  install(app){
+// 全局指令
+import globalDirectives from './globalDirectives';
+export default {
+  install(app) {
     app.use(store)
     app.use(router)
-    app.use(globalComponents)
+    globalComponents(app)
+    globalDirectives(app)
   }
 } as Plugin

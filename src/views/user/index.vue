@@ -45,6 +45,8 @@ import userDataModal from '@/render/modal/message/userData'
 // components
 import FollowBtn from '@/components/common/FollowBtn/index.vue'
 import UserViews from '@/components/common/UserViews/index.vue'
+// config
+import tips from '@/config/tips'
 
 // 用户信息
 const userInfor = ref<UserProfileResponse | null>(null)
@@ -75,7 +77,7 @@ const toGetUserData = async (uidString: string) => {
   try {
     const uid = +uidString
     if (isNaN(uid)) {
-      message.error('参数非法!')
+      message.error(tips.errorParams)
       await Promise.reject()
     } else if (userStore.userData.uid === uid) {
       // 若当前用户访问我的页面,重定向到我的页面
@@ -105,14 +107,14 @@ const onHandleShowMore = () => {
 }
 
 // 初始化加载
-onBeforeMount(() => toGetUserData(route.query.uid as string))
+onBeforeMount(() => toGetUserData(route.params.uid as string))
 
 // 路由更新时
 onBeforeRouteUpdate((to) => {
-  if (to.query.uid) {
-    toGetUserData(to.query.uid as string)
+  if (to.params.uid) {
+    toGetUserData(to.params.uid as string)
   } else {
-    message.warning('未携带参数!')
+    message.warning(tips.emptyParams)
     router.push({ path: '/', replace: true })
   }
 })

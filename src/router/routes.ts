@@ -97,7 +97,7 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
-    path: '/user',
+    path: '/user/:uid',
     name: 'user',
     component: () => import("@/views/user/index.vue"),
     meta: {
@@ -105,6 +105,24 @@ const routes: RouteRecordRaw[] = [
       title: '用户'
     },
     beforeEnter: userRoutesHooks
+  },
+  {
+    path: '/article/:aid',
+    name: 'article',
+    component: () => import("@/views/article/index.vue"),
+    meta: {
+      needAuth: false,
+      title:'帖子详情'
+    }
+  },
+  {
+    path: '/bar/:bid',
+    name: 'bar',
+    component: () => import("@/views/bar/index.vue"),
+    meta: {
+      needAuth: false,
+      title: '吧'
+    }
   }
 ]
 
