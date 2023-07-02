@@ -1,3 +1,4 @@
+import { ListResponse } from ".";
 /**
  * 用户文章数据
  */
@@ -37,3 +38,24 @@ export interface UserBrieflyInfo {
     uid: number;
     username: string;
 }
+
+/**
+ * 用户信息
+ */
+export interface UserItem {
+    article_count: number;
+    avatar: string;
+    createTime: string;
+    fans_count: number;
+    follow_bar_count: number;
+    follow_user_count: number;
+    is_fans: boolean;
+    is_followed: boolean;
+    uid: number;
+    username: string;
+}
+
+/**
+ * 用户列表的响应结果
+ */
+export type UserListResponse = ListResponse<UserItem>

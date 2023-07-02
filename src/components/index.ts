@@ -6,6 +6,8 @@ import Empty from '@/components/common/Empty/index.vue'
 import BarItem from '@/components/item/BarItem.vue'
 import FollowBarBtn from '@/components/common/FollowBarBtn/index.vue'
 import BarListLoad from '@/components/list/load/BarList.vue'
+import UserItem from '@/components/item/UserItem.vue'
+import UserList from '@/components/list/page/UserList.vue'
 
 // 全局组件
 export default {
@@ -16,5 +18,7 @@ export default {
   Empty,
   BarItem,
   FollowBarBtn,
-  BarListLoad
+  BarListLoad,
+  UserItem,
+  UserList
 }

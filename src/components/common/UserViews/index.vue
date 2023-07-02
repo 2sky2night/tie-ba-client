@@ -1,6 +1,6 @@
 <template>
   <div class="user-views-container" :class="{ 'vertical': isVertical }">
-    <n-tabs default-value="follow-bar" type="line" :size="isVertical ? 'medium' : 'small'"
+    <n-tabs default-value="post-article" type="line" :size="isVertical ? 'medium' : 'small'"
       :placement="isVertical ? 'left' : 'top'">
       <n-tab-pane name="post-article">
         <template #tab>

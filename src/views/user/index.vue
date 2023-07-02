@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <template v-if="!isLoading && userInfor">
-      <div class="user-info-container" >
+      <div class="user-info-container">
         <div class="image">
           <n-image :src="userInfor.avatar" />
         </div>
@@ -15,14 +15,15 @@
           </div>
           <div class="data">
             <div style="display: flex;">
-              <div class="text mr-10 data-item">关注: <span>{{ userInfor.follow_count }}</span></div>
-              <div class="text mr-10 data-item">粉丝: <span>{{ userInfor.fans_count }}</span></div>
-              <div class="text mr-10 data-item">帖子: <span>{{ userInfor.article.article_count }}</span></div>
+              <div class="mr-10 data-item">来到贴吧:<span>{{ getTempDays(userInfor.createTime) }}</span></div>
+              <div class="text mr-10 data-item" @click="onHandleToFollow">关注: <span>{{ userInfor.follow_count }}</span></div>
+              <div class="text mr-10 data-item" @click="onHandleToFans">粉丝: <span>{{ userInfor.fans_count }}</span></div>
             </div>
             <n-button size="small" text style="font-size: 13px;" @click="onHandleShowMore">更多信息</n-button>
           </div>
           <div class="edit">
-            <FollowBtn :uid="userInfor.uid" size="small" :is-fans="userInfor.is_fans" v-model:isFollowed="userInfor.is_followed"/>
+            <FollowBtn :uid="userInfor.uid" size="small" :is-fans="userInfor.is_fans"
+              v-model:isFollowed="userInfor.is_followed" />
           </div>
         </div>
       </div>
@@ -42,12 +43,16 @@ import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 import { useMessage } from 'naive-ui'
 import useUserStore from '@/store/user'
 import userDataModal from '@/render/modal/message/userData'
+import useNavigation from '@/hooks/useNavigation'
 // components
 import FollowBtn from '@/components/common/FollowBtn/index.vue'
 import UserViews from '@/components/common/UserViews/index.vue'
 // config
 import tips from '@/config/tips'
+// utils
+import { getTempDays } from '@/utils/tools'
 
+const { goFans, goFollow } = useNavigation()
 // 用户信息
 const userInfor = ref<UserProfileResponse | null>(null)
 // 路由元数据
@@ -106,6 +111,24 @@ const onHandleShowMore = () => {
   }
 }
 
+/**
+ * 去关注页
+ */
+const onHandleToFollow = () => {
+  if (userInfor.value) {
+    goFollow(userInfor.value.uid)
+  }
+}
+
+/**
+ * 去粉丝页
+ */
+const onHandleToFans = () => {
+  if (userInfor.value) {
+    goFans(userInfor.value.uid)
+  }
+}
+
 // 初始化加载
 onBeforeMount(() => toGetUserData(route.params.uid as string))
 
@@ -126,12 +149,12 @@ defineOptions({
 
 <style scoped lang='scss'>
 .page-container {
-  padding: 20px;
 
   .user-info-container {
     display: flex;
     padding-bottom: 20px;
     border-bottom: 1px solid var(--border-color-1);
+
     .user-data {
       position: relative;
       padding: 10px 0;

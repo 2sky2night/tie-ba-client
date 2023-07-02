@@ -1,5 +1,5 @@
 <template>
-  <n-config-provider :theme-overrides="theme" :theme="themeStore.theme">
+  <n-config-provider :theme-overrides="theme" :theme="themeStore.theme" :locale="zhCN">
     <n-message-provider>
       <Layout />
       <n-global-style />
@@ -14,6 +14,7 @@ import Layout from '@/layout/index.vue'
 import theme from './config/theme'
 // hooks
 import useThemeStore from '@/store/theme'
+import { zhCN } from 'naive-ui'
 
 const themeStore = useThemeStore()
 
@@ -31,6 +32,7 @@ if (themeStore.isDark) {
   max-width: 100vw;
   box-sizing: border-box;
   min-height: calc(100vh - var(--header-hight));
+  padding: 20px;
 }
 
 @media screen and (max-width:650px) {

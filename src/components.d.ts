@@ -6,7 +6,8 @@ import Empty from '@/components/common/Empty/index.vue'
 import BarItem from '@/components/item/BarItem.vue'
 import FollowBarBtn from '@/components/common/FollowBarBtn/index.vue'
 import BarListLoad from '@/components/list/load/BarList.vue'
-
+import UserItem from '@/components/item/UserItem.vue'
+import UserList from '@/components/list/page/UserList.vue'
 declare module 'vue' {
   export interface GlobalComponents {
     AuthBtn: typeof AuthBtn,
@@ -16,6 +17,8 @@ declare module 'vue' {
     Empty: typeof Empty,
     BarItem: typeof BarItem,
     FollowBarBtn: typeof FollowBarBtn,
-    BarListLoad: typeof BarListLoad
+    BarListLoad: typeof BarListLoad,
+    UserItem: typeof UserItem,
+    UserList: typeof UserList
   }
 }

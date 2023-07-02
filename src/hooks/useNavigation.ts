@@ -43,6 +43,14 @@ export default function () {
     router.push(`/bar/${bid}`)
   }
 
+  function goFans(uid: number) {
+    router.push(`/fans/${uid}`)
+  }
+
+  function goFollow(uid: number) {
+    router.push(`/follow/${uid}`)
+  }
+
   return {
     goHome,
     goDiscover,
@@ -52,7 +60,9 @@ export default function () {
     goRegister,
     goEdit,
     goArticle,
-    goBar
+    goBar,
+    goFans,
+    goFollow
   }
 
 }

@@ -1,5 +1,6 @@
 import type { ArticleListResponse } from "@/apis/public/types/article";
 import type { BarListResponse } from "@/apis/public/types/bar";
+import type { UserListResponse } from "@/apis/public/types/user";
 
 /**
  * 无限加载帖子组件的props
@@ -31,4 +32,11 @@ export interface BarListLoadProps {
    * 获取吧列表的函数
    */
   getDataCb: (page: number, pageSize: number, desc: boolean) => Promise<BarListResponse>;
+}
+
+/**
+ * 分页的用户列表组件的Props
+ */
+export interface UserListPageProps {
+  getData: (page: number, pageSize: number) => Promise<UserListResponse>
 }

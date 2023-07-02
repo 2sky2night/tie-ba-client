@@ -15,9 +15,9 @@
           </div>
           <div class="data">
             <div style="display: flex;">
-              <div class="text mr-10 data-item">关注: <span>{{ userInfor.follow_count }}</span></div>
-              <div class="text mr-10 data-item">粉丝: <span>{{ userInfor.fans_count }}</span></div>
-              <div class="text mr-10 data-item">帖子: <span>{{ userInfor.article.article_count }}</span></div>
+              <div class="mr-10 data-item">来到贴吧:<span>{{ getTempDays(userInfor.createTime) }}</span></div>
+              <div class="text mr-10 data-item" @click="onHandleToFollow">关注: <span>{{ userInfor.follow_count }}</span></div>
+              <div class="text mr-10 data-item" @click="onHandleToFans">粉丝: <span>{{ userInfor.fans_count }}</span></div>
             </div>
             <n-button size="small" text style="font-size: 13px;" @click="onHandleShowMore">更多信息</n-button>
           </div>
@@ -50,12 +50,13 @@ import useNavigation from '@/hooks/useNavigation'
 import { AngleRight } from '@vicons/fa'
 import userDataModal from '@/render/modal/message/userData'
 import UserViews from '@/components/common/UserViews/index.vue'
-import FollowBtn from '@/components/common/FollowBtn/index.vue'
+// utils
+import { getTempDays } from '@/utils/tools'
 
 // 用户信息
 const userInfor = ref<UserInfoResponse | null>(null)
 // 导航
-const { goEdit } = useNavigation()
+const { goEdit,goFans,goFollow } = useNavigation()
 // 收到的赞
 const total = computed(() => {
   if (userInfor.value) {
@@ -77,6 +78,24 @@ const onHandleShowMore = () => {
   }
 }
 
+/**
+ * 去关注页
+ */
+const onHandleToFollow = () => {
+  if (userInfor.value) {
+    goFollow(userInfor.value.uid)
+  }
+}
+
+/**
+ * 去粉丝页
+ */
+const onHandleToFans = () => {
+  if (userInfor.value) {
+    goFans(userInfor.value.uid)
+  }
+}
+
 onBeforeMount(async () => {
   try {
     const res = await getUserInfoAPI()
@@ -93,7 +112,6 @@ defineOptions({
 
 <style scoped lang='scss'>
 .page-container {
-  padding: 20px;
   .user-info-container {
     display: flex;
     border-bottom: 1px solid var(--border-color-1);

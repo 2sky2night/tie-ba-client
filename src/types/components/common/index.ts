@@ -68,6 +68,9 @@ export interface EchartsProps {
     height: number;
 }
 
+/**
+ * 关注吧按钮组件的props
+ */
 export interface FollowBarBtnProps {
     /**
      * 吧的id
@@ -85,4 +88,11 @@ export interface FollowBarBtnProps {
      * 关注数量
      */
     followCount: number;
+}
+
+/**
+ * 用户简要信息组件的Props
+ */
+export interface UserBrieflyProps {
+    uid:number
 }

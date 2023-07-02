@@ -59,6 +59,7 @@ onBeforeMount(getListData)
 
 <style scoped lang='scss'>
 .bar-list-container {
+    padding: 10px 0;
     .bar-list{
         display: grid;
         grid-template-columns: repeat(2, 1fr);

@@ -32,7 +32,7 @@
 }
 
 /*没有更多了的提示*/
-.no-more{
+.no-more,.sub-text{
   font-size: 12px;
   color:var(--text-color-2)
 }

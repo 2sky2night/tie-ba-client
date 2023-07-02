@@ -35,6 +35,7 @@ declare module 'vue' {
     NInput: typeof import('naive-ui')['NInput']
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
     NNumberAnimation: typeof import('naive-ui')['NNumberAnimation']
+    NPagination: typeof import('naive-ui')['NPagination']
     NScrollbar: typeof import('naive-ui')['NScrollbar']
     NSelect: typeof import('naive-ui')['NSelect']
     NSpace: typeof import('naive-ui')['NSpace']
@@ -42,9 +43,13 @@ declare module 'vue' {
     NTab: typeof import('naive-ui')['NTab']
     NTabPane: typeof import('naive-ui')['NTabPane']
     NTabs: typeof import('naive-ui')['NTabs']
+    Pagination: typeof import('./src/components/pagination/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    UserBriefly: typeof import('./src/components/common/UserBriefly/index.vue')['default']
     UserData: typeof import('./src/components/common/UserData/index.vue')['default']
+    UserItem: typeof import('./src/components/item/UserItem.vue')['default']
+    UserList: typeof import('./src/components/list/page/UserList.vue')['default']
     UserViews: typeof import('./src/components/common/UserViews/index.vue')['default']
   }
 }

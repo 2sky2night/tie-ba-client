@@ -123,6 +123,24 @@ const routes: RouteRecordRaw[] = [
       needAuth: false,
       title: '吧'
     }
+  },
+  {
+    path: '/fans/:uid',
+    name: 'fans',
+    component: () => import("@/views/fans/index.vue"),
+    meta: {
+      needAuth: false,
+      title: '粉丝'
+    }
+  },
+  {
+    path: '/follow/:uid',
+    name: 'follow',
+    component: () => import("@/views/follow/index.vue"),
+    meta: {
+      needAuth: false,
+      title: '关注'
+    }
   }
 ]
 

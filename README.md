@@ -473,7 +473,7 @@ export const loginRoutesHook: NavigationGuardWithThis<undefined> = (to, from, ne
 
 ### 3.我的
 
-
+​	展示用户基本信息，以及查看我相关的数据，以及跳转到粉丝、关注、编辑信息页
 
 ### 4.用户
 
@@ -481,7 +481,9 @@ export const loginRoutesHook: NavigationGuardWithThis<undefined> = (to, from, ne
 
 ​	关注：当前用户登录了才能就行关注操作；若对该用户是关注状态，点击则取消关注；若当前未关注用户，点击则关注用户
 
+### 5.关注和粉丝页
 
+​	分页浏览用户列表，可以通过搜索来查模糊匹配用户
 
 ## 四、render渲染组件函数
 
@@ -539,6 +541,10 @@ export const loginRoutesHook: NavigationGuardWithThis<undefined> = (to, from, ne
 
 ​	关注吧按钮，提供用户关注吧的操作，并且外套一个auth-btn，对点击事件进行捕获鉴权
 
+### 9.用户列表组件
+
+​	用户列表组件，通过传入获取数据的函数，在页数更新的时候去调用，所以需要监听当前页数。并且监听路由查询参数page，当page更新时调用获取数据的函数。向外暴露整个分页数据，好让外部操作分页数据，在路由更新的特殊情况更新数据。
+
 ## 六、指令
 
 ### 1.图片懒加载指令
@@ -549,7 +555,158 @@ export const loginRoutesHook: NavigationGuardWithThis<undefined> = (to, from, ne
 
 ​	给img绑定该指令传入图片的src，在img被渲染时会给他绑定一个事件处理函数，点击图片就会调用图片预览组件函数
 
-## 七、问题
+## 七、钩子
+
+### 1.检查路由参数的钩子
+
+​	返回一个检查路由的函数 减少重复代码，不过只能检查一个参数，且参数类型为number型，调用函数可以获取到解析成功的结果,可以传入路由元数据，来检查不同路由的参数，例如to或当前路由
+
+```ts
+import { useRoute, useRouter, RouteLocationNormalizedLoaded } from "vue-router";
+import { useMessage } from "naive-ui";
+import tips from "@/config/tips";
+
+/**
+ * 检查路由参数(只能检查一个参数 且参数检查的类型为number)
+ * @param key 路由参数中的那个key 
+ * @param type params参数还是query参数
+ */
+export default function (key: string, type: 'params' | 'query' = 'params') {
+
+    const route = useRoute()
+    const router = useRouter()
+    const message = useMessage()
+
+    /**
+     * 检查路由参数 (传入路由信息,默认为当前路由)
+     * @param currentRoutes 需要检查的路由 
+     * @returns 
+     */
+    function checkRoutes(currentRoutes: RouteLocationNormalizedLoaded = route) {
+        const value = currentRoutes[type][key]
+        if (value) {
+            // 携带参数
+            const temp = +value
+            if (isNaN(temp)) {
+                // 参数非法
+                message.error(tips.errorParams)
+                router.replace('/')
+                return Promise.reject()
+            } else {
+                return Promise.resolve(temp)
+            }
+        } else {
+            // 未携带参数
+            message.error(tips.emptyParams)
+            router.replace('/')
+            return Promise.reject()
+        }
+    }
+
+    return checkRoutes
+}
+```
+
+### 2.分页钩子
+
+​	初始化时检验page参数是否携带，未携带或非法会重置为1，合法就以该值初始化分页数据，在分页更新时进行会路由跳转，在路由更新时会校验参数是否合法，合法就获取数据，非法就重置页数
+
+```ts
+import { formatNumber } from '@/utils/tools'
+import { reactive, watch } from 'vue'
+import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router'
+
+/**
+ * 分页的钩子函数 传入获取数据的函数
+ * 监听页码或路由查询参数page更新
+ * 支持校验路由的page参数
+ * @param cb 
+ * @returns 
+ */
+export default function (cb: any) {
+
+    const router = useRouter()
+    const route = useRoute()
+    let routePage = 1
+
+    // 初始化解析路由参数page
+    if (route.query.page !== undefined) {
+        const res = formatNumber(route.query.page as string)
+        if (typeof res === 'number') {
+            // 是一个数字
+            if (res < 1) {
+                // 小于一 重置为1 更新路由
+                router.replace({ path: route.path, query: { ...route.query, page: 1 } })
+            } else {
+                routePage = res
+            }
+        } else {
+            // 不是一个数字 重置为1 更新路由
+            router.replace({ path: route.path, query: { ...route.query, page: 1 } })
+        }
+    } else {
+        // 未携带page参数
+        router.replace({ path: route.path, query: { ...route.query, page: 1 } })
+    }
+
+    const pagination = reactive({
+        page: routePage,
+        pageSize: 20,
+        total: 0,
+        has_more: false
+    })
+
+    // 页长度更新的回调
+    watch(() => pagination.pageSize, () => {
+        if (pagination.page === 1) {
+            cb()
+            router.push({ path: route.path, query: { ...route.query, page: 1 } })
+        } else {
+            pagination.page = 1
+        }
+
+    })
+
+    // 页码更新的回调
+    watch(() => pagination.page, (v) => {
+        cb()
+        router.push({ path: route.path, query: { ...route.query, page: v } })
+    })
+
+
+    // 路由更新时解析路由 (路由查询参数更新的回调)
+    onBeforeRouteUpdate((to) => {
+        if (to.query.page !== undefined) {
+            const res = formatNumber(to.query.page as string)
+            if (typeof res === 'number') {
+                // 是一个数字
+                if (res < 1) {
+                    // 小于一 重置为1 更新路由
+                    pagination.page = 1
+                    router.replace({ path: to.path, query: { ...to.query, page: 1 } })
+                } else {
+                    // 大于1 获取页码
+                    pagination.page = res
+                }
+            } else {
+                // 不是一个数字 重置为1 更新路由
+                pagination.page = 1
+                router.replace({ path: to.path, query: { ...to.query, page: 1 } })
+            }
+        } else {
+            // 未携带参数
+            pagination.page = 1
+            router.replace({ path: to.path, query: { ...to.query, page: 1 } })
+        }
+    })
+
+    return pagination
+}
+```
+
+
+
+## 八、问题
 
 ### 1.withDefaults声明props默认值
 
@@ -595,4 +752,20 @@ export const loginRoutesHook: NavigationGuardWithThis<undefined> = (to, from, ne
 
 6.帖子项组件的封装
 
-7.吧项组件
+7.吧项组件，吧列表组件
+
+7.2
+
+1.用户和我的页面添加创建时间
+
+2.粉丝、关注的api封装
+
+3.封装检查路由参数的钩子（参数的值必须为number型，且只能检查一个参数）
+
+4.更新关注用户按钮，添加更新粉丝数量的自定义事件
+
+5.用户列表
+
+6.分页钩子
+
+7.关注、粉丝页搭建了50%

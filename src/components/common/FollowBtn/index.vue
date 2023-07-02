@@ -11,7 +11,7 @@ import { computed, ref } from 'vue'
 import useUserStore from '@/store/user';
 import { useMessage } from 'naive-ui';
 // types
-import type { FollowBtnProps } from '@/types/components/common'; 
+import type { FollowBtnProps } from '@/types/components/common';
 // apis
 import { followUserAPI, cancelFollowUserAPI } from '@/apis/public/user';
 // configs
@@ -24,14 +24,18 @@ const emit = defineEmits<{
   /**
    * 更新关注状态
    */
-  'update:isFollowed': [ value: boolean ]
+  'update:isFollowed': [value: boolean];
+  /**
+   * 粉丝数量增加 flag为真 增加数量 反之减少数量
+   */
+  'changeCount': [flag: boolean];
 }>()
 // 用户仓库
 const userStore = useUserStore()
 // 关注按钮的文本
 const followFormat = computed(() => {
   if (props.isFans && props.isFollowed) {
-    return '互相关注'
+    return '已互粉'
   } else if (props.isFollowed) {
     return '已关注'
   } else {
@@ -56,10 +60,12 @@ const onHandleClick = async () => {
       // 关注了用户 点击则取消关注
       await toCancelFollowUser()
       message.success(tips.successCancelFollow)
+      emit('changeCount', false)
     } else {
       // 未关注 点击则关注用户
       await toFollowUser()
       message.success(tips.succeessFollow)
+      emit('changeCount', true)
     }
     // 关注或取消关注成功 更新关注状态
     emit('update:isFollowed', !props.isFollowed)
