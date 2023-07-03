@@ -45,7 +45,6 @@ import useUserStore from '@/store/user'
 import userDataModal from '@/render/modal/message/userData'
 import useNavigation from '@/hooks/useNavigation'
 // components
-import FollowBtn from '@/components/common/FollowBtn/index.vue'
 import UserViews from '@/components/common/UserViews/index.vue'
 // config
 import tips from '@/config/tips'

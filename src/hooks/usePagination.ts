@@ -17,6 +17,7 @@ export default function (cb: any) {
 
     // 初始化解析路由参数page
     if (route.query.page !== undefined) {
+        // 携带了page参数
         const res = formatNumber(route.query.page as string)
         if (typeof res === 'number') {
             // 是一个数字
@@ -30,11 +31,8 @@ export default function (cb: any) {
             // 不是一个数字 重置为1 更新路由
             router.replace({ path: route.path, query: { ...route.query, page: 1 } })
         }
-    } else {
-        // 未携带page参数
-        router.replace({ path: route.path, query: { ...route.query, page: 1 } })
     }
-
+    
     const pagination = reactive({
         page: routePage,
         pageSize: 20,
@@ -46,11 +44,9 @@ export default function (cb: any) {
     watch(() => pagination.pageSize, () => {
         if (pagination.page === 1) {
             cb()
-            router.push({ path: route.path, query: { ...route.query, page: 1 } })
         } else {
             pagination.page = 1
         }
-
     })
 
     // 页码更新的回调
@@ -82,9 +78,18 @@ export default function (cb: any) {
         } else {
             // 未携带参数
             pagination.page = 1
-            router.replace({ path: to.path, query: { ...to.query, page: 1 } })
+            // 不能加下面这段代码 会导致路由重复的更新也就是外层在使用路由监听的钩子会重复执行
+            // router.replace({ path: to.path, query: { ...to.query, page: 1 } })
         }
     })
+
+    function resetPage () {
+        if (pagination.page === 1) {
+            cb()
+        } else {
+            pagination.page=1
+        }
+    }
 
     return pagination
 }

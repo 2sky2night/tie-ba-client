@@ -1,6 +1,9 @@
 <template>
     <div class="page-container">
-        <UserBriefly :uid="uid" ><span class="sub-text ml-10">的关注</span></UserBriefly>
+        <UserBriefly :uid="uid" v-slot="{data}">
+            <span class="mr-10">的关注</span>
+             <span class="sub-text">共{{ data.user.follow_count }}项</span> 
+        </UserBriefly>
         <div class="user-list">
             <UserList ref="listIns" :get-data="getUserFollow" />
         </div>

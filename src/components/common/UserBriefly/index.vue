@@ -4,7 +4,7 @@
             <span class="username">
                 {{ user.username }}
             </span>
-            <slot></slot>
+            <slot :data="{user}"></slot>
         </div>
     </div>
 </template>
@@ -14,7 +14,7 @@
 import type { UserBrieflyProps } from '@/types/components/common'
 import type { UserCardResponse } from '@/apis/public/user/types.ts'
 // hooks
-import { onBeforeMount, reactive } from 'vue';
+import { onBeforeMount, reactive,watch } from 'vue';
 // apis
 import { getUserBrieflyInfoAPI } from '@/apis/public/user';
 
@@ -31,7 +31,7 @@ const user = reactive<UserCardResponse>({
     is_follow: false
 })
 
-onBeforeMount(async () => {
+async function toGetData () {
     const res = await getUserBrieflyInfoAPI(props.uid)
     user.avatar = res.data.avatar
     user.createTime = res.data.createTime
@@ -42,8 +42,11 @@ onBeforeMount(async () => {
     user.like_count = res.data.like_count
     user.uid = res.data.uid
     user.username = res.data.username
-})
+}
 
+onBeforeMount(toGetData)
+
+watch(()=>props.uid,toGetData)
 
 defineOptions({
     name: 'UserBriefly'

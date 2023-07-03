@@ -1,6 +1,9 @@
 <template>
     <div class="page-container">
-        <UserBriefly :uid="uid" ><span class="sub-text ml-10">的粉丝</span></UserBriefly>
+        <UserBriefly :uid="uid" v-slot="{data}">
+            <span class="mr-10">的粉丝</span>
+             <span class="sub-text">共{{ data.user.fans_count }}项</span> 
+        </UserBriefly>
         <div class="user-list">
             <UserList ref="listIns" :get-data="getUserFans" />
         </div>
@@ -49,13 +52,18 @@ function checkRoutes(currentRoutes: RouteLocationNormalizedLoaded = route) {
 checkRoutes()
 
 // 若params参数更新则需要重置页数加载数据
-onBeforeRouteUpdate((to, form) => {
+onBeforeRouteUpdate((to, from) => {
+    console.log(to,from)
     // 需要判断当前是否为params参数更新
-    if (to.params.uid !== form.params.uid) {
-        console.log(to.params, form.params)
+    if (to.params.uid !== from.params.uid) {
         checkRoutes(to)
         if (listIns.value) {
-            listIns.value.getListData()
+            if (listIns.value.pagination.page === 1) {
+                // 强制更新
+                listIns.value.getListData()
+            } else {
+                listIns.value.pagination.page=1
+            }
         }
     }
 })
