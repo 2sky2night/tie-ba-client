@@ -49,7 +49,7 @@ import UserViews from '@/components/common/UserViews/index.vue'
 // config
 import tips from '@/config/tips'
 // utils
-import { getTempDays } from '@/utils/tools'
+import { getTempDays,handleHttpError } from '@/utils/tools'
 
 const { goFans, goFollow } = useNavigation()
 // 用户信息
@@ -93,7 +93,7 @@ const toGetUserData = async (uidString: string) => {
     userInfor.value = res.data
     isLoading.value = false
   } catch (error) {
-    router.push({ path: '/', replace: true })
+    handleHttpError(error)
   }
 }
 
@@ -208,7 +208,7 @@ defineOptions({
     .user-info-container {
       flex-direction: column;
       align-items: center;
-
+      border: none;
       .image {
         border-radius: 50%;
         overflow: hidden;

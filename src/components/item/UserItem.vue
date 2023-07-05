@@ -1,5 +1,5 @@
 <template>
-    <div class="user-item-container" @click="()=>goUser(props.user.uid)">
+    <div class="user-item-container" @click="() => goUser(props.user.uid)">
         <div class="user-info">
             <img class="mr-10" style="border-radius: 50%;" v-lazyImg="user.avatar">
             <div class="user">
@@ -12,8 +12,10 @@
             </div>
         </div>
         <div class="user-data mt-10">
-            <div class="sub-text text" @click.stop="()=> goFollow(props.user.uid)">关注:<span>{{ user.follow_user_count }}</span></div>
-            <div class="sub-text text" @click.stop="()=>goFans(props.user.uid)">粉丝:<span>{{ user.fans_count }}</span></div>
+            <div class="sub-text text" @click.stop="() => goFollow(props.user.uid)">关注:<span>{{ user.follow_user_count
+            }}</span></div>
+            <div class="sub-text text" @click.stop="() => goFans(props.user.uid)">粉丝:<span>{{ user.fans_count }}</span>
+            </div>
             <div class="sub-text text">帖子:<span>{{ user.article_count }}</span></div>
             <div class="sub-text text">关注吧:<span>{{ user.follow_bar_count }}</span></div>
         </div>
@@ -28,11 +30,11 @@ import useNavigation from '@/hooks/useNavigation';
 const props = defineProps<UserItemProps>()
 const { goFans, goFollow, goUser } = useNavigation()
 const emits = defineEmits<{
-    'update:fansCount': [value: number]
+    'update:fansCount': [ value: number ]
 }>()
 
 const onHandleChangeCount = (flag: boolean) => {
-    flag ? emits('update:fansCount', props.fansCount + 1) : emits('update:fansCount', props.fansCount - 1)
+    emits('update:fansCount', flag ? props.fansCount + 1 : props.fansCount - 1)
 }
 
 </script>
@@ -41,6 +43,7 @@ const onHandleChangeCount = (flag: boolean) => {
 .user-item-container {
     padding: 10px;
     cursor: pointer;
+
     .user-info {
         display: flex;
 
@@ -51,11 +54,15 @@ const onHandleChangeCount = (flag: boolean) => {
 
         .user {
             flex-grow: 1;
-            .desc{
+
+            .desc {
                 padding-right: 50px;
             }
+
             .username {
+                height: 30px;
                 display: flex;
+                align-items: center;
                 justify-content: space-between;
             }
         }

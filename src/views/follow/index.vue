@@ -1,9 +1,14 @@
 <template>
     <div class="page-container">
-        <UserBriefly :uid="uid" v-slot="{data}">
+        <UserBriefly :uid="uid" v-slot="{ data }">
             <span class="mr-10">的关注</span>
-             <span class="sub-text">共{{ data.user.follow_count }}项</span> 
+            <span class="sub-text">共{{ data.user.follow_count }}项</span>
         </UserBriefly>
+        <div class="search mb-10">
+            <n-input v-model:value.trim="keywords" type="text" placeholder="基本的 Input" />
+            <n-button type="primary" @click="onHandleSearch">搜索</n-button>
+            <n-button @click="onHandleReset">重置</n-button>
+        </div>
         <div class="user-list">
             <UserList ref="listIns" :get-data="getUserFollow" />
         </div>
@@ -12,7 +17,7 @@
 
 <script lang='ts' setup>
 // apis
-import { getUserFollowListAPI } from '@/apis/public/user'
+import { getUserFollowListAPI, searchUserFollowListAPI } from '@/apis/follow'
 // hooks
 import { useMessage } from 'naive-ui';
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router';
@@ -23,42 +28,84 @@ import tips from '@/config/tips';
 // components
 import UserBriefly from '@/components/common/UserBriefly/index.vue'
 
-let uid = 0
+const uid = ref(0)
 const route = useRoute()
 const message = useMessage()
 const router = useRouter()
 const listIns = ref()
+const keywords = ref('a')
+const isSearchType = ref(false)
 
-async function getUserFollow(page: number, pageSize: number) {
+async function getUserFollow (page: number, pageSize: number) {
     try {
-        const res = await getUserFollowListAPI(uid, page, pageSize, true)
+        // 根据是否开启搜索关注决定调用哪个api
+        const res = isSearchType.value ? await searchUserFollowListAPI(uid.value, keywords.value, page, pageSize) : await getUserFollowListAPI(uid.value, page, pageSize, true)
         return Promise.resolve(res.data)
     } catch (error) {
         return Promise.reject(error)
     }
 }
 
-function checkRoutes(currentRoutes: RouteLocationNormalizedLoaded = route) {
+function checkRoutes (currentRoutes: RouteLocationNormalizedLoaded = route) {
     const id = + currentRoutes.params.uid
     if (isNaN(id)) {
         message.error(tips.errorParams)
         router.replace('/')
     } else {
-        uid = id
+        uid.value = id
     }
 }
 
 // 获取当前路由的参数
 checkRoutes()
 
+/**
+ * 开启搜索粉丝
+ */
+function onHandleSearch () {
+    if (keywords.value) {
+        isSearchType.value = true
+        // 重置页数 加载数据
+        if (listIns.value) {
+            if (listIns.value.pagination.page === 1) {
+                // 强制更新
+                listIns.value.getListData()
+            } else {
+                listIns.value.pagination.page = 1
+            }
+        }
+    }
+}
+
+/**
+ * 重置搜索
+ */
+function onHandleReset () {
+    isSearchType.value = false
+    keywords.value = ''
+    // 重置页数 加载数据
+    if (listIns.value) {
+        if (listIns.value.pagination.page === 1) {
+            // 强制更新
+            listIns.value.getListData()
+        } else {
+            listIns.value.pagination.page = 1
+        }
+    }
+}
+
+
 // 若params参数更新则需要重置页数加载数据
 onBeforeRouteUpdate((to, form) => {
     // 需要判断当前是否为params参数更新
     if (to.params.uid !== form.params.uid) {
-        console.log(to.params, form.params)
         checkRoutes(to)
         if (listIns.value) {
-            listIns.value.getListData()
+            if (listIns.value.pagination.page === 1) {
+                listIns.value.getListData()
+            } else {
+                listIns.value.pagination.page = 1
+            }
         }
     }
 })
@@ -72,6 +119,10 @@ defineOptions({
 .page-container {
     display: flex;
     flex-direction: column;
+
+    .search {
+        display: flex;
+    }
 
     .user-list {
         flex-grow: 1;

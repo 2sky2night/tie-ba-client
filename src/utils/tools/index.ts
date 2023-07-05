@@ -1,3 +1,6 @@
+import { AxiosError } from 'axios'
+import BaseResponse from '../request/types'
+import router from '@/router'
 /**
  * 传入时间类型的字符串 返回相距时间 若超过1天 显示对应日月 超过一年显示日月年
  * @param value 
@@ -52,4 +55,19 @@ export const formatNumber = (value: string) => {
     } else {
         return temp
     }
+}
+
+/**
+ * 处理http请求的回调
+ * @param error 
+ */
+export const handleHttpError = (error:any) => {
+    if (error.response?.data.code === 404) {
+        console.log('资源未找到')
+    } else if (error.response?.data.code===400) {
+        console.log('客户端请求错误')
+    } else {
+        console.log('其他错误')
+    }
+    router.replace('/')
 }

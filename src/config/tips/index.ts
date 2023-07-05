@@ -12,5 +12,6 @@ export default {
   successCancelLikeArticle: '取消点赞帖子成功!',
   errorParams: '参数非法!',
   emptyParams: '未携带参数!',
-  pleaseDoNotRepeatLogin:'请勿重复登录'
+  pleaseDoNotRepeatLogin: '请勿重复登录',
+  userIsNotFound:'用户不存在!'
 }

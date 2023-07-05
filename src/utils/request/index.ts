@@ -24,6 +24,7 @@ http.interceptors.request.use(
   },
   (error) => {
     end()
+    window.$message.error('请求失败!')
     return Promise.reject(error)
   }
 )
@@ -61,7 +62,7 @@ http.interceptors.response.use(
     if (error.response) {
       window.$message.error(error.response.data.message)
     } else {
-      window.$message.error('出错了!')
+      window.$message.error('响应出错了!')
     }
     return Promise.reject(error)
   }

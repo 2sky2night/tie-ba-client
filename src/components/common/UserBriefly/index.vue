@@ -17,6 +17,8 @@ import type { UserCardResponse } from '@/apis/public/user/types.ts'
 import { onBeforeMount, reactive,watch } from 'vue';
 // apis
 import { getUserBrieflyInfoAPI } from '@/apis/public/user';
+// utils
+import { handleHttpError } from '@/utils/tools';
 
 const props = defineProps<UserBrieflyProps>()
 const user = reactive<UserCardResponse>({
@@ -32,16 +34,20 @@ const user = reactive<UserCardResponse>({
 })
 
 async function toGetData () {
-    const res = await getUserBrieflyInfoAPI(props.uid)
-    user.avatar = res.data.avatar
-    user.createTime = res.data.createTime
-    user.fans_count = res.data.fans_count
-    user.follow_count = res.data.follow_count
-    user.is_fans = res.data.is_fans
-    user.is_follow = res.data.is_follow
-    user.like_count = res.data.like_count
-    user.uid = res.data.uid
-    user.username = res.data.username
+    try {
+        const res = await getUserBrieflyInfoAPI(props.uid)
+        user.avatar = res.data.avatar
+        user.createTime = res.data.createTime
+        user.fans_count = res.data.fans_count
+        user.follow_count = res.data.follow_count
+        user.is_fans = res.data.is_fans
+        user.is_follow = res.data.is_follow
+        user.like_count = res.data.like_count
+        user.uid = res.data.uid
+        user.username = res.data.username
+    } catch (error) {
+        handleHttpError(error)
+    }
 }
 
 onBeforeMount(toGetData)

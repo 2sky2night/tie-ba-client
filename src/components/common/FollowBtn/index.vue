@@ -113,3 +113,9 @@ defineOptions({
   name: 'FollowBtn'
 })
 </script>
+
+<style scoped lang="scss">
+:deep(.n-button){
+  font-size: 12px !important;
+}
+</style>
