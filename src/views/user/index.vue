@@ -49,7 +49,7 @@ import UserViews from '@/components/common/UserViews/index.vue'
 // config
 import tips from '@/config/tips'
 // utils
-import { getTempDays,handleHttpError } from '@/utils/tools'
+import { getTempDays } from '@/utils/tools'
 
 const { goFans, goFollow } = useNavigation()
 // 用户信息
@@ -78,11 +78,10 @@ const userStore = useUserStore()
  * @param uid 
  */
 const toGetUserData = async (uidString: string) => {
-  try {
     const uid = +uidString
     if (isNaN(uid)) {
       message.error(tips.errorParams)
-      await Promise.reject()
+      return
     } else if (userStore.userData.uid === uid) {
       // 若当前用户访问我的页面,重定向到我的页面
       router.replace('/my')
@@ -92,9 +91,6 @@ const toGetUserData = async (uidString: string) => {
     const res = await getUserProfileAPI(uid)
     userInfor.value = res.data
     isLoading.value = false
-  } catch (error) {
-    handleHttpError(error)
-  }
 }
 
 /**

@@ -5,9 +5,9 @@
             <span class="sub-text">共{{ data.user.follow_count }}项</span>
         </UserBriefly>
         <div class="search mb-10">
-            <n-input v-model:value.trim="keywords" type="text" placeholder="基本的 Input" />
+            <n-input v-model:value.trim="keywords" type="text" :placeholder="tips.searchPlaceholder" />
             <n-button type="primary" @click="onHandleSearch">搜索</n-button>
-            <n-button @click="onHandleReset">重置</n-button>
+            <n-button :disabled="!isSearchType" @click="onHandleReset">重置</n-button>
         </div>
         <div class="user-list">
             <UserList ref="listIns" :get-data="getUserFollow" />
@@ -33,7 +33,7 @@ const route = useRoute()
 const message = useMessage()
 const router = useRouter()
 const listIns = ref()
-const keywords = ref('a')
+const keywords = ref('')
 const isSearchType = ref(false)
 
 async function getUserFollow (page: number, pageSize: number) {
@@ -67,13 +67,10 @@ function onHandleSearch () {
         isSearchType.value = true
         // 重置页数 加载数据
         if (listIns.value) {
-            if (listIns.value.pagination.page === 1) {
-                // 强制更新
-                listIns.value.getListData()
-            } else {
-                listIns.value.pagination.page = 1
-            }
+            listIns.value.toResetPage()
         }
+    } else {
+        message.warning(tips.pleaseEnter)
     }
 }
 
@@ -85,12 +82,7 @@ function onHandleReset () {
     keywords.value = ''
     // 重置页数 加载数据
     if (listIns.value) {
-        if (listIns.value.pagination.page === 1) {
-            // 强制更新
-            listIns.value.getListData()
-        } else {
-            listIns.value.pagination.page = 1
-        }
+        listIns.value.toResetPage()
     }
 }
 
@@ -100,13 +92,7 @@ onBeforeRouteUpdate((to, form) => {
     // 需要判断当前是否为params参数更新
     if (to.params.uid !== form.params.uid) {
         checkRoutes(to)
-        if (listIns.value) {
-            if (listIns.value.pagination.page === 1) {
-                listIns.value.getListData()
-            } else {
-                listIns.value.pagination.page = 1
-            }
-        }
+        listIns.value.toResetPage()
     }
 })
 

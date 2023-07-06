@@ -12,6 +12,9 @@ export default {
   successCancelLikeArticle: '取消点赞帖子成功!',
   errorParams: '参数非法!',
   emptyParams: '未携带参数!',
-  pleaseDoNotRepeatLogin: '请勿重复登录',
-  userIsNotFound:'用户不存在!'
+  pleaseDoNotRepeatLogin: '请勿重复登录!',
+  userIsNotFound: '用户不存在!',
+  searchPlaceholder: '请输入内容进行搜索',
+  notFound: '请求的资源不存在!',
+  pleaseEnter:'请先输入内容!'
 }

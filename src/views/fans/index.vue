@@ -5,9 +5,9 @@
             <span class="sub-text">共{{ data.user.fans_count }}项</span>
         </UserBriefly>
         <div class="search mb-10">
-            <n-input v-model:value.trim="keywords" type="text" placeholder="基本的 Input" />
+            <n-input v-model:value.trim="keywords" type="text" :placeholder="tips.searchPlaceholder" />
             <n-button type="primary" @click="onHandleSearch">搜索</n-button>
-            <n-button @click="onHandleReset">重置</n-button>
+            <n-button :disabled="!isSearchType" @click="onHandleReset">重置</n-button>
         </div>
         <div class="user-list">
             <UserList ref="listIns" :get-data="getUserFans" />
@@ -34,7 +34,7 @@ const message = useMessage()
 const router = useRouter()
 // 用户列表实例
 const listIns = ref()
-const keywords = ref('a')
+const keywords = ref('')
 const isSearchType = ref(false)
 
 async function getUserFans (page: number, pageSize: number) {
@@ -65,13 +65,10 @@ function onHandleSearch () {
         isSearchType.value = true
         // 重置页数 加载数据
         if (listIns.value) {
-            if (listIns.value.pagination.page === 1) {
-                // 强制更新
-                listIns.value.getListData()
-            } else {
-                listIns.value.pagination.page = 1
-            }
+            listIns.value.toResetPage()
         }
+    } else {
+        message.warning(tips.pleaseEnter)
     }
 }
 
@@ -83,12 +80,7 @@ function onHandleReset () {
     keywords.value = ''
     // 重置页数 加载数据
     if (listIns.value) {
-        if (listIns.value.pagination.page === 1) {
-            // 强制更新
-            listIns.value.getListData()
-        } else {
-            listIns.value.pagination.page = 1
-        }
+        listIns.value.toResetPage()
     }
 }
 
@@ -101,12 +93,7 @@ onBeforeRouteUpdate((to, from) => {
     if (to.params.uid !== from.params.uid) {
         checkRoutes(to)
         if (listIns.value) {
-            if (listIns.value.pagination.page === 1) {
-                // 强制更新
-                listIns.value.getListData()
-            } else {
-                listIns.value.pagination.page = 1
-            }
+            listIns.value.toResetPage()
         }
     }
 })

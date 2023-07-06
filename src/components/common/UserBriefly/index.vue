@@ -4,7 +4,7 @@
             <span class="username">
                 {{ user.username }}
             </span>
-            <slot :data="{user}"></slot>
+            <slot :data="{ user }"></slot>
         </div>
     </div>
 </template>
@@ -14,11 +14,9 @@
 import type { UserBrieflyProps } from '@/types/components/common'
 import type { UserCardResponse } from '@/apis/public/user/types.ts'
 // hooks
-import { onBeforeMount, reactive,watch } from 'vue';
+import { onBeforeMount, reactive, watch } from 'vue';
 // apis
 import { getUserBrieflyInfoAPI } from '@/apis/public/user';
-// utils
-import { handleHttpError } from '@/utils/tools';
 
 const props = defineProps<UserBrieflyProps>()
 const user = reactive<UserCardResponse>({
@@ -34,25 +32,21 @@ const user = reactive<UserCardResponse>({
 })
 
 async function toGetData () {
-    try {
-        const res = await getUserBrieflyInfoAPI(props.uid)
-        user.avatar = res.data.avatar
-        user.createTime = res.data.createTime
-        user.fans_count = res.data.fans_count
-        user.follow_count = res.data.follow_count
-        user.is_fans = res.data.is_fans
-        user.is_follow = res.data.is_follow
-        user.like_count = res.data.like_count
-        user.uid = res.data.uid
-        user.username = res.data.username
-    } catch (error) {
-        handleHttpError(error)
-    }
+    const res = await getUserBrieflyInfoAPI(props.uid)
+    user.avatar = res.data.avatar
+    user.createTime = res.data.createTime
+    user.fans_count = res.data.fans_count
+    user.follow_count = res.data.follow_count
+    user.is_fans = res.data.is_fans
+    user.is_follow = res.data.is_follow
+    user.like_count = res.data.like_count
+    user.uid = res.data.uid
+    user.username = res.data.username
 }
 
 onBeforeMount(toGetData)
 
-watch(()=>props.uid,toGetData)
+watch(() => props.uid, toGetData)
 
 defineOptions({
     name: 'UserBriefly'
@@ -62,6 +56,7 @@ defineOptions({
 <style scoped lang='scss'>
 .user-briefly-container {
     margin-bottom: 20px;
+
     .title {
         .username {
             font-size: 20px;

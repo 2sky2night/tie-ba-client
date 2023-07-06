@@ -1,7 +1,7 @@
 // hooks
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import useNavigation from '@/hooks/useNavigation'
+import router from '@/router'
 // apis
 import { loginAPI } from '@/apis/login'
 import { getUserInfoAPI } from '@/apis/my/index'
@@ -28,8 +28,6 @@ const useUserStore = defineStore(
             username: '',
             createTime: ''
         })
-
-        const { goLogin } = useNavigation()
 
         /**
          * 用户登录
@@ -75,7 +73,7 @@ const useUserStore = defineStore(
             userData.value.createTime = ''
             userData.value.username = ''
             userData.value.uid = 0
-            goLogin()
+            router.replace('/login')
             Token.removeToken()
         }
 

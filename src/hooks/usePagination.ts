@@ -16,18 +16,21 @@ export default function (cb: any) {
     })
 
     // 页长度更新的回调
-    watch(() => pagination.pageSize, () => {
+    watch(() => pagination.pageSize, toResetPage)
+
+    /**
+     * 重置页码获取数据
+     */
+    function toResetPage () {
         if (pagination.page === 1) {
             cb()
         } else {
             pagination.page = 1
         }
-    })
+    }
 
     // 页码更新的回调
-    watch(() => pagination.page, () => {
-        cb()
-    })
+    watch(() => pagination.page, cb)
 
-    return pagination
+    return { pagination,toResetPage }
 }

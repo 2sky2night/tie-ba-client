@@ -1,9 +1,9 @@
 <template>
     <div class="user-list-page-container">
         <div class="user-list" v-if="list.length && !isLoading">
-            <user-item v-for=" item  in list" :key="item.uid" :user="item" v-model:fans-count="item.fans_count" />
+            <user-item v-for="item in list" :key="item.uid" :user="item" v-model:fans-count="item.fans_count" />
         </div>
-        <div style="display: flex;align-items: center;justify-content: center;flex-grow: 1;">
+        <div class="empty">
             <empty v-if="!list.length && !isLoading" />
         </div>
         <div class="pagination" v-if="list.length">
@@ -20,34 +20,28 @@ import usePagination from '@/hooks/usePagination'
 // types
 import type { UserItem } from '@/apis/public/types/user'
 import type { UserListPageProps } from '@/types/components/list';
-// utils
-import { handleHttpError } from '@/utils/tools';
 
 const props = defineProps<UserListPageProps>()
 const list = reactive<UserItem[]>([])
-const pagination = usePagination(getListData)
+const { pagination, toResetPage } = usePagination(getListData)
 const isLoading = ref(false)
 
 async function getListData () {
-    try {
-        isLoading.value = true
-        list.length = 0
-        const res = await props.getData(pagination.page, pagination.pageSize)
-        res.list.forEach(ele => list.push(ele))
-        pagination.total = res.total
-        pagination.has_more = res.has_more
-        isLoading.value = false
-    } catch (error) {
-        handleHttpError(error)
-    }
+    isLoading.value = true
+    list.length = 0
+    const res = await props.getData(pagination.page, pagination.pageSize)
+    res.list.forEach(ele => list.push(ele))
+    pagination.total = res.total
+    pagination.has_more = res.has_more
+    isLoading.value = false
 }
 
 onBeforeMount(getListData)
 
 defineExpose<{
     pagination: typeof pagination;
-    getListData: typeof getListData;
-}>({ pagination, getListData })
+    toResetPage: typeof toResetPage;
+}>({ pagination, toResetPage })
 </script>
 
 <style scoped lang='scss'>
@@ -60,6 +54,13 @@ defineExpose<{
     .user-list {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
     }
 
     .pagination {
@@ -79,5 +80,4 @@ defineExpose<{
     }
 
 
-}
-</style>
+}</style>
