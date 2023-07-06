@@ -5,7 +5,6 @@
 </template>
 
 <script lang='ts' setup>
-
 defineOptions({
   name: 'Main'
 })
@@ -15,12 +14,5 @@ defineOptions({
 .main-container {
   margin: 0 auto;
   width: var(--main-width);
-}
-
-// 显示tabbar
-@media screen and (max-width:650px) {
-  .main-container {
-    height: calc(100vh - var(--header-hight) - var(--footer-hight));
-  }
 }
 </style>

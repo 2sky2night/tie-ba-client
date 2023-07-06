@@ -1,15 +1,20 @@
 <template>
     <div class="user-list-page-container">
-        <div class="user-list" v-if="list.length && !isLoading">
-            <user-item v-for="item in list" :key="item.uid" :user="item" v-model:fans-count="item.fans_count" />
-        </div>
-        <div class="empty">
-            <empty v-if="!list.length && !isLoading" />
-        </div>
-        <div class="pagination" v-if="list.length">
-            <n-pagination v-model:page="pagination.page" v-model:page-size="pagination.pageSize"
-                :item-count="pagination.total" show-size-picker :page-sizes="[ 10, 20, 30, 40 ]" />
-        </div>
+        <template v-if="isFirstLoading">
+            <user-list-skeleton :length="pagination.pageSize" />
+        </template>
+        <template v-else>
+            <div class="user-list" v-if="list.length && !isLoading">
+                <user-item v-for=" item  in list" :key="item.uid" :user="item" v-model:fans-count="item.fans_count" />
+            </div>
+            <div class="empty" v-if="!list.length && !isLoading">
+                <empty />
+            </div>
+            <div class="pagination" v-if="list.length">
+                <n-pagination v-model:page="pagination.page" v-model:page-size="pagination.pageSize"
+                    :item-count="pagination.total" show-size-picker :page-sizes="[ 10, 20, 30, 40 ]" />
+            </div>
+        </template>
     </div>
 </template>
 
@@ -25,6 +30,7 @@ const props = defineProps<UserListPageProps>()
 const list = reactive<UserItem[]>([])
 const { pagination, toResetPage } = usePagination(getListData)
 const isLoading = ref(false)
+const isFirstLoading = ref(false)
 
 async function getListData () {
     isLoading.value = true
@@ -36,7 +42,11 @@ async function getListData () {
     isLoading.value = false
 }
 
-onBeforeMount(getListData)
+onBeforeMount(async () => {
+    isFirstLoading.value = true
+    await getListData()
+    isFirstLoading.value = false
+})
 
 defineExpose<{
     pagination: typeof pagination;
@@ -54,6 +64,7 @@ defineExpose<{
     .user-list {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
     }
 
     .empty {
@@ -80,4 +91,5 @@ defineExpose<{
     }
 
 
-}</style>
+}
+</style>

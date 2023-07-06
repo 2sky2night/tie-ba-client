@@ -81,7 +81,7 @@ const useUserStore = defineStore(
          * 用户是否登录
          */
         const isLogin = computed(() => {
-            return token.value && userData.value.uid && userData.value.username ? true : false
+            return token.value ? true : false
         })
 
 

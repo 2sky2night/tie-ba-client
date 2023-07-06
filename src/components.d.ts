@@ -7,7 +7,12 @@ import BarItem from '@/components/item/BarItem.vue'
 import FollowBarBtn from '@/components/common/FollowBarBtn/index.vue'
 import BarListLoad from '@/components/list/load/BarList.vue'
 import UserItem from '@/components/item/UserItem.vue'
-import UserList from '@/components/list/page/UserList.vue'
+import UserList from '@/components/list/pagination/UserList.vue'
+import ArticleListInf from '@/components/list/load/ArticleListInf.vue'
+import ArticleListSkeleton from '@/components/skeleton/list/ArticleSkeletonList.vue'
+import BarListSkeleton from '@/components/skeleton/list/BarListSkeleton.vue'
+import UserListSkeleton from '@/components/skeleton/list/UserListSkeleton.vue'
+
 declare module 'vue' {
   export interface GlobalComponents {
     AuthBtn: typeof AuthBtn,
@@ -19,6 +24,10 @@ declare module 'vue' {
     FollowBarBtn: typeof FollowBarBtn,
     BarListLoad: typeof BarListLoad,
     UserItem: typeof UserItem,
-    UserList: typeof UserList
+    UserList: typeof UserList,
+    ArticleListInf: typeof ArticleListInf,
+    ArticleListSkeleton: typeof ArticleListSkeleton,
+    BarListSkeleton: typeof BarListSkeleton,
+    UserListSkeleton:typeof UserListSkeleton,
   }
 }

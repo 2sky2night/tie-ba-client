@@ -8,10 +8,16 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ArticleItem: typeof import('./src/components/item/ArticleItem.vue')['default']
+    ArticleItemSkeleton: typeof import('./src/components/skeleton/item/ArticleItemSkeleton.vue')['default']
     ArticleList: typeof import('./src/components/list/load/ArticleList.vue')['default']
+    ArticleListInf: typeof import('./src/components/list/load/ArticleListInf.vue')['default']
+    ArticleSkeleton: typeof import('./src/components/skeleton/item/ArticleSkeleton.vue')['default']
+    ArticleSkeletonList: typeof import('./src/components/skeleton/list/ArticleSkeletonList.vue')['default']
     AuthBtn: typeof import('./src/components/common/AuthBtn/index.vue')['default']
     BarItem: typeof import('./src/components/item/BarItem.vue')['default']
+    BarItemSkeleton: typeof import('./src/components/skeleton/item/BarItemSkeleton.vue')['default']
     BarList: typeof import('./src/components/list/load/BarList.vue')['default']
+    BarListSkeleton: typeof import('./src/components/skeleton/list/BarListSkeleton.vue')['default']
     Echats: typeof import('./src/components/common/Echats/index.vue')['default']
     Empty: typeof import('./src/components/common/Empty/index.vue')['default']
     FollowBarBtn: typeof import('./src/components/common/FollowBarBtn/index.vue')['default']
@@ -38,7 +44,9 @@ declare module 'vue' {
     NPagination: typeof import('naive-ui')['NPagination']
     NScrollbar: typeof import('naive-ui')['NScrollbar']
     NSelect: typeof import('naive-ui')['NSelect']
+    NSkeleton: typeof import('naive-ui')['NSkeleton']
     NSpace: typeof import('naive-ui')['NSpace']
+    NSpin: typeof import('naive-ui')['NSpin']
     NSwitch: typeof import('naive-ui')['NSwitch']
     NTab: typeof import('naive-ui')['NTab']
     NTabPane: typeof import('naive-ui')['NTabPane']
@@ -49,7 +57,9 @@ declare module 'vue' {
     UserBriefly: typeof import('./src/components/common/UserBriefly/index.vue')['default']
     UserData: typeof import('./src/components/common/UserData/index.vue')['default']
     UserItem: typeof import('./src/components/item/UserItem.vue')['default']
-    UserList: typeof import('./src/components/list/page/UserList.vue')['default']
+    UserItemSkeleton: typeof import('./src/components/skeleton/item/UserItemSkeleton.vue')['default']
+    UserList: typeof import('./src/components/list/pagination/UserList.vue')['default']
+    UserListSkeleton: typeof import('./src/components/skeleton/list/UserListSkeleton.vue')['default']
     UserViews: typeof import('./src/components/common/UserViews/index.vue')['default']
   }
 }

@@ -1,42 +1,50 @@
 <template>
   <div class="article-list-load-container">
-    <div class="article-list">
 
-      <template v-if="list.length">
-        <div class="tools" v-if="ctDesc || ctPageSize">
+    <template v-if="isFirstLoading">
+      <article-list-skeleton :length="10" />
+    </template>
 
-          <div class="controller-desc" v-if="ctDesc">
-            <n-switch size="small" v-model:value="pagination.desc" @update:value="onHandleChangeOrder">
-              <template #checked>
-                <span style="font-size: 12px;">降序</span>
-              </template>
-              <template #unchecked>
-                <span style="font-size: 12px;">升序</span>
-              </template>
-            </n-switch>
+    <template v-else>
+      <div class="article-list">
+  
+        <template v-if="list.length">
+          <div class="tools" v-if="ctDesc || ctPageSize">
+  
+            <div class="controller-desc" v-if="ctDesc">
+              <n-switch size="small" v-model:value="pagination.desc" @update:value="onHandleChangeOrder">
+                <template #checked>
+                  <span style="font-size: 12px;">降序</span>
+                </template>
+                <template #unchecked>
+                  <span style="font-size: 12px;">升序</span>
+                </template>
+              </n-switch>
+            </div>
+  
+            <div class="controller-page" v-if="ctPageSize">
+              <n-select  size="small" style="width:100px" @update:value="onHandleChangeSize" v-model:value="pagination.pageSize" :options="pageSizesOption as any" />
+            </div>
+  
           </div>
+          <article-item v-for="item in list" :key="item.aid" :article="item" v-model:is-liked="item.is_liked"
+            v-model:is-star="item.is_star" v-model:like-count="item.like_count" v-model:star-count="item.star_count" />
+        </template>
+  
+        <template v-else>
+          <empty />
+        </template>
+  
+      </div>
+      <div class="load-more">
+        <n-button strong secondary type="primary" @click="onHandleClick" :loading="isLoading"
+          v-if="pagination.has_more">加载更多</n-button>
+          <n-divider v-if="!pagination.has_more&&list.length">
+            <span class="no-more">没有更多了</span>
+          </n-divider>
+      </div>
+    </template>
 
-          <div class="controller-page" v-if="ctPageSize">
-            <n-select  size="small" style="width:100px" @update:value="onHandleChangeSize" v-model:value="pagination.pageSize" :options="pageSizesOption as any" />
-          </div>
-
-        </div>
-        <article-item v-for="item in list" :key="item.aid" :article="item" v-model:is-liked="item.is_liked"
-          v-model:is-star="item.is_star" v-model:like-count="item.like_count" v-model:star-count="item.star_count" />
-      </template>
-
-      <template v-else>
-        <empty />
-      </template>
-
-    </div>
-    <div class="load-more">
-      <n-button strong secondary type="primary" @click="onHandleClick" :loading="isLoading"
-        v-if="pagination.has_more">加载更多</n-button>
-        <n-divider v-if="!pagination.has_more&&list.length">
-          <span class="no-more">没有更多了</span>
-        </n-divider>
-    </div>
   </div>
 </template>
 
@@ -49,6 +57,8 @@ import { ref, reactive, onBeforeMount, computed } from 'vue'
 
 // 是否正在加载
 const isLoading = ref(false)
+// 第一次加载
+const isFirstLoading = ref(false)
 const list = reactive<ArticleItem[]>([])
 // props
 const props = withDefaults(defineProps<ArticleListLoadProps>(), {
@@ -124,7 +134,11 @@ function onHandleChangeSize(value:number) {
   toGetListData()
 }
 
-onBeforeMount(toGetListData)
+onBeforeMount(async () => {
+  isFirstLoading.value=true
+  await toGetListData()
+  isFirstLoading.value=false
+})
 
 defineOptions({
   name:'ArticleListLoad'

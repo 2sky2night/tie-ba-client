@@ -48,7 +48,7 @@ const {goBar} = useNavigation()
     cursor: pointer;
     .info {
         display: flex;
-
+        align-items: center;
         img {
             width: 50px;
             height: 50px;
@@ -63,6 +63,7 @@ const {goBar} = useNavigation()
             }
 
             .bar-name {
+                height: 35px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;

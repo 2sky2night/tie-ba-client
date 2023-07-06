@@ -62,6 +62,7 @@ http.interceptors.response.use(
           // 未登录 返回登陆页
           router.replace('/login')
         }
+        window.$message.error(error.response.data.message)
       } else if (status === 404) {
         // 资源请求不存在
         window.$message.error(tips.notFound)

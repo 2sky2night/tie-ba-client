@@ -1,13 +1,19 @@
 <template>
     <div class="bar-list-container">
-        <empty v-if="!list.length" />
-        <div class="bar-list" v-else>
-            <bar-item v-for="item in list" :key="item.bid" :bar="item" />
-        </div>
-    </div> 
-    <div class="load-more mt-10">
-        <n-button :loading="isLoading" strong secondary type="primary" v-if="paganition.has_more" @click="onHandleClick">加载更多</n-button>
-        <n-divider v-if="!paganition.has_more&&list.length"><span class="no-more">没有更多了</span></n-divider>
+        <template v-if="isFirstLoading">
+            <bar-list-skeleton :length="20" />
+        </template>
+        <template v-else>
+            <empty v-if="!list.length" />
+            <div class="bar-list" v-else>
+                <bar-item v-for="item in list" :key="item.bid" :bar="item" />
+            </div>
+            <div class="load-more mt-10">
+                <n-button :loading="isLoading" strong secondary type="primary" v-if="paganition.has_more"
+                    @click="onHandleClick">加载更多</n-button>
+                <n-divider v-if="!paganition.has_more && list.length"><span class="no-more">没有更多了</span></n-divider>
+            </div>
+        </template>
     </div>
 </template>
 
@@ -16,12 +22,15 @@
 import type { BarItem } from '@/apis/public/types/bar';
 import type { BarListLoadProps } from '@/types/components/list'
 // hooks
-import { ref,reactive, onBeforeMount } from 'vue';
+import { ref, reactive, onBeforeMount } from 'vue';
 
 const props = defineProps<BarListLoadProps>()
 // 吧列表项
 const list = reactive<BarItem[]>([])
+// 正在加载
 const isLoading = ref(false)
+// 首次加载
+const isFirstLoading = ref(false)
 // 分页数据
 const paganition = reactive({
     page: 1,
@@ -31,9 +40,9 @@ const paganition = reactive({
     desc: true
 })
 
-async function getListData() {
+async function getListData () {
     try {
-        isLoading.value=true
+        isLoading.value = true
         const res = await props.getDataCb(paganition.page, paganition.pageSize, paganition.desc)
         paganition.total = res.total
         paganition.has_more = res.has_more
@@ -48,33 +57,38 @@ async function getListData() {
 /**
  * 点击加载更多
  */
-function onHandleClick() {
+function onHandleClick () {
     paganition.page++
     getListData()
 }
 
-onBeforeMount(getListData)
+onBeforeMount(async () => {
+    isFirstLoading.value = true
+    await getListData()
+    isFirstLoading.value = false
+})
 
 </script>
 
 <style scoped lang='scss'>
 .bar-list-container {
     padding: 10px 0;
-    .bar-list{
+
+    .bar-list {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 10px
     }
 }
 
-.load-more{
+.load-more {
     display: flex;
     justify-content: center;
 }
 
 @media screen and (max-width:650px) {
     .bar-list-container {
-        .bar-list{
+        .bar-list {
 
             display: flex;
             flex-direction: column;

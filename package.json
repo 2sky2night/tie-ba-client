@@ -15,12 +15,14 @@
     "nprogress": "^0.2.0",
     "pinia": "^2.1.4",
     "pinia-plugin-persistedstate": "^3.1.0",
+    "pubsub-js": "^1.9.4",
     "vue": "3.3.4",
     "vue-router": "^4.2.2"
   },
   "devDependencies": {
     "@types/node": "^20.3.1",
     "@types/nprogress": "^0.2.0",
+    "@types/pubsub-js": "^1.8.3",
     "@vicons/antd": "^0.12.0",
     "@vicons/fa": "^0.12.0",
     "@vicons/ionicons4": "^0.12.0",

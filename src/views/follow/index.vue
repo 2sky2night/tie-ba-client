@@ -91,7 +91,10 @@ function onHandleReset () {
 onBeforeRouteUpdate((to, form) => {
     // 需要判断当前是否为params参数更新
     if (to.params.uid !== form.params.uid) {
+        // 路由参数更新 解析最新的uid 重置搜索状态 重置页码获取数据
         checkRoutes(to)
+        isSearchType.value = false
+        keywords.value = ''
         listIns.value.toResetPage()
     }
 })
