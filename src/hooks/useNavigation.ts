@@ -1,5 +1,4 @@
 import { useRouter } from 'vue-router';
-
 /**
  * 路由导航钩子
  * @returns 
@@ -19,7 +18,7 @@ export default function () {
     router.push('/my')
   }
 
-  function goUser(uid: number) {
+  function goUser (uid: number) {
     router.push(`/user/${uid}`)
   }
 

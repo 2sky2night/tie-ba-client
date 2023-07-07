@@ -8,7 +8,7 @@ import tips from '@/config/tips'
 
 // axios实例
 const http = axios.create({
-  baseURL: '/api'
+  baseURL: import.meta.env.VITE_BASE_URL
 })
 
 // 请求拦截器

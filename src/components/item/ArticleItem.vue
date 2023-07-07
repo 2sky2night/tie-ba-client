@@ -7,7 +7,7 @@
         <span class="ml-10 text" @click.stop="() => goUser(article.uid)">{{ article.user.username }}</span>
       </div>
       <div class="action">
-        <FollowBtn v-model:is-followed="article.user.is_followed"  :is-fans="article.user.is_fans" :uid="article.user.uid"
+        <FollowBtn v-model:is-followed="article.user.is_followed" :is-fans="article.user.is_fans" :uid="article.user.uid"
           size="small" />
       </div>
     </div>
@@ -17,7 +17,7 @@
       <div class="content mb-10">{{ article.content }}</div>
       <template v-if="article.photo">
         <div class="photo-container mb-10" :class="{ 'three': article.photo.length === 3 }">
-          <img v-lazyImg="img" v-for="img in article.photo"  v-imgPre="img" >
+          <img v-lazyImg="img" v-for=" img  in article.photo" v-imgPre="img">
         </div>
       </template>
       <div class="bar">
@@ -30,30 +30,30 @@
       <div class="btns">
 
         <auth-btn>
-          <div class="item mr-10" @click.stop="onHandleStarArticle">
+          <button class="item mr-10" @click.stop="onHandleStarArticle">
             <n-icon size="20" :color="isStar ? '#ffcb6b' : ''">
-              <component :is="isStar?'StarFilled':'StarOutlined'"></component>
+              <component :is="isStar ? 'StarFilled' : 'StarOutlined'"></component>
             </n-icon>
-            <span class="count">{{ article.star_count }}</span>
-          </div>
+            <span class="count">{{ formatCount(article.star_count) }}</span>
+          </button>
         </auth-btn>
 
         <div class="item">
           <n-icon size="18">
             <CommentRegular />
           </n-icon>
-          <span class="count">{{ article.comment_count }}</span>
+          <span class="count">{{ formatCount(article.comment_count) }}</span>
         </div>
       </div>
 
       <div class="btns">
         <auth-btn>
-          <div class="item" @click.stop="onHandleLikeArticle">
+          <button class="item" @click.stop="onHandleLikeArticle">
             <n-icon size="18" :color="isLiked ? 'red' : ''">
-              <component :is="isLiked?'LikeFilled':'LikeOutlined'"></component>
+              <component :is="isLiked ? 'LikeFilled' : 'LikeOutlined'"></component>
             </n-icon>
-            <span class="count">{{ article.like_count }}</span>
-          </div>
+            <span class="count">{{ formatCount(article.like_count) }}</span>
+          </button>
         </auth-btn>
       </div>
 
@@ -66,6 +66,7 @@
 // hooks
 import { useMessage } from 'naive-ui';
 import useNavigation from '@/hooks/useNavigation';
+import { ref } from 'vue'
 // types
 import type { ArticleItemProps } from '@/types/components/item';
 // components
@@ -75,21 +76,31 @@ import { CommentRegular } from '@vicons/fa'
 import { likeArticleAPI, cancelLikeArticleAPI, starArticleAPI, cancelStarArticleAPI } from '@/apis/public/article';
 // config
 import tips from '@/config/tips'
+// utlis
+import { formatCount } from '@/utils/tools'
 
+const likeIsLoading = ref(false)
+const starIsLoading = ref(false)
 const props = defineProps<ArticleItemProps>()
 const emit = defineEmits<{
-  'update:isLiked': [value: boolean];
-  'update:isStar': [value: boolean];
-  'update:starCount': [value: number];
-  'update:likeCount': [value: number];
+  'update:isLiked': [ value: boolean ];
+  'update:isStar': [ value: boolean ];
+  'update:starCount': [ value: number ];
+  'update:likeCount': [ value: number ];
 }>()
 const message = useMessage()
 const { goArticle, goUser, goBar } = useNavigation()
+
 /**
  * 点击收藏帖子的回调
  */
 const onHandleStarArticle = async () => {
+  if (starIsLoading.value) {
+    // 若当前正在加载 需要等待上次结果后才能继续操作
+    return
+  }
   try {
+    starIsLoading.value=true
     if (props.isStar) {
       // 已经收藏了 点击取消收藏
       await cancelStarArticleAPI(props.article.aid)
@@ -103,6 +114,7 @@ const onHandleStarArticle = async () => {
     }
     // 操作成功 更新本地收藏值
     emit('update:isStar', !props.isStar)
+    starIsLoading.value=false
   } catch (error) {
     console.log(error)
   }
@@ -111,7 +123,12 @@ const onHandleStarArticle = async () => {
  * 点击点赞帖子的帖子
  */
 const onHandleLikeArticle = async () => {
+  if (likeIsLoading.value) {
+    // 若当前正在加载 需要等待上次结果后才能继续操作
+    return
+  }
   try {
+    likeIsLoading.value=true
     if (props.isLiked) {
       // 已经点赞了 取消点赞帖子
       await cancelLikeArticleAPI(props.article.aid)
@@ -125,6 +142,7 @@ const onHandleLikeArticle = async () => {
     }
     // 更新状态
     emit('update:isLiked', !props.isLiked)
+    likeIsLoading.value=false
   } catch (error) {
     console.log(error)
   }

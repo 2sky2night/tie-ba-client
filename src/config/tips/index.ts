@@ -16,5 +16,8 @@ export default {
   userIsNotFound: '用户不存在!',
   searchPlaceholder: '请输入内容进行搜索',
   notFound: '请求的资源不存在!',
-  pleaseEnter:'请先输入内容!'
+  pleaseEnter: '请先输入内容!',
+  allowImage: '只允许图片格式的文件!',
+  imageSizeOverflow: '图片大小限制为10MB!',
+  pleaseSelectFile:'请选择文件!'
 }

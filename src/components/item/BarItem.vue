@@ -22,11 +22,11 @@
         <div class="data mt-5">
             <div class="item">
                 <span>关注:</span>
-                <span> {{ bar.user_follow_count }}</span>
+                <span> {{ formatCount(bar.user_follow_count) }}</span>
             </div>
             <div class="item">
                 <span>帖子:</span>
-                <span>{{ bar.article_count }}</span>
+                <span>{{ formatCount(bar.article_count) }}</span>
             </div>
         </div>
     </div>
@@ -37,6 +37,8 @@
 import type { BarItemProps } from '@/types/components/item'
 // hooks
 import useNavigation from '@/hooks/useNavigation';
+// utlis
+import { formatCount } from '@/utils/tools'
 
 defineProps<BarItemProps>()
 const {goBar} = useNavigation()

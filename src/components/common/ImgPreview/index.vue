@@ -1,11 +1,21 @@
 <template>
     <Transition name="img" appear>
         <div v-if="isShow" class="img-preview-container" @click.stop="">
-            <img :src="src" :style="{ transform: `scale(${scale})` }">
+            <img :src="src" :style="{ transform: `scale(${scale}) rotate(${deg}deg)` }">
         </div>
     </Transition>
     <Transition name="tool" appear>
         <div v-if="isShow" class="tool-container">
+            <div class="item text" @click.stop="deg -= 90">
+                <n-icon size="25" >
+                    <RefreshOutline style="transform: scale(-1,1);" />
+                </n-icon>
+            </div>
+            <div class="item text" @click.stop="deg += 90">
+                <n-icon size="25">
+                    <RefreshOutline />
+                </n-icon>
+            </div>
             <div class="item text" @click.stop="scale += .1">
                 <n-icon size="25">
                     <ZoomInOutlined />
@@ -31,13 +41,14 @@ import { watch, ref } from 'vue'
 // types
 import type { ImgPreviewProps } from '@/types/components/common'
 // components 
-import { Close } from '@vicons/ionicons5'
+import { Close,RefreshOutline } from '@vicons/ionicons5'
 import { NIcon } from 'naive-ui'
 import { ZoomInOutlined, ZoomOutOutlined } from '@vicons/antd'
 
 defineProps<ImgPreviewProps>()
 const isShow = ref(true)
 const scale = ref(1)
+const deg = ref(0)
 
 watch(scale, (v) => {
     if (v < 0) {
@@ -57,7 +68,11 @@ defineOptions({
 
 <style scoped lang='scss'>
 .img-preview-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     img {
+        width: 80%;
         transition: var(--time-normal);
     }
 }

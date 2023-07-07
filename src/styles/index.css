@@ -12,7 +12,10 @@
   --border-color-1:rgb(224, 224, 230);
   --shadow-color-1:#eee;
   --bg-color-1:#fff;
+  --bg-color-2:#fff;
+  --bg-color-3:#eee;
   --bg-mask:#0909094b;
+  --text-color-1:#000;
   --text-color-2:#86909c;
   /*----时间-----*/
   --time-normal:.3s;
@@ -20,6 +23,10 @@
 
 *{
   user-select: none;
+}
+a{
+  text-decoration: none;
+  color:var(--text-color-1);
 }
 
 /*文字悬浮高亮*/

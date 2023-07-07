@@ -14,7 +14,7 @@ export default function (key: string, type: 'params' | 'query' = 'params') {
     const message = useMessage()
 
     /**
-     * 检查路由参数 (传入路由信息,默认为当前路由)
+     * 检查路由参数 (传入路由信息,默认为当前路由) 若为null说明校验失败
      * @param currentRoutes 需要检查的路由 
      * @returns 
      */
@@ -27,15 +27,15 @@ export default function (key: string, type: 'params' | 'query' = 'params') {
                 // 参数非法
                 message.error(tips.errorParams)
                 router.replace('/')
-                return Promise.reject()
+                return null
             } else {
-                return Promise.resolve(temp)
+                return temp
             }
         } else {
             // 未携带参数
             message.error(tips.emptyParams)
             router.replace('/')
-            return Promise.reject()
+            return null
         }
     }
 

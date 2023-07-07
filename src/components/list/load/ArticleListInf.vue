@@ -31,7 +31,8 @@
 // hooks
 import { ref, watch, reactive, onBeforeMount, onMounted, onUnmounted, inject, type Ref } from 'vue'
 // types 
-import type { ArticleItem, ArticleListResponse } from '@/apis/public/types/article';
+import type { ArticleItem } from '@/apis/public/types/article';
+import type { ArticleListLoadInfProps } from '@/types/components/list';
 // tools
 import pubsub from 'pubsub-js'
 
@@ -50,10 +51,8 @@ const pagination = reactive({
 const isLoading = ref(false)
 // 第一次加载
 const isFirstLoading = ref(false)
-// 自定义熟先
-const props = defineProps<{
-  getList: (page: number, pageSize: number) => Promise<ArticleListResponse>;
-}>()
+// 自定义属性
+const props = defineProps<ArticleListLoadInfProps>()
 
 // 获取列表项的函数
 async function getData () {

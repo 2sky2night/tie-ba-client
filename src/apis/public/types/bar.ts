@@ -30,6 +30,18 @@ export interface BarItem {
 }
 
 /**
+ * 吧的基础数据
+ */
+export interface BarBase {
+  bdesc: string;
+  bid: number;
+  bname: string;
+  createTime: string;
+  photo: string;
+  uid: number;
+}
+
+/**
  * 吧列表接口的响应结果
  */
 export type BarListResponse = ListResponse<BarItem>

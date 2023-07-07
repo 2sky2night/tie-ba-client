@@ -6,8 +6,11 @@ export const lightCSSVarList = {
     '--border-color-1': 'rgb(224, 224, 230)',
     '--shadow-color-1': '#eee',
     '--bg-color-1': '#fff',
+    '--bg-color-2':'#fff',
+    '--bg-color-3':'#eee',
     '--bg-mask': '#0909094b',
-    '--text-color-2':'#86909c',
+    '--text-color-2': '#86909c',
+    '--text-color-1': '#000',
 }
 
 /**
@@ -18,6 +21,9 @@ export const darkCSSVarList = {
     '--border-color-1': '#262629',
     '--shadow-color-1': '#60606040',
     '--bg-color-1': '#48484e',
+    '--bg-color-2': '#111',
+    '--bg-color-3':'#5555',
     '--bg-mask': '#65656575',
-    '--text-color-2':'#929293',
+    '--text-color-2': '#929293',
+    '--text-color-1':'#fff',
 }

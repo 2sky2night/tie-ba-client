@@ -40,3 +40,10 @@ export interface BarListLoadProps {
 export interface UserListPageProps {
   getData: (page: number, pageSize: number) => Promise<UserListResponse>
 }
+
+/**
+ * 根据主视图滚动条无限加载的帖子列表组件的props
+ */
+export interface ArticleListLoadInfProps {
+  getList: (page: number, pageSize: number) => Promise<ArticleListResponse>;
+}
