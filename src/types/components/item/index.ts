@@ -1,4 +1,4 @@
-import type { ArticleItem } from '@/apis/public/types/article';
+import type { ArticleItem, CommentItem } from '@/apis/public/types/article';
 import type { BarItem } from '@/apis/public/types/bar';
 import type { UserItem } from '@/apis/public/types/user';
 
@@ -26,4 +26,13 @@ export interface BarItemProps {
 export interface UserItemProps {
   user: UserItem;
   fansCount: number;
+}
+
+/**
+ * 评论项组件的props
+ */
+export interface CommentItemProps {
+  comment: CommentItem
+  isLike: boolean;
+  likeCount:number
 }

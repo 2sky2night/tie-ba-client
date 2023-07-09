@@ -1,10 +1,14 @@
 <template>
-    <div class="user-item-container" @click="() => goUser(props.user.uid)">
+    <div class="user-item-container">
         <div class="user-info">
-            <img class="mr-10" style="border-radius: 50%;" v-lazyImg="user.avatar">
+            <router-link :to="`/user/${user.uid}`">
+                <img class="mr-10" style="border-radius: 50%;" v-lazyImg="user.avatar">
+            </router-link>
             <div class="user">
                 <div class="username">
-                    <span class="text">{{ user.username }}</span>
+                    <router-link :to="`/user/${user.uid}`">
+                        <span class="text">{{ user.username }}</span>
+                    </router-link>
                     <follow-btn @change-count="onHandleChangeCount" :is-fans="user.is_fans"
                         v-model:is-followed="user.is_followed" :uid="user.uid" size="small" />
                 </div>
@@ -12,10 +16,15 @@
             </div>
         </div>
         <div class="user-data mt-10">
-            <div class="sub-text text" @click.stop="() => goFollow(props.user.uid)">关注:<span>{{ user.follow_user_count
-            }}</span></div>
-            <div class="sub-text text" @click.stop="() => goFans(props.user.uid)">粉丝:<span>{{ user.fans_count }}</span>
-            </div>
+            <router-link class="sub-text text" :to="`/follow/${user.uid}`">
+                关注:
+                <span>{{ user.follow_user_count }}</span>
+            </router-link>
+
+            <router-link class="sub-text text" :to="`/fans/${user.uid}`">
+                粉丝:
+                <span>{{ user.fans_count }}</span>
+            </router-link>
             <div class="sub-text text">帖子:<span>{{ user.article_count }}</span></div>
             <div class="sub-text text">关注吧:<span>{{ user.follow_bar_count }}</span></div>
         </div>
@@ -30,7 +39,7 @@ import useNavigation from '@/hooks/useNavigation';
 const props = defineProps<UserItemProps>()
 const { goFans, goFollow, goUser } = useNavigation()
 const emits = defineEmits<{
-    'update:fansCount': [ value: number ]
+    'update:fansCount': [value: number]
 }>()
 
 const onHandleChangeCount = (flag: boolean) => {
@@ -42,7 +51,6 @@ const onHandleChangeCount = (flag: boolean) => {
 <style scoped lang='scss'>
 .user-item-container {
     padding: 10px;
-    cursor: pointer;
 
     .user-info {
         display: flex;

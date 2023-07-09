@@ -81,7 +81,7 @@ defineExpose<{
     }
 }
 
-@media screen and (max-width:650px) {
+@media screen and (max-width:651px) {
     .user-list-page-container {
 
         .user-list {

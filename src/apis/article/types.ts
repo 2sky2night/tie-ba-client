@@ -30,4 +30,7 @@ export interface SendCommentBody {
   photo: string[] | null
 }
 
+/**
+ * 发送评论的响应结果
+ */
 export type SendCommentResponse = null

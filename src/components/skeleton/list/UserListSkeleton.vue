@@ -5,8 +5,9 @@
 </template>
 
 <script lang='ts' setup>
-import UserItemSkeleton from '../item/UserItemSkeleton.vue';
-defineProps<{length:number}>()
+import UserItemSkeleton from '@/components/skeleton/item/UserItemSkeleton.vue';
+import type { SkeletonListProps } from '@/types/components/skeleton'
+defineProps<SkeletonListProps>()
 </script>
 
 <style scoped lang='scss'>
@@ -15,7 +16,7 @@ defineProps<{length:number}>()
   grid-template-columns: repeat(2,1fr);
   gap:10px;
 }
-@media screen and (max-width:650px) {
+@media screen and (max-width:651px) {
   .list-skeleton{
     display: flex;
     flex-direction: column;

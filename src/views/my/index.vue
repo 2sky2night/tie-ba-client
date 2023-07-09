@@ -166,7 +166,7 @@ defineOptions({
   }
 }
 
-@media screen and (max-width:650px) {
+@media screen and (max-width:651px) {
   .page-container {
     .user-info-container {
       flex-direction: column;

@@ -3,8 +3,12 @@
 
     <div class="title mb-10">
       <div class="user-info">
-        <img v-lazyImg="article.user.avatar" @click.stop="() => goUser(article.uid)">
-        <span class="ml-10 text" @click.stop="() => goUser(article.uid)">{{ article.user.username }}</span>
+        <RouterLink :to="`/user/${article.uid}`" @click.stop="">
+          <img v-lazyImg="article.user.avatar" @click.stop="">
+        </RouterLink>
+        <RouterLink :to="`/user/${article.uid}`" @click.stop="">
+          <span class="ml-10 text">{{ article.user.username }}</span>
+        </RouterLink>
       </div>
       <div class="action">
         <FollowBtn v-model:is-followed="article.user.is_followed" :is-fans="article.user.is_fans" :uid="article.user.uid"
@@ -21,7 +25,9 @@
         </div>
       </template>
       <div class="bar">
-        <n-button size="tiny" strong secondary @click.stop="() => goBar(article.bid)">{{ article.bar.bname }}吧</n-button>
+        <RouterLink :to="`/bar/${article.bid}`" @click.stop="">
+          <n-button size="tiny" strong secondary >{{ article.bar.bname }}吧</n-button>
+        </RouterLink>
       </div>
     </div>
 
@@ -83,13 +89,13 @@ const likeIsLoading = ref(false)
 const starIsLoading = ref(false)
 const props = defineProps<ArticleItemProps>()
 const emit = defineEmits<{
-  'update:isLiked': [ value: boolean ];
-  'update:isStar': [ value: boolean ];
-  'update:starCount': [ value: number ];
-  'update:likeCount': [ value: number ];
+  'update:isLiked': [value: boolean];
+  'update:isStar': [value: boolean];
+  'update:starCount': [value: number];
+  'update:likeCount': [value: number];
 }>()
 const message = useMessage()
-const { goArticle, goUser, goBar } = useNavigation()
+const { goArticle } = useNavigation()
 
 /**
  * 点击收藏帖子的回调
@@ -100,7 +106,7 @@ const onHandleStarArticle = async () => {
     return
   }
   try {
-    starIsLoading.value=true
+    starIsLoading.value = true
     if (props.isStar) {
       // 已经收藏了 点击取消收藏
       await cancelStarArticleAPI(props.article.aid)
@@ -114,7 +120,7 @@ const onHandleStarArticle = async () => {
     }
     // 操作成功 更新本地收藏值
     emit('update:isStar', !props.isStar)
-    starIsLoading.value=false
+    starIsLoading.value = false
   } catch (error) {
     console.log(error)
   }
@@ -128,7 +134,7 @@ const onHandleLikeArticle = async () => {
     return
   }
   try {
-    likeIsLoading.value=true
+    likeIsLoading.value = true
     if (props.isLiked) {
       // 已经点赞了 取消点赞帖子
       await cancelLikeArticleAPI(props.article.aid)
@@ -142,7 +148,7 @@ const onHandleLikeArticle = async () => {
     }
     // 更新状态
     emit('update:isLiked', !props.isLiked)
-    likeIsLoading.value=false
+    likeIsLoading.value = false
   } catch (error) {
     console.log(error)
   }
@@ -163,7 +169,7 @@ defineOptions({
   display: flex;
   flex-direction: column;
   padding: 10px;
-
+  cursor: pointer;
   &:not(:last-child) {
     border-bottom: 1px solid var(--border-color-1);
   }

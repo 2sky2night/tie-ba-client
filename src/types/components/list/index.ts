@@ -1,4 +1,4 @@
-import type { ArticleListResponse } from "@/apis/public/types/article";
+import type { ArticleListResponse, CommentListResponse } from "@/apis/public/types/article";
 import type { BarListResponse } from "@/apis/public/types/bar";
 import type { UserListResponse } from "@/apis/public/types/user";
 
@@ -38,6 +38,9 @@ export interface BarListLoadProps {
  * 分页的用户列表组件的Props
  */
 export interface UserListPageProps {
+  /**
+   * 获取数据的函数
+   */
   getData: (page: number, pageSize: number) => Promise<UserListResponse>
 }
 
@@ -45,5 +48,17 @@ export interface UserListPageProps {
  * 根据主视图滚动条无限加载的帖子列表组件的props
  */
 export interface ArticleListLoadInfProps {
+  /**
+  * 获取数据的函数
+  */
   getList: (page: number, pageSize: number) => Promise<ArticleListResponse>;
+}
+/**
+ * 根据主视图滚动条无限加载的评论列表组件的props
+ */
+export interface CommentListLoadInfProps {
+  /**
+  * 获取数据的函数
+  */
+  getData: (page: number, pageSize: number) => Promise<CommentListResponse>
 }

@@ -4,7 +4,7 @@
 export const lightCSSVarList = {
     '--primary-color': '#2080f0',
     '--border-color-1': 'rgb(224, 224, 230)',
-    '--shadow-color-1': '#eee',
+    '--shadow-color-1': '#47474759',
     '--bg-color-1': '#fff',
     '--bg-color-2':'#fff',
     '--bg-color-3':'#eee',

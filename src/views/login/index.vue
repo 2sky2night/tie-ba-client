@@ -142,7 +142,7 @@ defineOptions({
   }
 }
 
-@media screen and (max-width:650px) {
+@media screen and (max-width:651px) {
   .page-container {
     .main-content {
       width: 100%;

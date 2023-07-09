@@ -1,37 +1,39 @@
 <template>
   <div class="page-container">
-    <template v-if="aid!==null">
+    <template v-if="aid !== null">
       <ArticleInfo :aid="aid" />
+      <Panel :aid="aid" />
     </template>
   </div>
 </template>
 
 <script lang='ts' setup>
 // hooks
-import { ref,onBeforeMount } from 'vue';
+import { ref } from 'vue';
 import useCheckRoutes from '@/hooks/useCheckRoutes';
 import { onBeforeRouteUpdate } from 'vue-router';
 // components
-import ArticleInfo from './components/ArticleInfo.vue';
+import ArticleInfo from './components/ArticleInfo/index.vue';
+import Panel from './components/Panel/index.vue'
 
-const checkRoutes= useCheckRoutes('aid')
-const aid = ref<number|null>(checkRoutes())
+const checkRoutes = useCheckRoutes('aid')
+const aid = ref<number | null>(checkRoutes())
 
 // 路由更新获取最新的aid参数值
 onBeforeRouteUpdate(to => {
   const temp = checkRoutes(to)
-  if (temp!==null) {
-    aid.value=temp
+  if (temp !== null) {
+    aid.value = temp
   }
 })
 
 defineOptions({
-  name:'Article'
+  name: 'Article'
 })
 </script>
 
 <style scoped lang='scss'>
-.page-container{
+.page-container {
   padding: 10px 12px;
 }
 </style>

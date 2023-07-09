@@ -9,18 +9,18 @@ export const formatDBDateTime = (value: string) => {
     const time = new Date(value)
     // 获取相差秒
     const temp = (Date.now() - (time.getTime())) / 1000
-    console.log(temp)
+    
     if (temp < 60) {
         // 小于分钟
-        return `${ temp.toFixed() }秒`
+        return `${ temp.toFixed() }秒前`
     }
     if (temp < 60 * 60) {
         // 小于小时
-        return `${ (temp / 60).toFixed() }分钟`
+        return `${ (temp / 60).toFixed() }分钟前`
     }
     if (temp < 60 * 60 * 24) {
         // 小于一天
-        return `${ (temp / 60 / 60).toFixed() }小时`
+        return `${ (temp / 60 / 60).toFixed() }小时前`
     }
     if (temp < 60 * 60 * 24 * 365) {
         // 超过一天 但不超过一年 返回MM:DD

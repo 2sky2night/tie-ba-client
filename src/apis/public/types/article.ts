@@ -21,7 +21,29 @@ export interface ArticleItem {
   user: UserBrieflyInfo;
 }
 
+
+/**
+ * 评论项信息
+ */
+export interface CommentItem {
+  aid: number;
+  cid: number;
+  content: string;
+  createTime: string;
+  is_liked: boolean;
+  like_count: number;
+  photo: string[] | null;
+  uid: number;
+  user: UserBrieflyInfo;
+}
+
+
 /**
  * 帖子列表的响应结果
  */
 export type ArticleListResponse = ListResponse<ArticleItem>
+
+/**
+ * 评论列表的响应结果
+ */
+export type CommentListResponse = ListResponse<CommentItem>

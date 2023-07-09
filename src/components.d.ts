@@ -9,9 +9,13 @@ import BarListLoad from '@/components/list/load/BarList.vue'
 import UserItem from '@/components/item/UserItem.vue'
 import UserList from '@/components/list/pagination/UserList.vue'
 import ArticleListInf from '@/components/list/load/ArticleListInf.vue'
-import ArticleListSkeleton from '@/components/skeleton/list/ArticleSkeletonList.vue'
+import ArticleListSkeleton from '@/components/skeleton/list/ArticleListSkeleton.vue'
 import BarListSkeleton from '@/components/skeleton/list/BarListSkeleton.vue'
 import UserListSkeleton from '@/components/skeleton/list/UserListSkeleton.vue'
+import CommentItem from '@/components/item/CommentItem.vue';
+import CommentListInf from '@/components/list/load/CommentListInf.vue'
+import CommentListSkeleton from '@/components/skeleton/list/CommentListSkeleton.vue'
+import UserListInf from '@/components/list/load/UserListInf.vue'
 
 declare module 'vue' {
   export interface GlobalComponents {
@@ -28,6 +32,10 @@ declare module 'vue' {
     ArticleListInf: typeof ArticleListInf,
     ArticleListSkeleton: typeof ArticleListSkeleton,
     BarListSkeleton: typeof BarListSkeleton,
-    UserListSkeleton:typeof UserListSkeleton,
+    UserListSkeleton: typeof UserListSkeleton,
+    CommentItem: typeof CommentItem,
+    CommentListInf: typeof CommentListInf,
+    CommentListSkeleton: typeof CommentListSkeleton,
+    UserListInf: typeof UserListInf
   }
 }

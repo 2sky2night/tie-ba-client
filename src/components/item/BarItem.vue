@@ -1,12 +1,16 @@
 <template>
-    <div class="bar-item-container" @click="()=> goBar(bar.bid)">
+    <div class="bar-item-container">
 
         <div class="info">
-            <img class="mr-10" v-lazyImg="bar.photo">
+            <router-link :to="`/bar/${bar.bid}`" >
+                <img class="mr-10" v-lazyImg="bar.photo">
+            </router-link>
             <div class="bar-info">
                 <div class="bar-name">
                     <n-ellipsis :line-clamp="1">
-                        {{ bar.bname }}
+                        <router-link :to="`/bar/${bar.bid}`" class="text">
+                            {{ bar.bname }}
+                        </router-link>
                     </n-ellipsis>
                     <follow-bar-btn :bid="bar.bid" v-model:is-followed="bar.is_followed" size="small"
                         v-model:follow-count="bar.user_follow_count" />
@@ -52,6 +56,8 @@ const {goBar} = useNavigation()
         display: flex;
         align-items: center;
         img {
+            position: relative;
+            top:-5px;
             width: 50px;
             height: 50px;
         }

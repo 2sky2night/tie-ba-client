@@ -5,8 +5,9 @@
 </template>
 
 <script lang='ts' setup>
-import BarItemSkeleton from '../item/BarItemSkeleton.vue';
-defineProps<{ length: number }>()
+import BarItemSkeleton from '@/components/skeleton/item/BarItemSkeleton.vue';
+import type { SkeletonListProps } from '@/types/components/skeleton'
+defineProps<SkeletonListProps>()
 </script>
 
 <style scoped lang="scss">
@@ -16,7 +17,7 @@ defineProps<{ length: number }>()
   gap: 10px
 }
 
-@media screen and (max-width:650px) {
+@media screen and (max-width:651px) {
   .list-skeleton {
     display: flex;
     flex-direction: column;

@@ -483,7 +483,19 @@ export const loginRoutesHook: NavigationGuardWithThis<undefined> = (to, from, ne
 
 ### 5.关注和粉丝页
 
-​	分页浏览用户列表，可以通过搜索来查模糊匹配用户
+​	分页浏览用户列表，有搜索模式和普通模式
+
+### 6.首页
+
+​	无限加载浏览帖子项
+
+### 7.帖子详情页
+
+​	帖子详情页，上方就是帖子的详情数据，下方就是一个tab面板(浏览评论、查看点赞、收藏该帖子的人)。
+
+​	移动端650px以下底部有个操作栏，可以发送评论 点赞帖子 收藏帖子操作，也可以给评论配图。
+
+​	下方的tab面板的效果做了1个小时😢
 
 ## 四、render渲染组件函数
 
@@ -544,6 +556,16 @@ export const loginRoutesHook: NavigationGuardWithThis<undefined> = (to, from, ne
 ### 9.用户列表组件
 
 ​	用户列表组件，通过传入获取数据的函数，在页数更新的时候去调用，所以需要监听当前页数。并且监听路由查询参数page，当page更新时调用获取数据的函数。向外暴露整个分页数据，好让外部操作分页数据，在路由更新的特殊情况更新数据。
+
+### 10.真无限加载的帖子列表组件
+
+​	真无限加载是通过滚动条是否滚动到底部来发送请求获取更多数据，由于这个项目布局是定宽定高的，只有中间主视图容器是有滚动条的，所以就去监听这个DOM元素是否滚动到底部来加载更多数据。
+
+​	具体的实现思路：
+
+​	1.为了节约浏览器性能，所以给主视图容器的scroll事件监听是按需开启的，通过pubsub关注后代组件是否需要开启事件监听。主视图容器通过一个响应式数据来记录当前是否滚动到底部，并将该数据依赖注入给后代组件
+
+​	2.后代组件通过依赖注入的响应式数据来判断是否滚动到底部，来决定是否加载更多数据，后代组件被卸载或不需要加载更多数据时就通过pubsub来取消主视图容器的scroll监听。
 
 ## 六、指令
 
@@ -718,6 +740,43 @@ export default function (cb: any) {
 
 ![](D:\随便写写\tie-ba-client\static\截图_2023-07-01_16-11-30.png)
 
+### 2.同一个事件挂载多个回调
+
+​	若一个元素，挂载了多个同事件的处理函数，则执行顺序按照挂载顺序执行。
+
+```html
+    <button>btn</button>
+    <script>
+      const onHandleClick01 = () => {
+        console.log('点我干嘛01')
+      }
+      const onHandleClick02 = () => {
+        console.log('点我干嘛02')
+      }
+      const btn = document.querySelector('button')
+      btn.addEventListener('click', onHandleClick02)
+      btn.addEventListener('click', onHandleClick01)
+      // 点击时 02先执行
+    </script>
+```
+
+​	若一个元素，挂载了多个同事件的处理函数，且这些事件的处理函数的指针都是同一个对象，则事件触发时只会执行一次
+
+```html
+    <button>btn</button>
+    <script>
+      const onHandleClick = () => {
+        console.log('点我干嘛')
+      }
+      const btn = document.querySelector('button')
+      btn.addEventListener('click', onHandleClick)
+      btn.addEventListener('click', onHandleClick)
+      // 点击时 只会执行一次回调
+    </script>
+```
+
+
+
 ## 零、time
 
 6.23
@@ -769,3 +828,13 @@ export default function (cb: any) {
 6.分页钩子
 
 7.关注、粉丝页搭建了50%
+
+7.9
+
+1.帖子详情页下的tab栏封装
+
+2.评论组件封装、评论无限加载列表组件、修改列表组件的props依赖为外部类型引入
+
+3.用户无限加载列表
+
+4.帖子详情基本完成

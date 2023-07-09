@@ -14,5 +14,13 @@ defineOptions({
 .main-container {
   margin: 0 auto;
   width: var(--main-width);
+  background-color: var(--bg-color-2);
+  min-height: calc(100vh - var(--header-hight));
+}
+
+@media screen and (max-width:651px) {
+  .main-container {
+    min-height: calc(100vh - var(--header-hight) - var(--footer-hight));
+  }
 }
 </style>

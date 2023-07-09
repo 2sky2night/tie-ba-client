@@ -19,5 +19,11 @@ export default {
   pleaseEnter: '请先输入内容!',
   allowImage: '只允许图片格式的文件!',
   imageSizeOverflow: '图片大小限制为10MB!',
-  pleaseSelectFile:'请选择文件!'
+  pleaseSelectFile: '请选择文件!',
+  textAllowSize: (num: number) => `限制文本长度为${num}个字符!`,
+  successLikeComment: '点赞评论成功!',
+  successCancelLikeComment: '取消点赞评论成功!',
+  commentPlaceholder: '回复该帖子',
+  emptyStringWaring: '无效的字符串!',
+  successComment:'发送评论成功!'
 }
