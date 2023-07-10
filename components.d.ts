@@ -7,6 +7,8 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    Articel: typeof import('./src/components/skeleton/views/Articel.vue')['default']
+    ArticelSkeleton: typeof import('./src/components/skeleton/views/ArticelSkeleton.vue')['default']
     ArticleItem: typeof import('./src/components/item/ArticleItem.vue')['default']
     ArticleItemSkeleton: typeof import('./src/components/skeleton/item/ArticleItemSkeleton.vue')['default']
     ArticleList: typeof import('./src/components/list/load/ArticleList.vue')['default']
@@ -18,6 +20,7 @@ declare module 'vue' {
     BarItemSkeleton: typeof import('./src/components/skeleton/item/BarItemSkeleton.vue')['default']
     BarList: typeof import('./src/components/list/load/BarList.vue')['default']
     BarListSkeleton: typeof import('./src/components/skeleton/list/BarListSkeleton.vue')['default']
+    BarSkeleton: typeof import('./src/components/skeleton/views/BarSkeleton.vue')['default']
     CommentItem: typeof import('./src/components/item/CommentItem.vue')['default']
     CommentListInf: typeof import('./src/components/list/load/CommentListInf.vue')['default']
     CommentListSkeleton: typeof import('./src/components/skeleton/list/CommentListSkeleton.vue')['default']

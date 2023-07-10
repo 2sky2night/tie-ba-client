@@ -73,6 +73,7 @@
         :to-like-handle="toLikeArticle" :is-star="articleInfo.is_star" :like-is-loading="likeIsLoading"
         :star-is-loading="starIsLoading" :aid="articleInfo.aid" v-model:comment-count="articleInfo.comment_count" />
     </template>
+    <ArticelSkeleton v-else></ArticelSkeleton>
   </div>
 </template>
 
@@ -92,6 +93,7 @@ import PubSub from 'pubsub-js'
 import { Star } from '@vicons/ionicons5'
 import { MdThumbsUp } from '@vicons/ionicons4'
 import Actions from './components/Actions.vue';
+import ArticelSkeleton from '@/components/skeleton/views/ArticelSkeleton.vue'
 
 const props = defineProps<{ aid: number }>()
 const articleInfo = ref<ArticleInfoResponse | null>(null)

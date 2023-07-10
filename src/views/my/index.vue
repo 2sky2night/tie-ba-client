@@ -3,7 +3,7 @@
     <template v-if="userInfor">
       <div class="user-info-container">
         <div class="image">
-          <n-image :src="userInfor.avatar" />
+          <img v-imgPre="userInfor.avatar" :src="userInfor.avatar" />
         </div>
         <div class="user-data">
           <div class="username">
@@ -159,6 +159,7 @@ defineOptions({
     }
 
     .image {
+      cursor: pointer;
       width: 150px;
       height: 150px;
       margin-right: 30px;

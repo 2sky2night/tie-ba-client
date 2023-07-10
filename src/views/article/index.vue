@@ -21,10 +21,7 @@ const aid = ref<number | null>(checkRoutes())
 
 // 路由更新获取最新的aid参数值
 onBeforeRouteUpdate(to => {
-  const temp = checkRoutes(to)
-  if (temp !== null) {
-    aid.value = temp
-  }
+  aid.value = checkRoutes(to)
 })
 
 defineOptions({

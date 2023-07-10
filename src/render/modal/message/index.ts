@@ -2,10 +2,10 @@ import { type VNode, h, render } from 'vue'
 import Modal from '@/components/modal/message/index.vue'
 import './index.css'
 
-export default function model(title: string, renderVnode: () => VNode) {
+export default function modal(title: string, renderVnode: () => VNode[]|VNode) {
     // 模态框容器
     const container = document.createElement('div')
-    container.classList.add('model-container')
+    container.classList.add('modal-container')
 
 
     const vnode = h(Modal, { title, closeHandler: onHandleClose }, { default: renderVnode })

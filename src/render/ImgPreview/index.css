@@ -8,4 +8,5 @@
     justify-content: center;
     align-items: center;
     background-color: var(--bg-mask);
+    z-index: 9999;
 }

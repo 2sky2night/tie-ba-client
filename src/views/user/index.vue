@@ -3,7 +3,7 @@
     <template v-if="!isLoading && userInfor">
       <div class="user-info-container">
         <div class="image">
-          <n-image :src="userInfor.avatar" />
+          <img v-imgPre="userInfor.avatar" :src="userInfor.avatar" />
         </div>
         <div class="user-data">
           <div class="username">
@@ -193,6 +193,7 @@ defineOptions({
 
     .image {
       width: 150px;
+      cursor: pointer;
       height: 150px;
       margin-right: 30px;
     }
