@@ -19,7 +19,7 @@
         </div>
         <div class="comments mt-10" ref="commentsIns">
             <div class="switch mb-10">
-                <n-select size="small" :loading="isLoadingOrder" v-model="type" :default-value="type" :options="orderOption"
+                <n-select size="small" :loading="isLoadingOrder" :value="type" :default-value="type" :options="orderOption"
                     @update:value="handleUpdateOrder" />
                 <n-switch :loading="isLoadingOrder" :value="isDesc" @update:value="onHandleOrder">
                     <template #checked>
@@ -129,7 +129,8 @@ const onHandleOrder = async (value: boolean) => {
     isLoadingOrder.value = false
 }
 // 评论排序依据选择更新的回调
-const handleUpdateOrder = async () => {
+const handleUpdateOrder = async (value: 1 | 2) => {
+    type.value = value
     isLoadingOrder.value = true
     // 重置页码 获取数据
     await listIns.value.resetPage()
