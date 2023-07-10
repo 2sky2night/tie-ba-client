@@ -63,13 +63,13 @@ async function getListData() {
 // 重置页码和列表项 获取数据
 async function resetPage() {
   isFirstLoading.value = true
+  // 元素挂载多个同一个事件且事件处理函数都是同一个指针 则事件触发时只会执行一次 
+  // 所以随意开启监听 无论是否取消还是没有取消监听
+  PubSub.publish('watchScroll', true)
   pagination.page = 1
   list.length = 0
   await getListData()
   isFirstLoading.value = false
-  // 元素挂载多个同一个事件且事件处理函数都是同一个指针 则事件触发时只会执行一次 
-  // 所以随意开启监听 无论是否取消还是没有取消监听
-  PubSub.publish('watchScroll', true)
 }
 
 onMounted(async () => {

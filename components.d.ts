@@ -63,6 +63,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     UploadImg: typeof import('./src/components/common/UploadImg/index.vue')['default']
     UserBriefly: typeof import('./src/components/common/UserBriefly/index.vue')['default']
+    UserCard: typeof import('./src/components/common/UserCard/index.vue')['default']
     UserData: typeof import('./src/components/common/UserData/index.vue')['default']
     UserItem: typeof import('./src/components/item/UserItem.vue')['default']
     UserItemSkeleton: typeof import('./src/components/skeleton/item/UserItemSkeleton.vue')['default']

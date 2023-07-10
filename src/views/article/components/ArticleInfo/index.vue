@@ -21,10 +21,10 @@
           </div>
           <div class="user-info">
             <div class="username">
-              <RouterLink class="mr-10" :to="`/user/${articleInfo.uid}`">
+              <RouterLink class="mr-10" :to="`/user/${ articleInfo.uid }`">
                 <img :src="articleInfo.user.avatar">
               </RouterLink>
-              <RouterLink class="text" :to="`/user/${articleInfo.uid}`">
+              <RouterLink class="text" :to="`/user/${ articleInfo.uid }`">
                 {{ articleInfo.user.username }}
               </RouterLink>
             </div>
@@ -32,13 +32,13 @@
               :is-fans="articleInfo.user.is_fans" size="small" />
           </div>
         </div>
-        <div class="article-content">
+        <div class="article-content mb-10">
           <p class="mb-10">{{ articleInfo.content }}</p>
           <div class="img-container" v-if="articleInfo.photo !== null">
-            <img v-imgPre="item" v-lazyImg="item" v-for="item in articleInfo.photo">
+            <img v-imgPre="item" v-lazyImg="item" v-for=" item  in articleInfo.photo">
           </div>
         </div>
-        <div class="tips sub-text">到底了</div>
+        <!-- <div class="tips sub-text">到底了</div> -->
         <div class="actions">
           <auth-btn>
             <n-button text round :disabled="likeIsLoading">
@@ -58,6 +58,14 @@
               </div>
             </n-button>
           </auth-btn>
+        </div>
+        <div class="bar-info">
+          <RouterLink :to="`/bar/${ articleInfo.bid }`">
+            <img :src="articleInfo.bar.photo" class="mr-5">
+            <span>
+              {{ articleInfo.bar.bname }}吧
+            </span>
+          </RouterLink>
         </div>
       </div>
       <!--移动端会显示的操作面板-->
@@ -94,13 +102,13 @@ const showAction = ref(false)
 
 
 // 获取帖子详情数据
-async function getData() {
+async function getData () {
   const res = await getArticleInfoAPI(props.aid)
   articleInfo.value = res.data
 }
 
 // 点赞或取消点赞帖子
-async function toLikeArticle() {
+async function toLikeArticle () {
   if (articleInfo.value) {
     likeIsLoading.value = true
     const res = articleInfo.value.is_liked ?
@@ -108,7 +116,7 @@ async function toLikeArticle() {
       await likeArticleAPI(articleInfo.value.aid)
     message.success(res.message)
     articleInfo.value.is_liked = !articleInfo.value.is_liked
-    articleInfo.value.like_count= articleInfo.value.is_liked? articleInfo.value.like_count+1: articleInfo.value.like_count-1
+    articleInfo.value.like_count = articleInfo.value.is_liked ? articleInfo.value.like_count + 1 : articleInfo.value.like_count - 1
     // 向 Like 组件 通知当前用户点赞了帖子 重新加载点赞列表
     PubSub.publish('likeArticle')
     likeIsLoading.value = false
@@ -116,7 +124,7 @@ async function toLikeArticle() {
 }
 
 // 收藏或取消收藏帖子
-async function toStarArticle() {
+async function toStarArticle () {
   if (articleInfo.value) {
     starIsLoading.value = true
     const res = articleInfo.value.is_star ?
@@ -124,7 +132,7 @@ async function toStarArticle() {
       await starArticleAPI(articleInfo.value.aid)
     message.success(res.message)
     articleInfo.value.is_star = !articleInfo.value.is_star
-    articleInfo.value.star_count= articleInfo.value.is_star? articleInfo.value.star_count+1: articleInfo.value.star_count-1
+    articleInfo.value.star_count = articleInfo.value.is_star ? articleInfo.value.star_count + 1 : articleInfo.value.star_count - 1
     // 向 Star 组件 通知当前用户收藏了帖子 重新加载收藏列表
     PubSub.publish('starArticle')
     starIsLoading.value = false
@@ -133,7 +141,7 @@ async function toStarArticle() {
 
 onMounted(() => {
 
-  function checkResize() {
+  function checkResize () {
     if (window.innerWidth > 650) {
       showAction.value = false
     } else {
@@ -148,6 +156,13 @@ onMounted(() => {
 })
 
 onBeforeMount(getData)
+
+// 监听发送评论的回调
+PubSub.subscribe('sendComment', () => {
+  if (articleInfo.value) {
+    articleInfo.value.comment_count++
+  }
+})
 
 watch(() => props.aid, getData)
 
@@ -282,6 +297,22 @@ defineOptions({
         svg {
           position: relative;
           top: -2px;
+        }
+      }
+    }
+
+    .bar-info {
+      a {
+        padding: 10px;
+        cursor: pointer;
+        width: 80px;
+        height: 40px;
+        background-color: var(--bg-color-3);
+        font-size: 12px;
+        border-radius: 5px;
+        img {
+          height: 20px;
+          width: 20px;
         }
       }
     }

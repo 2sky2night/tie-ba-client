@@ -70,12 +70,12 @@ async function getData() {
 // 重置页码 重新获取数据
 async function resetPage() {
   isFirstLoading.value = true
+  // 开启监听
+  pubsub.publish('watchScroll', true)
   pagination.page = 1
   list.length = 0
   await getData()
   isFirstLoading.value = false
-  // 开启监听
-  pubsub.publish('watchScroll', true)
 }
 
 // 获取数据并通知scroll组件 开启事件监听 监听容器的滚动条是否滚动到底部

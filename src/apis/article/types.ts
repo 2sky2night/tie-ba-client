@@ -34,3 +34,7 @@ export interface SendCommentBody {
  * 发送评论的响应结果
  */
 export type SendCommentResponse = null
+/**
+ * 删除评论成功的响应结果
+ */
+export type DeleteCommentResponse = null

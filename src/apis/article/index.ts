@@ -1,10 +1,10 @@
 import request from '@/utils/request';
-import type { ArticleInfoResponse, SendCommentBody, SendCommentResponse } from './types';
+import type { ArticleInfoResponse, SendCommentBody, SendCommentResponse,DeleteCommentResponse } from './types';
 import type { CommentListResponse } from '../public/types/article';
 import type { UserListResponse } from '../public/types/user'
 /**
  * 获取帖子详情列表
- * @param aid 
+ * @param aid 帖子id
  * @returns 
  */
 export const getArticleInfoAPI = (aid: number) => {
@@ -29,14 +29,17 @@ export const commentArticleAPI = (data: SendCommentBody) => {
  * @param aid 帖子id
  * @param page 页码
  * @param pageSize 页长度
+ * @param desc 降序或升序
+ * @param type 排序依据 根据点赞数量排序还是根据创建时间排序 type=1点赞数量 type=2创建时间
  */
-export const getArticleCommentAPI = (aid: number, page: number, pageSize: number, desc: boolean) => {
+export const getArticleCommentAPI = (aid: number, page: number, pageSize: number, desc: boolean,type:1|2) => {
   return request.get<CommentListResponse>('/article/comment/list', {
     params: {
       aid,
       offset: (page - 1) * pageSize,
       limit: pageSize,
-      desc: desc ? 1 : 0
+      desc: desc ? 1 : 0,
+      type
     }
   })
 }
@@ -75,6 +78,19 @@ export const getArticleStarListAPI = (aid: number, page: number, pageSize: numbe
       limit: pageSize,
       offset: (page - 1) * pageSize,
       desc: desc ? 1 : 0
+    }
+  })
+}
+
+/**
+ * 删除评论
+ * @param cid 评论的id
+ * @returns 
+ */
+export const toDeleteComment = (cid: number) => {
+  return request.delete<DeleteCommentResponse>('/article/comment', {
+    params:{
+      cid
     }
   })
 }
