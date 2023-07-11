@@ -49,6 +49,7 @@ export interface UserItem {
     fans_count: number;
     follow_bar_count: number;
     follow_user_count: number;
+    create_bar_count: number;
     is_fans: boolean;
     is_followed: boolean;
     uid: number;

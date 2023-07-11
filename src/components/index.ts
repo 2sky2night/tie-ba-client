@@ -7,7 +7,7 @@ import BarItem from '@/components/item/BarItem.vue'
 import FollowBarBtn from '@/components/common/FollowBarBtn/index.vue'
 import BarListLoad from '@/components/list/load/BarList.vue'
 import UserItem from '@/components/item/UserItem.vue'
-import UserList from '@/components/list/pagination/UserList.vue'
+import UserListPagination from '@/components/list/pagination/UserListPagination.vue'
 import ArticleListInf from '@/components/list/load/ArticleListInf.vue'
 import ArticleListSkeleton from'@/components/skeleton/list/ArticleListSkeleton.vue'
 import BarListSkeleton from '@/components/skeleton/list/BarListSkeleton.vue'
@@ -16,6 +16,7 @@ import CommentItem from '@/components/item/CommentItem.vue';
 import CommentListInf from '@/components/list/load/CommentListInf.vue'
 import CommentListSkeleton from '@/components/skeleton/list/CommentListSkeleton.vue'
 import UserListInf from '@/components/list/load/UserListInf.vue'
+import ArticleListPagination from './list/pagination/ArticleListPagination.vue'
 // 全局组件
 export default {
   AuthBtn,
@@ -27,7 +28,7 @@ export default {
   FollowBarBtn,
   BarListLoad,
   UserItem,
-  UserList,
+  UserListPagination,
   ArticleListInf,
   ArticleListSkeleton,
   BarListSkeleton,
@@ -35,5 +36,6 @@ export default {
   CommentItem,
   CommentListInf,
   CommentListSkeleton,
-  UserListInf
+  UserListInf,
+  ArticleListPagination
 }

@@ -29,6 +29,7 @@
       </div>
       <UserViews :uid="userInfor.uid" />
     </template>
+    <UserSkeleton v-else />
   </div>
 </template>
 
@@ -46,6 +47,7 @@ import userDataModal from '@/render/modal/message/userData'
 import useNavigation from '@/hooks/useNavigation'
 // components
 import UserViews from '@/components/common/UserViews/index.vue'
+import UserSkeleton from '@/components/skeleton/views/UserSkeleton.vue'
 // config
 import tips from '@/config/tips'
 // utils

@@ -32,7 +32,7 @@
 import { ref, watch, reactive, onMounted, onBeforeUnmount, inject, type Ref } from 'vue'
 // types 
 import type { ArticleItem } from '@/apis/public/types/article';
-import type { ArticleListLoadInfProps } from '@/types/components/list';
+import type { ArticleListLoadInfProps,ListLoadInfIns } from '@/types/components/list';
 // tools
 import pubsub from 'pubsub-js'
 
@@ -104,9 +104,7 @@ onBeforeUnmount(() => {
   pubsub.publish('watchScroll', false)
 })
 
-defineExpose({
-  resetPage
-})
+defineExpose<ListLoadInfIns>({resetPage})
 </script>
 
 <style scoped lang='scss'>

@@ -62,3 +62,25 @@ export interface CommentListLoadInfProps {
   */
   getData: (page: number, pageSize: number) => Promise<CommentListResponse>
 }
+
+/**
+ * 分页列表组件实例暴露的api
+ */
+export interface ListPageIns {
+  /**
+   * 重置页码 获取最新数据
+   * @returns 
+   */
+  toResetPage:()=>Promise<void>
+}
+
+/**
+ * 视图无限滚动加载列表组件暴露的api
+ */
+export interface ListLoadInfIns {
+  /**
+   * 重置页码获取最新数据
+   * @returns 
+   */
+  resetPage:()=>Promise<void>
+}

@@ -35,6 +35,7 @@
       </div>
       <UserViews :uid="userInfor.uid" />
     </template>
+    <UserSkeleton v-else />
   </div>
 </template>
 
@@ -50,6 +51,7 @@ import useNavigation from '@/hooks/useNavigation'
 import { AngleRight } from '@vicons/fa'
 import userDataModal from '@/render/modal/message/userData'
 import UserViews from '@/components/common/UserViews/index.vue'
+import UserSkeleton from '@/components/skeleton/views/UserSkeleton.vue'
 // utils
 import { getTempDays } from '@/utils/tools'
 

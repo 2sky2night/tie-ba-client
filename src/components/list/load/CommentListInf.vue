@@ -23,7 +23,7 @@
 <script lang='ts' setup>
 // types
 import type { CommentItem as CommentItemType } from '@/apis/public/types/article'
-import { CommentListLoadInfProps } from '@/types/components/list';
+import { CommentListLoadInfProps, ListLoadInfIns } from '@/types/components/list';
 // hooks
 import { reactive, ref, onMounted, inject, type Ref, watch, onBeforeUnmount } from 'vue'
 // tools
@@ -98,9 +98,7 @@ onBeforeUnmount(() => {
 })
 
 // 向外暴露重置页码的api 可以在其他场景下重置页码 获取数据
-defineExpose({
-  resetPage
-})
+defineExpose<ListLoadInfIns>({resetPage})
 
 </script>
 

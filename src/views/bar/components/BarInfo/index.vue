@@ -10,7 +10,7 @@
             <img class="mr-10" v-imgPre="barInfo.photo" :src="barInfo.photo">
             <div class="title">{{ barInfo.bname }}</div>
           </div>
-          <follow-bar-btn :bid="barInfo.bid" v-model:isFollowed="barInfo.is_followed" size="small"
+          <follow-bar-btn @update:isFollowed="onHandleFollowBar" :bid="barInfo.bid" v-model:isFollowed="barInfo.is_followed" size="small"
             v-model:follow-count="barInfo.user_follow_count"></follow-bar-btn>
         </div>
         <div title="查看吧简介" class="desc mb-10" @click="onHandleShowDesc">
@@ -55,6 +55,8 @@ import type { BarInfoResponse } from '@/apis/bar/types';
 // utils
 import { formatCount } from '@/utils/tools';
 import modal from '@/render/modal/message';
+import Pubsub from 'pubsub-js'
+
 // components
 import BarSkeleton from '@/components/skeleton/views/BarSkeleton.vue'
 
@@ -74,9 +76,15 @@ const onHandleShowDesc = () => {
     h('div', barInfo.value?.bdesc)
   ])
 }
+// 关注吧状态更新的回调 (自定义事件可以绑定多个处理函数?)
+const onHandleFollowBar = () => {
+  // 通知panel下的用户关注列表组件重新加载
+  Pubsub.publish('toFollowBar')
+}
 
 // 路由更新 获取最新的吧数据
 watch(() => props.bid, () => {
+  barInfo.value=null
   getBarData()
 })
 

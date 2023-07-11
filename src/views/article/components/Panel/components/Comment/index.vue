@@ -21,7 +21,7 @@
             <div class="switch mb-10">
                 <n-select size="small" :loading="isLoadingOrder" :value="type" :default-value="type" :options="orderOption"
                     @update:value="handleUpdateOrder" />
-                <n-switch :loading="isLoadingOrder" :value="isDesc" @update:value="onHandleOrder">
+                <n-switch :round="false" :loading="isLoadingOrder" :value="isDesc" @update:value="onHandleOrder">
                     <template #checked>
                         降序
                     </template>
@@ -46,6 +46,7 @@ import { getArticleCommentAPI, commentArticleAPI } from '@/apis/article';
 import tips from '@/config/tips';
 // types
 import type { UploadFileInfo, SelectOption } from 'naive-ui';
+import type { ListLoadInfIns } from '@/types/components/list';
 // components
 import UploadImg from '@/components/common/UploadImg/index.vue'
 // utlis
@@ -54,7 +55,7 @@ import PubSub from 'pubsub-js';
 // 评论区按照升序或降序排序评论
 const isDesc = ref(false)
 // 评论区排序依据
-const type = ref<1 | 2>(1)
+const type = ref<1 | 2>(2)
 // 正在加载排序
 const isLoadingOrder = ref(false)
 // 正在加载发送评论
@@ -77,7 +78,7 @@ const message = useMessage()
 // props
 const props = defineProps<{ aid: number }>()
 // 评论列表实例
-const listIns = ref()
+const listIns = ref<ListLoadInfIns>()
 // 评论排序依据选项
 const orderOption: SelectOption[] = [
     {
@@ -112,9 +113,9 @@ const onHandleSendComment = async () => {
     await commentArticleAPI({ aid: props.aid, photo: commentBody.photo.length ? commentBody.photo : null, content: commentBody.content })
     message.success(tips.successComment)
     // 清空评论的内容以及配图
-    onHandleReset()
+    onHandleReset();
     // 重新加载评论数据
-    listIns.value.resetPage()
+    await toResetPage()
     // 通知articleInfo 更新评论数量
     PubSub.publish('sendComment')
     // 加载完成
@@ -123,9 +124,9 @@ const onHandleSendComment = async () => {
 // 评论升降序更新的回调
 const onHandleOrder = async (value: boolean) => {
     isLoadingOrder.value = true
-    isDesc.value = value
+    isDesc.value = value;
     // 重置页数 获取数据
-    await listIns.value.resetPage()
+    await toResetPage()
     isLoadingOrder.value = false
 }
 // 评论排序依据选择更新的回调
@@ -133,21 +134,27 @@ const handleUpdateOrder = async (value: 1 | 2) => {
     type.value = value
     isLoadingOrder.value = true
     // 重置页码 获取数据
-    await listIns.value.resetPage()
+    await toResetPage()
     isLoadingOrder.value = false
 }
 
+// 通过评论列表组件实例暴露的api重置页码
+const toResetPage = async () => {
+    if (listIns.value) {
+        await listIns.value.resetPage()
+    }
+    return
+}
+
 // 监听actions组件通知是否重新加载评论列表
-PubSub.subscribe('reloadComment', () => {
-    listIns.value.resetPage()
-})
+PubSub.subscribe('reloadComment', toResetPage)
 // 监听actions组件通知让评论区进入视图
 PubSub.subscribe('toCommentArea', () => {
     (commentsIns.value as HTMLDivElement).scrollIntoView({ behavior: 'smooth' })
 })
 // 监听路由变化 重置页数加载评论数据
-watch(() => props.aid, () => {
-    listIns.value.resetPage()
+watch(() => props.aid, async () => {
+    toResetPage()
     onHandleReset()
 })
 

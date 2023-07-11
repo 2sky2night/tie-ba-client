@@ -13,33 +13,32 @@ import { getArticleStarListAPI } from '@/apis/article'
 import { watch, ref } from 'vue'
 // utils
 import PubSub from 'pubsub-js'
+// types
+import type { ListLoadInfIns } from '@/types/components/list';
 
 const isDesc = ref(true)
 const props = defineProps<{ aid: number }>()
-const listIns = ref()
+const listIns = ref<ListLoadInfIns>()
 
 // 获取点赞数据
 async function getLikeList(page: number, pageSize: number) {
     const res = await getArticleStarListAPI(props.aid, page, pageSize, isDesc.value)
     return res.data
 }
-// 监听当前用户是否点赞帖子 点赞了就重新加载数据
-PubSub.subscribe('starArticle', () => {
-    listIns.value.onHandleReset()
-})
-// 路由更新 重置页码和列表项 重新获取最新数据
-watch(() => props.aid, () => {
-    listIns.value.onHandleReset()
-})
 
+// 通过列表实例重置页码 获取最新数据
+const toResetPage = () => {
+    if (listIns.value) {
+        listIns.value.resetPage()
+    }
+}
+
+// 监听当前用户是否点赞帖子 点赞了就重新加载数据
+PubSub.subscribe('starArticle',toResetPage)
+// 路由更新 重置页码和列表项 重新获取最新数据
+watch(() => props.aid,toResetPage)
 
 defineOptions({
     name: 'Star'
 })
 </script>
-
-<style scoped lang='scss'>
-.star-container {
-    .list {}
-}
-</style>

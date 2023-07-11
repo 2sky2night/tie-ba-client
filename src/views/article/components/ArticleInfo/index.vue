@@ -93,7 +93,7 @@ import PubSub from 'pubsub-js'
 import { Star } from '@vicons/ionicons5'
 import { MdThumbsUp } from '@vicons/ionicons4'
 import Actions from './components/Actions.vue';
-import ArticelSkeleton from '@/components/skeleton/views/ArticelSkeleton.vue'
+import ArticelSkeleton from '@/components/skeleton/views/ArticleSkeleton.vue'
 
 const props = defineProps<{ aid: number }>()
 const articleInfo = ref<ArticleInfoResponse | null>(null)

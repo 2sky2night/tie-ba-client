@@ -10,7 +10,7 @@
             <n-button :disabled="!isSearchType" @click="onHandleReset">重置</n-button>
         </div>
         <div class="user-list">
-            <UserList ref="listIns" :get-data="getUserFollow" />
+            <UserListPagination ref="listIns" :get-data="getUserFollow" />
         </div>
     </div>
 </template>

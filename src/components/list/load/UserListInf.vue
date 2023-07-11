@@ -9,7 +9,7 @@
 
       <template v-if="list.length">
         <div class="user-list">
-          <user-item :user="item" v-model:fans-count="item.fans_count" :key="item.uid" v-for="item in list"></user-item>
+          <user-item :user="item" v-model:fans-count="item.fans_count" :key="item.uid" v-for=" item  in list"></user-item>
         </div>
         <div class="spin" v-if="isLoading">
           <span class="sub-text mr-10">正在加载</span>
@@ -31,6 +31,7 @@
 <script lang='ts' setup>
 // types
 import type { UserItem as Item, UserListResponse } from '@/apis/public/types/user';
+import type { ListLoadInfIns } from '@/types/components/list';
 // hooks
 import { reactive, onMounted, inject, onBeforeUnmount, type Ref, watch, ref } from 'vue'
 // utils
@@ -57,7 +58,7 @@ const isLoading = ref(false)
 const isFirstLoading = ref(false)
 
 // 重置页码和列表 获取数据
-const onHandleReset = async () => {
+const resetPage = async () => {
   isFirstLoading.value = true
   PubSub.publish('watchScroll', true)
   list.length = 0
@@ -102,16 +103,15 @@ onBeforeUnmount(() => {
   PubSub.publish('watchScroll', false)
 })
 
-defineExpose({
-  onHandleReset
-})
+// 向外暴露重置页码的api 可以在其他场景下重置页码 获取数据
+defineExpose<ListLoadInfIns>({ resetPage })
 </script>
 
 <style scoped lang='scss'>
 .user-list-inf-container {
   .user-list {
-    display:grid;
-    grid-template-columns: repeat(2,1fr);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .spin {
@@ -148,9 +148,10 @@ defineExpose({
     }
   }
 }
+
 @media screen and (max-width:651px) {
-  .user-list-inf-container{
-    .user-list{
+  .user-list-inf-container {
+    .user-list {
       display: flex;
       flex-direction: column;
     }
