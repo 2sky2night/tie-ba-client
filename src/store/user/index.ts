@@ -5,8 +5,10 @@ import router from '@/router'
 // apis
 import { loginAPI } from '@/apis/login'
 import { getUserInfoAPI } from '@/apis/my/index'
+import { editUserInfoAPI, editUserPasswordAPI } from '@/apis/edit'
 // types
 import { UserData } from './types'
+import { EditUserInfoBody, EditUserPasswordBody } from '@/apis/edit/types'
 // utils
 import Token from '@/utils/token'
 
@@ -28,6 +30,11 @@ const useUserStore = defineStore(
             username: '',
             createTime: ''
         })
+
+        /**
+         * 用户浏览的历史记录帖子
+         */
+        const historyAids = ref<number[]>([])
 
         /**
          * 用户登录
@@ -65,6 +72,31 @@ const useUserStore = defineStore(
         }
 
         /**
+         * 编辑用户信息
+         * @param data 
+         */
+        const toEditUserInfo = async (data: EditUserInfoBody) => {
+            try {
+                await editUserInfoAPI(data)
+                // 编辑成功 修改用户数据
+                userData.value.avatar = data.avatar
+                userData.value.username = data.username
+            } catch (error) {
+                return Promise.reject(error)
+            }
+        }
+
+        /**
+         * 编辑用户密码 成功后注销用户重新登录
+         * @param data 
+         */
+        const toEditUserPassword = async (data: EditUserPasswordBody) => {
+            await editUserPasswordAPI(data)
+            // 注销并重新登录
+            toLogout()
+        }
+
+        /**
          * 清空用户数据并清除本地数据(token和用户数据) 返回登陆页
          */
         const toLogout = () => {
@@ -78,6 +110,42 @@ const useUserStore = defineStore(
         }
 
         /**
+         * 添加历史记录
+         * @param aid 
+         */
+        const addHistory = (aid: number) => {
+            // 查询历史记录是否存在
+            const index = historyAids.value.findIndex(ele => ele === aid)
+            console.log(index);
+
+            if (index !== -1) {
+                // 若存在该帖子的历史记录 则删除该帖子记录
+                historyAids.value.splice(index, 1)
+            }
+            // 将帖子id保存在历史记录中
+            historyAids.value.unshift(aid)
+        }
+
+        /**
+         * 删除历史记录
+         * @param aid 
+         */
+        const deleteHistory = (aid: number) => {
+            historyAids.value.some((ele, index, arr) => {
+                if (ele === aid) {
+                    arr.splice(index, 1)
+                }
+            })
+        }
+
+        /**
+         * 清除所有历史记录
+         */
+        const clearAllHistory = () => {
+            historyAids.value.length = 0
+        }
+
+        /**
          * 用户是否登录
          */
         const isLogin = computed(() => {
@@ -85,13 +153,20 @@ const useUserStore = defineStore(
         })
 
 
+
         return {
             token,
             userData,
+            historyAids,
             isLogin,
             toLogin,
             toGetUserInfo,
-            toLogout
+            toLogout,
+            toEditUserInfo,
+            toEditUserPassword,
+            addHistory,
+            deleteHistory,
+            clearAllHistory
         }
     },
     {

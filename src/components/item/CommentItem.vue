@@ -16,7 +16,7 @@
         <div class="content">
             <p>{{ comment.content }}</p>
             <div class="img-list mb-10" v-if="comment.photo !== null">
-                <img v-lazyImg="item" v-imgPre="item" v-for="    item     in comment.photo" :key="item">
+                <img v-lazyImg="item" v-imgPre="item" v-for="     item      in comment.photo" :key="item">
             </div>
             <div class="time">
                 <span class="time sub-text">{{ formatDBDateTime(comment.createTime) }}</span>
@@ -87,9 +87,12 @@ const onHandleLikeArticle = async () => {
 const onHandleMouseLeave = () => {
     // 当鼠标移出头像后 超过阈值未进入用户卡片 就销毁卡片
     setTimeout(() => {
-        if (!userCardIns.value.isMouseOn) {
-            // 若移出头像.5秒后鼠标未进入了卡片 则隐藏卡片
-            showCard.value = false
+        if (showCard.value) {
+            // 在.5s后 还打开着卡片 并移出了卡片就关闭卡片           
+            if (!userCardIns.value.isMouseOn) {
+                // 若移出头像.5秒后鼠标未进入了卡片 则隐藏卡片
+                showCard.value = false
+            }
         }
 
     }, 500)

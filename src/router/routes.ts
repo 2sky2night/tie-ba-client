@@ -141,6 +141,15 @@ const routes: RouteRecordRaw[] = [
       needAuth: false,
       title: '关注'
     }
+  },
+  {
+    path: '/history',
+    name: 'history',
+    component: () => import('@/views/history/index.vue'),
+    meta: {
+      needAuth: false,
+      title: '历史'
+    }
   }
 ]
 

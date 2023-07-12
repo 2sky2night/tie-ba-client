@@ -13,10 +13,11 @@
       <div class="form-container mt-10">
         <n-form ref="formRef" :model="userData" :rules="rules">
           <n-form-item :show-require-mark="false" path="username" label="用户名">
-            <n-input v-model:value.trim="userData.username" placeholder="请输入用户名" />
+            <n-input v-model:value.trim="userData.username" :placeholder="tips.formPlaceholder('用户名')" />
           </n-form-item>
           <n-form-item :show-require-mark="false" path="password" label="密码">
-            <n-input type="password" show-password-on='click' placeholder="请输入密码" v-model:value="userData.password" />
+            <n-input type="password" show-password-on='click' :placeholder="tips.formPlaceholder('密码')"
+              v-model:value="userData.password" />
           </n-form-item>
         </n-form>
         <div class="btns mt-10">
@@ -30,7 +31,7 @@
 
 <script lang='ts' setup>
 // hooks
-import { reactive, ref } from 'vue'
+import { reactive, ref,watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import useUserStore from '@/store/user'
 import { useMessage } from 'naive-ui'
@@ -38,6 +39,8 @@ import { useMessage } from 'naive-ui'
 import type { FormInst, FormItemRule, FormRules } from 'naive-ui'
 // components
 import Logo from '@/components/common/Logo/index.vue'
+// tips
+import tips from '@/config/tips'
 
 // 用户仓库
 const userStore = useUserStore()
@@ -56,25 +59,27 @@ const userData = reactive({
 const rules: FormRules = {
   username: {
     required: true,
-    validator(_rule: FormItemRule, value: string) {
+    validator (_rule: FormItemRule, value: string) {
       if (!value) {
-        return new Error('用户名不能为空')
+        return new Error(tips.formNotEmpty('用户名'))
+      } else if (value.length > 15) {
+        return new Error(tips.textNameAllSize('用户名', 15, 1))
       }
       return true
     },
-    trigger: ['input', 'blur']
+    trigger: [ 'input', 'blur' ]
   },
   password: {
     required: true,
-    validator(_rule: FormItemRule, value: string) {
+    validator (_rule: FormItemRule, value: string) {
       if (!value) {
-        return new Error('密码不能为空')
+        return new Error(tips.formNotEmpty('密码'))
       } else if (value.length < 6 || value.length > 14) {
-        return new Error('密码长度必须为6-14位')
+        return new Error(tips.textNameAllSize('密码', 14, 6))
       }
       return true
     },
-    trigger: ['input', 'blur']
+    trigger: [ 'input', 'blur' ]
   }
 }
 const message = useMessage()
@@ -115,6 +120,11 @@ const onHandleSubmit = async () => {
     console.log(error)
   }
 }
+
+// 清除用户输入的左右空串
+watch(() => userData.username, () => {
+  userData.username=userData.username.trim()
+})
 
 defineOptions({
   name: 'Login'

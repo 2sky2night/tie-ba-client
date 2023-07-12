@@ -40,8 +40,7 @@ watch(() => route.fullPath, () => {
   if (scrollIns.value) {
     scrollIns.value.scrollTo({
       top: 0,
-      left: 0,
-      behavior: 'smooth'
+      left: 0
     })
   }
 })
@@ -84,8 +83,7 @@ onMounted(() => {
     if (scrollIns.value) {
       scrollIns.value.scrollTo({
         top: 0,
-        left: 0,
-        behavior: 'smooth'
+        left: 0
       })
     }
   })

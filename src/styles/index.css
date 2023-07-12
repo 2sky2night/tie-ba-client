@@ -43,6 +43,12 @@ a{
   font-size: 12px;
   color:var(--text-color-2)
 }
+/*页面的标题*/
+.page-title{
+  font-size: 20px;
+  color: var(--primary-color);
+  font-weight: 600;
+}
 
 .mb-5{
   margin-bottom: 5px;

@@ -42,6 +42,8 @@ import type { FormInst, FormItemRule, FormRules } from 'naive-ui'
 import Logo from '@/components/common/Logo/index.vue'
 // apis
 import { registerAPI } from '@/apis/register'
+// configs
+import tips from '@/config/tips'
 
 // 消息组件
 const message = useMessage()
@@ -61,41 +63,44 @@ const userData = reactive({
 const rules: FormRules = {
   username: {
     required: true,
-    validator(_rule: FormItemRule, value: string) {
+    validator (_rule: FormItemRule, value: string) {
       if (!value) {
-        return new Error('用户名不能为空')
+        return new Error(tips.formNotEmpty('用户名'))
+        // 用户名必须为1-15个字节
+      } else if (value.length > 15) {
+        return new Error(tips.textNameAllSize('用户名', 15, 1))
       }
       return true
     },
-    trigger: ['input', 'blur']
+    trigger: [ 'input', 'blur' ]
   },
   password: {
     required: true,
-    validator(_rule: FormItemRule, value: string) {
+    validator (_rule: FormItemRule, value: string) {
       if (!value) {
-        return new Error('密码不能为空')
+        return new Error(tips.formNotEmpty('密码'))
       } else if (value.length < 6 || value.length > 14) {
-        return new Error('密码长度必须为6-14位')
+        return new Error(tips.textNameAllSize('密码', 14, 6))
       } else if (value !== userData.rePassword && userData.rePassword.length) {
-        return new Error('两次密码不一致')
+        return new Error(tips.passwordNotEqual)
       }
       return true
     },
-    trigger: ['input', 'blur']
+    trigger: [ 'input', 'blur' ]
   },
   rePassword: {
     required: true,
-    validator(_rule: FormItemRule, value: string) {
+    validator (_rule: FormItemRule, value: string) {
       if (!value) {
-        return new Error('密码不能为空')
+        return new Error(tips.formNotEmpty('密码'))
       } else if (value.length < 6 || value.length > 14) {
-        return new Error('密码长度必须为6-14位')
+        return new Error(tips.textNameAllSize('密码', 14, 6))
       } else if (value !== userData.password) {
-        return new Error('两次密码不一致')
+        return new Error(tips.passwordNotEqual)
       }
       return true
     },
-    trigger: ['input', 'blur']
+    trigger: [ 'input', 'blur' ]
   }
 }
 
@@ -144,6 +149,11 @@ watch(userData, () => {
       formRef.value.restoreValidation()
     }
   }
+})
+
+// 清除用户输入的左右空串
+watch(() => userData.username, () => {
+  userData.username = userData.username.trim()
 })
 
 defineOptions({
