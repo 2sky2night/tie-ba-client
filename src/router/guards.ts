@@ -64,6 +64,12 @@ export const loginRoutesHook: NavigationGuardWithThis<undefined> = (_to, from, n
   }
 }
 
+/**
+ * 用户页面的路由独享守卫 禁止当前登录的用户进入用户页面
+ * @param to 
+ * @param _from 
+ * @param next 
+ */
 export const userRoutesHooks: NavigationGuardWithThis<undefined> = (to, _from, next) => {
   const userStore = useUserStore()
   if (to.params.uid) {

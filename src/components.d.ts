@@ -16,7 +16,7 @@ import CommentItem from '@/components/item/CommentItem.vue';
 import CommentListInf from '@/components/list/load/CommentListInf.vue'
 import CommentListSkeleton from '@/components/skeleton/list/CommentListSkeleton.vue'
 import UserListInf from '@/components/list/load/UserListInf.vue'
-import ArticleListPagination from './list/pagination/ArticleListPagination.vue'
+import ArticleListPagination from '@/components/list/pagination/ArticleListPagination.vue'
 declare module 'vue' {
   export interface GlobalComponents {
     AuthBtn: typeof AuthBtn,

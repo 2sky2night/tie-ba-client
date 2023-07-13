@@ -150,6 +150,15 @@ const routes: RouteRecordRaw[] = [
       needAuth: false,
       title: '历史'
     }
+  },
+  {
+    path: '/post-article',
+    name: 'post-article',
+    component: () => import('@/views/post-article/index.vue'),
+    meta: {
+      needAuth: true,
+      title: '发帖'
+    }
   }
 ]
 

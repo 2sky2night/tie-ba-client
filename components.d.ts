@@ -67,6 +67,7 @@ declare module 'vue' {
     Pagination: typeof import('./src/components/pagination/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SwiperCell: typeof import('./src/components/common/SwiperCell/index.vue')['default']
     UploadImg: typeof import('./src/components/common/UploadImg/index.vue')['default']
     UserBriefly: typeof import('./src/components/common/UserBriefly/index.vue')['default']
     UserCard: typeof import('./src/components/common/UserCard/index.vue')['default']

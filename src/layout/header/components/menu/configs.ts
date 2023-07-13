@@ -2,11 +2,10 @@
 import { type DropdownOption, NIcon } from 'naive-ui'
 import { type Component, h } from 'vue'
 // components
-import { LogInOutline, Star, LogOutOutline } from '@vicons/ionicons5'
+import { LogInOutline, LogOutOutline,DocumentTextSharp } from '@vicons/ionicons5'
 import { HistoryOutlined } from '@vicons/antd'
 import { UserEdit, UserRegular, UserPlus, UserCircleRegular } from '@vicons/fa'
 import { NAvatar } from 'naive-ui'
-
 /**
  * 渲染icon虚拟DOM
  * @param icon 对应图标组件
@@ -56,9 +55,9 @@ export const authMenu: DropdownOption[] = [
     icon: renderIcon(UserEdit)
   },
   {
-    label: '收藏的帖子',
-    key: '/star',
-    icon: renderIcon(Star)
+    label: '发帖',
+    key: '/post-article',
+    icon: renderIcon(DocumentTextSharp)
   },
   {
     label: '浏览的历史',

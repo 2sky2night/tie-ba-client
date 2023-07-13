@@ -3,28 +3,15 @@ import type { ListResponse } from '.';
 /**
  * 吧的简要信息
  */
-export interface BarBriefInfo {
-  bdesc: string;
-  bid: number;
-  bname: string;
-  createTime: string;
+export interface BarBriefInfo extends BarBase{
   is_followed: boolean;
-  photo: string;
-  uid: number;
 }
 
 /**
  * 吧列表中的每一项
  */
-export interface BarItem {
+export interface BarItem extends BarBriefInfo{
   article_count: number;
-  bdesc: string;
-  bid: number;
-  bname: string;
-  createTime: string;
-  is_followed: boolean;
-  photo: string;
-  uid: number;
   user: UserBrieflyInfo;
   user_follow_count: number;
 }

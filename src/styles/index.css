@@ -14,9 +14,11 @@
   --bg-color-1:#fff;
   --bg-color-2:#fff;
   --bg-color-3:#eee;
+  --bg-color-4:rgba(255, 255, 255, 0.09);
   --bg-mask:#0909094b;
   --text-color-1:#000;
   --text-color-2:#86909c;
+  --scrollbar-color: rgba(0, 0, 0, 0.25);
   /*----时间-----*/
   --time-normal:.3s;
 }

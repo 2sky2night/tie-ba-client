@@ -5,30 +5,26 @@
       <span class="sub-text">共{{ pagination.total }}项</span>
     </div>
     <template v-if="isFirstLoading">
-      <ArticleListSkeleton :length="pagination.pageSize" ></ArticleListSkeleton>
+      <ArticleListSkeleton :length="pagination.pageSize"></ArticleListSkeleton>
     </template>
     <template v-else>
       <template v-if="list.length">
-        <div class="list" v-if="list.length">
-          <template v-for="item in list">
-            <n-carousel draggable :slides-per-view="2"
-    :space-between="20">
-              <n-carousel-item style="width: 80%;">
-                <article-item v-model:isLiked="item.is_liked"  :key="item.aid" :article="item"
-                  v-model:is-star="item.is_star" v-model:star-count="item.star_count"
-                  v-model:like-count="item.like_count"></article-item>
-              </n-carousel-item>
-              <n-carousel-item style="width: 20%;">
-                <div class="actions"><n-button>删除历史记录</n-button></div>
-              </n-carousel-item>
-            </n-carousel>
-          </template>
+        <div class="list">
+          <SwiperCell v-for="item in list" :key="item.aid">
+            <template #default>
+              <article-item v-model:isLiked="item.is_liked" :article="item" v-model:is-star="item.is_star"
+                v-model:star-count="item.star_count" v-model:like-count="item.like_count"></article-item>
+            </template>
+            <template #right>
+              <div class="actions"><n-button @click="() => onHandleDelete(item.aid)" type="error">删除</n-button></div>
+            </template>
+          </SwiperCell>
         </div>
         <div class="spin" v-if="isLoading">
           <span class="sub-text mr-10">正在加载</span>
           <n-spin size="small" />
         </div>
-        <div class="divier" v-if="list.length>=pagination.total"><span class="sub-text">没有更多了</span></div>
+        <div class="divier" v-if="list.length >= pagination.total"><span class="sub-text">没有更多了</span></div>
       </template>
       <div class="empty" v-else>
         <Empty></Empty>
@@ -47,9 +43,11 @@ import useUserStore from '@/store/user';
 import type { ArticleItem } from '@/apis/public/types/article';
 // utils
 import PubSub from 'pubsub-js';
+// components
+import SwiperCell from '@/components/common/SwiperCell/index.vue'
 
 // 首次加载
-const isFirstLoading=ref(false)
+const isFirstLoading = ref(false)
 // 帖子列表
 const list = reactive<ArticleItem[]>([])
 // 用户仓库
@@ -85,7 +83,19 @@ async function getListData () {
   isLoading.value = false
 }
 
-onBeforeMount(async() => {
+// 删除历史记录的回调
+const onHandleDelete = async (aid: number) => {
+  isFirstLoading.value = true
+  userStore.deleteHistory(aid)
+  pagination.value.total--
+  // 重置页数 重新加载数据
+  pagination.value.page = 1
+  list.length = 0
+  await getListData()
+  isFirstLoading.value = false
+}
+
+onBeforeMount(async () => {
   isFirstLoading.value = true
   await getListData()
   isFirstLoading.value = false
@@ -123,8 +133,13 @@ defineOptions({
   .empty {
     padding-top: 100px;
   }
-  .actions{
-    background-color: red;
+
+  .actions {
+    height: 100%;
+
+    >button {
+      height: 100%;
+    }
   }
 
   .spin {
