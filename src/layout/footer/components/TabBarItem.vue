@@ -44,7 +44,21 @@ const onHandleClick = () => {
     font-size: 12px;
   }
   &.active{
-    color:var(--primary-color)
+    color:var(--primary-color);
+    i{
+      animation: icon ease var(--time-normal) 1;
+    }
+  }
+}
+@keyframes icon {
+  from{
+    transform: scale(.8);
+  }
+  50%{
+    transform: scale(1.2);
+  }
+  100%{
+    transform: scale(1);
   }
 }
 </style>

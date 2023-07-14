@@ -1,6 +1,6 @@
 <template>
     <div class="comment-item-container">
-        <div class="header ">
+        <div class="header">
             <div class="username">
                 <RouterLink :to="`/user/${ comment.uid }`">
                     <img v-lazyImg="comment.user.avatar" @mouseenter="showCard = true" @mouseleave="onHandleMouseLeave">
@@ -9,14 +9,14 @@
                     <span class="text">{{ comment.user.username }}</span>
                 </RouterLink>
                 <Transition name="card">
-                    <UserCard ref="userCardIns" :uid="comment.uid" v-if="showCard" v-model:show="showCard" />
+                    <UserCard ref="userCardIns" :uid="comment.uid" v-if="showCard" v-model:show="showCard" :top="60" :left="0" />
                 </Transition>
             </div>
         </div>
         <div class="content">
             <p>{{ comment.content }}</p>
             <div class="img-list mb-10" v-if="comment.photo !== null">
-                <img v-lazyImg="item" v-imgPre="item" v-for="     item      in comment.photo" :key="item">
+                <img v-lazyImg="item" v-imgPre="item" v-for="item in comment.photo" :key="item">
             </div>
             <div class="time">
                 <span class="time sub-text">{{ formatDBDateTime(comment.createTime) }}</span>

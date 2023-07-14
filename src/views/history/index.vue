@@ -12,8 +12,19 @@
         <div class="list">
           <SwiperCell v-for="item in list" :key="item.aid">
             <template #default>
-              <article-item v-model:isLiked="item.is_liked" :article="item" v-model:is-star="item.is_star"
-                v-model:star-count="item.star_count" v-model:like-count="item.like_count"></article-item>
+              <!--有效的帖子-->
+              <template v-if="item.not_found===undefined">
+                <article-item v-model:isLiked="item.is_liked" :article="item" v-model:is-star="item.is_star"
+                  v-model:star-count="item.star_count" v-model:like-count="item.like_count"></article-item>
+              </template>
+              <!--无效的帖子-->
+              <template v-else>
+                <div class="empty-article">
+                  <span>帖子id{{ item.aid }},</span>
+                  <span>是一篇失效的帖子</span>
+                  <span class="face">😢</span>
+                </div>
+              </template>
             </template>
             <template #right>
               <div class="actions"><n-button @click="() => onHandleDelete(item.aid)" type="error">删除</n-button></div>
@@ -39,8 +50,6 @@ import { getHistoryArticleAPI } from '@/apis/history';
 // hooks
 import { reactive, ref, onBeforeMount, computed, inject, watch, onMounted, onBeforeUnmount, type Ref } from 'vue'
 import useUserStore from '@/store/user';
-// types
-import type { ArticleItem } from '@/apis/public/types/article';
 // utils
 import PubSub from 'pubsub-js';
 // components
@@ -49,7 +58,7 @@ import SwiperCell from '@/components/common/SwiperCell/index.vue'
 // 首次加载
 const isFirstLoading = ref(false)
 // 帖子列表
-const list = reactive<ArticleItem[]>([])
+const list = reactive<any[]>([])
 // 用户仓库
 const userStore = useUserStore()
 // 分页数据
@@ -130,6 +139,15 @@ defineOptions({
 
 <style scoped lang='scss'>
 .page-container {
+  .empty-article{
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .face{
+      font-size: 20px;
+    }
+  }
   .empty {
     padding-top: 100px;
   }

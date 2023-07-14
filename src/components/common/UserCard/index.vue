@@ -1,5 +1,6 @@
 <template>
-  <div class="user-card-container" @mouseleave="onHandleLeave" @mouseenter="onHandleMouseEnter">
+  <div :style="{ top: top + 'px', left: left + 'px' }" class="user-card-container" @mouseleave="onHandleLeave"
+    @mouseenter="onHandleMouseEnter">
     <template v-if="userData">
       <div class="header mb-10">
         <div class="username">
@@ -57,6 +58,8 @@ const props = defineProps<{
    * 是否显示卡片
    */
   show: boolean;
+  top: number;
+  left: number;
 }>()
 // 用户信息
 const userData = ref<UserCardResponse | null>(null)
@@ -133,6 +136,7 @@ defineOptions({
         cursor: pointer;
         width: 50px;
         height: 50px;
+        border-radius: 50%;
       }
     }
   }

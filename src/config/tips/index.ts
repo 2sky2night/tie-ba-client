@@ -34,5 +34,11 @@ export default {
   formPlaceholder: (name: string) => `请输入${ name }`,
   passwordNotEqual: '两次密码不一致!',
   successEditPassword: '更新用户密码成功!',
-  formNotEmpty: (name: string)=>`${name}不能为空!`
+  formNotEmpty: (name: string) => `${ name }不能为空!`,
+  pleaseSelectImage: '请选择图片',
+  pleaseUploadInTurn: '请依次选择图片!',
+  successPostArticle: '发帖成功!',
+  pleaseSelectBar: '请选择吧!',
+  successCreateBar: '创建吧成功!',
+  searchPleaseholder:'请输入内容来搜索'
 }

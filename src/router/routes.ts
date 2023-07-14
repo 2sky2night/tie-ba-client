@@ -112,7 +112,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/views/article/index.vue"),
     meta: {
       needAuth: false,
-      title:'帖子详情'
+      title: '帖子详情'
     }
   },
   {
@@ -159,7 +159,73 @@ const routes: RouteRecordRaw[] = [
       needAuth: true,
       title: '发帖'
     }
-  }
+  },
+  {
+    path: '/create-bar',
+    name: 'create-bar',
+    component: () => import('@/views/create-bar/index.vue'),
+    meta: {
+      needAuth: true,
+      title: '创吧'
+    }
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: () => import('@/views/search/index.vue'),
+    meta: {
+      needAuth: false,
+      title: '搜索'
+    },
+    redirect:'/search/article',
+    children: [
+      {
+        path: '/search/article',
+        name: 'search-title',
+        component: () => import('@/views/search/children/article/index.vue'),
+        meta: {
+          needAuth: false,
+          title: '搜索帖子'
+        },
+      },
+      {
+        path: '/search/bar',
+        name: 'search-bar',
+        component: () => import('@/views/search/children/bar/index.vue'),
+        meta: {
+          needAuth: false,
+          title: '搜索吧'
+        },
+      },
+      {
+        path: '/search/comment',
+        name: 'search-comment',
+        component: () => import('@/views/search/children/comment/index.vue'),
+        meta: {
+          needAuth: false,
+          title: '搜索评论'
+        },
+      },
+      {
+        path: '/search/user',
+        name: 'search-user',
+        component: () => import('@/views/search/children/user/index.vue'),
+        meta: {
+          needAuth: false,
+          title: '搜索用户'
+        },
+      }
+    ]
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: '404',
+    component: () => import('@/views/404/index.vue'),
+    meta: {
+      needAuth: false,
+      title: '404'
+    }
+  },
 ]
 
 export default routes

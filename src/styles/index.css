@@ -9,71 +9,88 @@
 
   /*------颜色------*/
   --primary-color: #2080f0;
-  --border-color-1:rgb(224, 224, 230);
-  --shadow-color-1:#47474759;
-  --bg-color-1:#fff;
-  --bg-color-2:#fff;
-  --bg-color-3:#eee;
-  --bg-color-4:rgba(255, 255, 255, 0.09);
-  --bg-mask:#0909094b;
-  --text-color-1:#000;
-  --text-color-2:#86909c;
+  --border-color-1: rgb(224, 224, 230);
+  --shadow-color-1: #47474759;
+  --bg-color-1: #fff;
+  --bg-color-2: #fff;
+  --bg-color-3: #eee;
+  --bg-color-4: rgba(255, 255, 255, 0.09);
+  --bg-mask: #0909094b;
+  --text-color-1: #000;
+  --text-color-2: #86909c;
   --scrollbar-color: rgba(0, 0, 0, 0.25);
   /*----时间-----*/
-  --time-normal:.3s;
+  --time-normal: .3s;
 }
 
-*{
+* {
   user-select: none;
 }
-a{
+
+a {
   text-decoration: none;
-  color:var(--text-color-1);
+  color: var(--text-color-1);
 }
 
 /*文字悬浮高亮*/
-.text{
+.text {
   transition: var(--time-normal);
   cursor: pointer;
 }
-.text:hover{
-  color:var(--primary-color) !important;
+
+.text:hover {
+  color: var(--primary-color) !important;
 }
 
 /*没有更多了的提示*/
-.no-more,.sub-text{
+.no-more,
+.sub-text {
   font-size: 12px;
-  color:var(--text-color-2)
-}
-/*页面的标题*/
-.page-title{
-  font-size: 20px;
-  color: var(--primary-color);
-  font-weight: 600;
+  color: var(--text-color-2)
 }
 
-.mb-5{
+/*页面的标题*/
+.page-title {
+  font-size: 30px;
+  color: var(--primary-color);
+  font-weight: 600;
+  transition: var(--time-normal);
+}
+
+@media screen and (max-width:651px) {
+  .page-title {
+    font-size: 20px;
+  }
+}
+
+.mb-5 {
   margin-bottom: 5px;
 }
-.mt-5{
+
+.mt-5 {
   margin-top: 5px;
 }
-.mr-5{
+
+.mr-5 {
   margin-right: 5px;
 }
-.ml-5{
+
+.ml-5 {
   margin-left: 5px;
 }
 
-.mb-10{
+.mb-10 {
   margin-bottom: 10px;
 }
-.mt-10{
+
+.mt-10 {
   margin-top: 10px;
 }
-.mr-10{
+
+.mr-10 {
   margin-right: 10px;
 }
-.ml-10{
+
+.ml-10 {
   margin-left: 10px;
 }

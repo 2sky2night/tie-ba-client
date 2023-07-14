@@ -3,6 +3,7 @@
     <template v-if="bid !== null">
       <BarInfo :bid="bid" />
       <Panel class="mt-10" :bid="bid" />
+      <Actions />
     </template>
   </div>
 </template>
@@ -15,6 +16,7 @@ import { onBeforeRouteUpdate } from 'vue-router';
 // components
 import BarInfo from './components/BarInfo/index.vue'
 import Panel from './components/Panel/index.vue'
+import Actions from './components/Actions/index.vue';
 
 // 路由的钩子
 const checkRoute = useCheckRoutes('bid')

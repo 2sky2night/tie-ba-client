@@ -3,17 +3,17 @@
 
     <div class="title mb-10">
       <div class="user-info">
-        <RouterLink :to="`/user/${article.uid}`" @click.stop="">
-          <img v-lazyImg="article.user.avatar" @click.stop="">
+        <RouterLink :to="`/user/${ article.uid }`" @click.stop="">
+          <img @mouseleave="onHandleMouseLeave" @mouseenter="onHandleMouseEnter" v-lazyImg="article.user.avatar"
+            @click.stop="">
         </RouterLink>
-        <RouterLink :to="`/user/${article.uid}`" @click.stop="">
+        <RouterLink :to="`/user/${ article.uid }`" @click.stop="">
           <span class="ml-10 text">{{ article.user.username }}</span>
         </RouterLink>
       </div>
-      <div class="action">
-        <FollowBtn v-model:is-followed="article.user.is_followed" :is-fans="article.user.is_fans" :uid="article.user.uid"
-          size="small" />
-      </div>
+      <Transition name="card">
+        <UserCard ref="cardIns" :uid="article.uid" v-if="isShow" v-model:show="isShow" :top="50" :left="0" />
+      </Transition>
     </div>
 
     <div class="article-content mb-10">
@@ -21,12 +21,12 @@
       <div class="content mb-10">{{ article.content }}</div>
       <template v-if="article.photo">
         <div class="photo-container mb-10" :class="{ 'three': article.photo.length === 3 }">
-          <img v-lazyImg="img" v-for=" img  in article.photo" v-imgPre="img">
+          <img v-lazyImg="img" v-for="  img   in article.photo" v-imgPre="img">
         </div>
       </template>
       <div class="bar">
-        <RouterLink :to="`/bar/${article.bid}`" @click.stop="">
-          <n-button size="tiny" strong secondary >{{ article.bar.bname }}吧</n-button>
+        <RouterLink :to="`/bar/${ article.bid }`" @click.stop="">
+          <n-button size="tiny" strong secondary>{{ article.bar.bname }}吧</n-button>
         </RouterLink>
       </div>
     </div>
@@ -78,6 +78,7 @@ import type { ArticleItemProps } from '@/types/components/item';
 // components
 import { LikeOutlined, StarOutlined, StarFilled, LikeFilled } from '@vicons/antd'
 import { CommentRegular } from '@vicons/fa'
+import UserCard from '@/components/common/UserCard/index.vue'
 // apis
 import { likeArticleAPI, cancelLikeArticleAPI, starArticleAPI, cancelStarArticleAPI } from '@/apis/public/article';
 // config
@@ -85,14 +86,18 @@ import tips from '@/config/tips'
 // utlis
 import { formatCount } from '@/utils/tools'
 
+// 是否显示用户卡片
+const isShow = ref(false)
+// 用户卡片实例
+const cardIns = ref()
 const likeIsLoading = ref(false)
 const starIsLoading = ref(false)
 const props = defineProps<ArticleItemProps>()
 const emit = defineEmits<{
-  'update:isLiked': [value: boolean];
-  'update:isStar': [value: boolean];
-  'update:starCount': [value: number];
-  'update:likeCount': [value: number];
+  'update:isLiked': [ value: boolean ];
+  'update:isStar': [ value: boolean ];
+  'update:starCount': [ value: number ];
+  'update:likeCount': [ value: number ];
 }>()
 const message = useMessage()
 const { goArticle } = useNavigation()
@@ -153,6 +158,26 @@ const onHandleLikeArticle = async () => {
     console.log(error)
   }
 }
+/**
+ * 鼠标移入头像显示用户卡片
+ */
+const onHandleMouseEnter = () => {
+  isShow.value = true
+}
+/**
+ * 鼠标移出用户头像的回调
+ */
+const onHandleMouseLeave = () => {
+  setTimeout(() => {
+    if (cardIns.value) {
+      // 若.5s后卡片实例还存在 则根据当前用户是否移入该组件来决定是否显示或销毁组件
+      if (!cardIns.value.isMouseOn) {
+        // 若.5s后未移入卡片 就销毁卡片
+        isShow.value = false
+      }
+    }
+  }, 500)
+}
 
 defineOptions({
   components: {
@@ -170,11 +195,13 @@ defineOptions({
   flex-direction: column;
   padding: 10px;
   cursor: pointer;
+
   &:not(:last-child) {
     border-bottom: 1px solid var(--border-color-1);
   }
 
   .title {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -206,13 +233,17 @@ defineOptions({
 
     .photo-container {
       display: flex;
+      align-items: center;
 
       img {
         margin-right: 10px;
-        max-width: 30%;
-        max-height: 30%;
+        width: 30%;
+        height: 30%;
+        max-width: 400px;
+        max-height: 400px;
         flex-grow: 1;
         cursor: pointer;
+        object-fit: contain;
       }
 
       &.three {
@@ -248,5 +279,19 @@ defineOptions({
       }
     }
   }
+}
+
+.card-move,
+.card-enter-active,
+.card-leave-active {
+  transition: all ease var(--time-normal);
+}
+
+.card-enter-from,
+.card-leave-to {
+  opacity: .3;
+}
+.card-enter-to,.card-leave-from{
+  opacity: 1;
 }
 </style>

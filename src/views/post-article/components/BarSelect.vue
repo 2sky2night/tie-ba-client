@@ -13,14 +13,18 @@
               <span class="sub-text ml-5">共{{ pagination.total }}个吧</span>
             </div>
             <div class="btns">
-              <n-button @click="onHandleCancel">取消</n-button>
-              <n-button class="ml-10" type="primary" @click="onHandleSubmit">确定</n-button>
+              <n-button size="small" @click="onHandleCancel">取消</n-button>
+              <n-button size="small" class="ml-10" type="primary" @click="onHandleSubmit">确定</n-button>
             </div>
           </div>
           <div ref="listDOM" class="select-container">
             <div class="list">
               <div @click="() => onHandleSelect(item.bid)" :class="{ 'active': item.bid === currentBid }" class="item"
-                v-for="item in list" :key="item.bid">{{ item.bname }}</div>
+                v-for="item in list" :key="item.bid">
+                <span>
+                  {{ item.bname }}
+                </span>
+              </div>
               <div class="spin" v-if="isLoading">
                 <span class="sub-text mr-10">正在加载</span>
                 <n-spin size="small" />
@@ -57,7 +61,7 @@ const props = defineProps<{
 }>()
 // emit
 const emit = defineEmits<{
-  'update:select': [ value: number ]
+  'update:select': [ value: number|null ]
 }>()
 // 格式化当前选择的吧
 const currentBarLabel = computed(() => {
@@ -100,7 +104,7 @@ const onHandleOpen = () => {
 }
 // 确认的回调
 const onHandleSubmit = () => {
-  emit('update:select', currentBid.value as number)
+  emit('update:select', currentBid.value)
   showModal.value = false
 }
 // 选择的回调
@@ -130,6 +134,11 @@ const removeScrollListener = () => {
   const dom = listDOM.value as HTMLDivElement
   dom.removeEventListener('scroll', onHandleScroll)
 }
+// 重置当前选择的吧
+const onHandleReset = () => {
+  emit('update:select', null)
+  currentBid.value=null
+}
 
 // 初始化获取数据 并添加滚动事件监听
 onMounted(async () => {
@@ -145,6 +154,9 @@ onMounted(async () => {
 // 移除事件监听
 onBeforeUnmount(removeScrollListener)
 
+defineExpose({
+  onHandleReset
+})
 </script>
 
 <style scoped lang='scss'>
@@ -211,7 +223,7 @@ onBeforeUnmount(removeScrollListener)
           padding: 15px 10px;
           border-radius: 5px;
           cursor: pointer;
-
+          position: relative;
           &:not(:last-child) {
             margin-bottom: 5px;
           }
@@ -219,6 +231,11 @@ onBeforeUnmount(removeScrollListener)
           &.active,
           &:hover {
             background-color: var(--bg-color-4);
+          }
+          &.active::after{
+            content: '√';
+            position: absolute;
+            right: 10px;
           }
         }
       }
@@ -242,14 +259,13 @@ onBeforeUnmount(removeScrollListener)
       height: 100%;
       width: 100%;
       background-color: var(--bg-color-2);
-
+      padding: 0;
       .page-title {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        font-size: 15px;
       }
-
-      .select-container {}
     }
   }
 

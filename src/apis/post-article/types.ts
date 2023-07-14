@@ -30,7 +30,7 @@ export interface PostArticleBody {
   /**
    * 帖子的配图
    */
-  photo: string[] | null | string;
+  photo: string[] | null;
   /**
    * 帖子标题
    */

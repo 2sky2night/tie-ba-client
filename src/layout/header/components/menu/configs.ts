@@ -2,9 +2,9 @@
 import { type DropdownOption, NIcon } from 'naive-ui'
 import { type Component, h } from 'vue'
 // components
-import { LogInOutline, LogOutOutline,DocumentTextSharp } from '@vicons/ionicons5'
+import { LogInOutline, LogOutOutline,DocumentTextSharp,Cafe } from '@vicons/ionicons5'
 import { HistoryOutlined } from '@vicons/antd'
-import { UserEdit, UserRegular, UserPlus, UserCircleRegular } from '@vicons/fa'
+import { UserEdit, UserPlus, UserCircleRegular,User } from '@vicons/fa'
 import { NAvatar } from 'naive-ui'
 /**
  * 渲染icon虚拟DOM
@@ -47,7 +47,7 @@ export const authMenu: DropdownOption[] = [
   {
     label: '我的',
     key: '/my',
-    icon: renderIcon(UserRegular)
+    icon: renderIcon(User)
   },
   {
     label: '编辑用户资料',
@@ -58,6 +58,11 @@ export const authMenu: DropdownOption[] = [
     label: '发帖',
     key: '/post-article',
     icon: renderIcon(DocumentTextSharp)
+  },
+  {
+    label: '创建吧',
+    key: '/create-bar',
+    icon: renderIcon(Cafe)
   },
   {
     label: '浏览的历史',

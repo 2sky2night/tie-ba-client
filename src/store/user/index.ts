@@ -36,6 +36,8 @@ const useUserStore = defineStore(
          */
         const historyAids = ref<number[]>([])
 
+        const historySearch = ref<({ time: number; title:string})[]>([])
+
         /**
          * 用户登录
          * @param username 用户名 
@@ -110,7 +112,7 @@ const useUserStore = defineStore(
         }
 
         /**
-         * 添加历史记录
+         * 添加帖子历史记录
          * @param aid 
          */
         const addHistory = (aid: number) => {
@@ -127,7 +129,7 @@ const useUserStore = defineStore(
         }
 
         /**
-         * 删除历史记录
+         * 删除某项帖子历史记录
          * @param aid 
          */
         const deleteHistory = (aid: number) => {
@@ -139,10 +141,39 @@ const useUserStore = defineStore(
         }
 
         /**
-         * 清除所有历史记录
+         * 清除所有帖子历史记录
          */
         const clearAllHistory = () => {
             historyAids.value.length = 0
+        }
+
+        /**
+         * 添加搜索历史记录
+         * @param title 
+         */
+        const addSearchHistroy = (title: string) => {
+            const index = historySearch.value.findIndex(ele => ele.title === title)
+            // 若存在该搜索词条 则删除该历史记录
+            if (index!==-1) {
+                historySearch.value.splice(index,1)
+            }
+            // 保存历史记录
+            historySearch.value.unshift({
+                time: Date.now(),
+                title
+            })
+        }
+
+        /**
+         * 删除搜索历史记录
+         * @param time 
+         */
+        const deleteSearchHistory = (time: number) => {
+            historySearch.value.some((ele, index, arr) => {
+                if (ele.time === time) {
+                    arr.splice(index,1)
+                }
+            })
         }
 
         /**
@@ -158,6 +189,7 @@ const useUserStore = defineStore(
             token,
             userData,
             historyAids,
+            historySearch,
             isLogin,
             toLogin,
             toGetUserInfo,
@@ -166,7 +198,9 @@ const useUserStore = defineStore(
             toEditUserPassword,
             addHistory,
             deleteHistory,
-            clearAllHistory
+            clearAllHistory,
+            addSearchHistroy,
+            deleteSearchHistory
         }
     },
     {

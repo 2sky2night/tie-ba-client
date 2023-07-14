@@ -2,15 +2,15 @@
   <div class="edit-password-container">
     <n-form :show-require-mark="false" ref="formIns" :model="formModel" :rules="rules">
       <n-form-item path="oldPassword" label="旧密码">
-        <n-input show-password-toggle type="password" :placeholder="tips.formPlaceholder('旧密码')"
+        <n-input size="large" show-password-toggle type="password" :placeholder="tips.formPlaceholder('旧密码')"
           v-model:value="formModel.oldPassword"></n-input>
       </n-form-item>
       <n-form-item path="password" label="新密码">
-        <n-input show-password-toggle type="password" :placeholder="tips.formPlaceholder('密码')"
+        <n-input size="large" show-password-toggle type="password" :placeholder="tips.formPlaceholder('密码')"
           v-model:value="formModel.password"></n-input>
       </n-form-item>
       <n-form-item path="rePassword" label="再次输入新密码">
-        <n-input show-password-toggle type="password" :placeholder="tips.formPlaceholder('密码')"
+        <n-input size="large" show-password-toggle type="password" :placeholder="tips.formPlaceholder('密码')"
           v-model:value="formModel.rePassword"></n-input>
       </n-form-item>
       <n-form-item>

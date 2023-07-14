@@ -50,6 +50,10 @@ export default function () {
     router.push(`/follow/${uid}`)
   }
 
+  function goPostArticle () {
+    router.push('/post-article')
+  }
+
   return {
     goHome,
     goDiscover,
@@ -61,7 +65,8 @@ export default function () {
     goArticle,
     goBar,
     goFans,
-    goFollow
+    goFollow,
+    goPostArticle
   }
 
 }
