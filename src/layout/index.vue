@@ -48,10 +48,10 @@ watch(() => route.fullPath, () => {
 onMounted(() => {
 
   // @ts-ignore (给滚动组件容器绑定滚动事件 只要滚动到底部)
-  const t = scrollIns.value.$el.nextElementSibling.children[ 0 ] as HTMLDivElement
+  const t = scrollIns.value.$el.nextElementSibling.children[0] as HTMLDivElement
 
   // 滚动组件的滚动事件
-  function scrollHandle (e: Event) {
+  function scrollHandle(e: Event) {
     const div = e.target as HTMLDivElement
     console.log('滚动条监听....')
     // 若卷上去的高度 大于等于 （总高度-容器高度） 说明滚动到底部了
@@ -104,6 +104,7 @@ defineOptions({
   display: flex;
   flex-direction: column;
   background-color: var(--bg-color-3);
+  overflow: hidden;
 
   .header-content {
     display: flex;
@@ -118,7 +119,7 @@ defineOptions({
 
   .main-content {
     height: calc(100vh - var(--header-hight));
-    overflow: hidden;
+    // overflow: hidden;
 
     :deep(.n-scrollbar-content) {
       display: flex;
@@ -127,18 +128,19 @@ defineOptions({
 
   .footer-content {
     border-top: 1px solid var(--border-color-1);
-    display: none;
+    display: block;
     box-shadow: 0 -5px 10px var(--shadow-color-1);
     min-height: var(--footer-hight);
     background-color: var(--bg-color-2);
-
+    transition: all ease var(--time-normal);
+    transform: translateY(100%);
   }
 }
 
 @media screen and (max-width:651px) {
   .layout-container {
     .footer-content {
-      display: block
+      transform: translateY(0%);
     }
 
     .main-content {

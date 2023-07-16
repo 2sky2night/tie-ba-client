@@ -21,10 +21,10 @@
           </div>
           <div class="user-info">
             <div class="username">
-              <RouterLink class="mr-10" :to="`/user/${ articleInfo.uid }`">
+              <RouterLink class="mr-10" :to="`/user/${articleInfo.uid}`">
                 <img :src="articleInfo.user.avatar">
               </RouterLink>
-              <RouterLink class="text" :to="`/user/${ articleInfo.uid }`">
+              <RouterLink class="text" :to="`/user/${articleInfo.uid}`">
                 {{ articleInfo.user.username }}
               </RouterLink>
             </div>
@@ -60,7 +60,7 @@
           </auth-btn>
         </div>
         <div class="bar-info">
-          <RouterLink :to="`/bar/${ articleInfo.bid }`">
+          <RouterLink :to="`/bar/${articleInfo.bid}`">
             <img :src="articleInfo.bar.photo" class="mr-5">
             <span>
               {{ articleInfo.bar.bname }}吧
@@ -104,13 +104,13 @@ const showAction = ref(false)
 
 
 // 获取帖子详情数据
-async function getData () {
+async function getData() {
   const res = await getArticleInfoAPI(props.aid)
   articleInfo.value = res.data
 }
 
 // 点赞或取消点赞帖子
-async function toLikeArticle () {
+async function toLikeArticle() {
   if (articleInfo.value) {
     likeIsLoading.value = true
     const res = articleInfo.value.is_liked ?
@@ -126,7 +126,7 @@ async function toLikeArticle () {
 }
 
 // 收藏或取消收藏帖子
-async function toStarArticle () {
+async function toStarArticle() {
   if (articleInfo.value) {
     starIsLoading.value = true
     const res = articleInfo.value.is_star ?
@@ -143,7 +143,7 @@ async function toStarArticle () {
 
 onMounted(() => {
 
-  function checkResize () {
+  function checkResize() {
     if (window.innerWidth > 650) {
       showAction.value = false
     } else {
@@ -217,6 +217,13 @@ defineOptions({
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 10px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          max-height: 350px;
+          object-fit:cover;
+        }
       }
     }
 
@@ -312,6 +319,7 @@ defineOptions({
         background-color: var(--bg-color-3);
         font-size: 12px;
         border-radius: 5px;
+
         img {
           height: 20px;
           width: 20px;

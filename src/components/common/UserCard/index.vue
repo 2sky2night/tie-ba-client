@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ top: top + 'px', left: left + 'px' }" class="user-card-container" @mouseleave="onHandleLeave"
+  <div @click.stop="" :style="{ top: top + 'px', left: left + 'px' }" class="user-card-container" @mouseleave="onHandleLeave"
     @mouseenter="onHandleMouseEnter">
     <template v-if="userData">
       <div class="header mb-10">
@@ -133,7 +133,6 @@ defineOptions({
       align-items: center;
 
       img {
-        cursor: pointer;
         width: 50px;
         height: 50px;
         border-radius: 50%;

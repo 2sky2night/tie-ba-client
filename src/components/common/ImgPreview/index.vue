@@ -1,13 +1,13 @@
 <template>
     <Transition name="img" appear>
-        <div v-if="isShow" class="img-preview-container" @click.stop="">
-            <img :src="src" :style="{ transform: `scale(${scale}) rotate(${deg}deg)` }">
+        <div ref="imgDOM" :style="{top:y+'px',left:x+'px'}" v-if="isShow" class="img-preview-container" @click.stop="">
+            <img draggable="false" :src="src" :style="{ transform: `scale(${scale}) rotate(${deg}deg)` }">
         </div>
     </Transition>
     <Transition name="tool" appear>
-        <div v-if="isShow" class="tool-container">
+        <div v-if="isShow" class="tool-container" @click.stop>
             <div class="item text" @click.stop="deg -= 90">
-                <n-icon size="25" >
+                <n-icon size="25">
                     <RefreshOutline style="transform: scale(-1,1);" />
                 </n-icon>
             </div>
@@ -38,10 +38,11 @@
 <script lang='ts' setup>
 // hooks
 import { watch, ref } from 'vue'
+import { useDraggable } from '@vueuse/core'
 // types
 import type { ImgPreviewProps } from '@/types/components/common'
 // components 
-import { Close,RefreshOutline } from '@vicons/ionicons5'
+import { Close, RefreshOutline } from '@vicons/ionicons5'
 import { NIcon } from 'naive-ui'
 import { ZoomInOutlined, ZoomOutOutlined } from '@vicons/antd'
 
@@ -49,6 +50,8 @@ defineProps<ImgPreviewProps>()
 const isShow = ref(true)
 const scale = ref(1)
 const deg = ref(0)
+const imgDOM = ref<HTMLDivElement | null>()
+const { x, y, style } = useDraggable(imgDOM)
 
 watch(scale, (v) => {
     if (v < 0) {
@@ -71,10 +74,13 @@ defineOptions({
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    height: 80vh;
+    width: 80vw;
+    cursor:grab;
     img {
-        width: 80vw;
+        position: absolute;
         object-fit: contain;
-        height: 80vh;
         transition: var(--time-normal);
     }
 }

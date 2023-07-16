@@ -233,17 +233,12 @@ defineOptions({
 
     .photo-container {
       display: flex;
-      align-items: center;
-
       img {
         margin-right: 10px;
-        width: 30%;
-        height: 30%;
-        max-width: 400px;
-        max-height: 400px;
-        flex-grow: 1;
+        height: 30vw;
+        width: 30vw;
         cursor: pointer;
-        object-fit: contain;
+        object-fit:cover;
       }
 
       &.three {

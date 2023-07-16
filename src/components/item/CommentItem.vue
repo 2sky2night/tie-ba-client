@@ -2,10 +2,10 @@
     <div class="comment-item-container">
         <div class="header">
             <div class="username">
-                <RouterLink :to="`/user/${ comment.uid }`">
+                <RouterLink :to="`/user/${ comment.uid }`" @click.stop="">
                     <img v-lazyImg="comment.user.avatar" @mouseenter="showCard = true" @mouseleave="onHandleMouseLeave">
                 </RouterLink>
-                <RouterLink class="ml-10" :to="`/user/${ comment.uid }`">
+                <RouterLink class="ml-10" :to="`/user/${ comment.uid }`" @click.stop="">
                     <span class="text">{{ comment.user.username }}</span>
                 </RouterLink>
                 <Transition name="card">
@@ -21,7 +21,7 @@
             <div class="time">
                 <span class="time sub-text">{{ formatDBDateTime(comment.createTime) }}</span>
                 <auth-btn>
-                    <div @click="onHandleLikeArticle" class="like-btn" :class="{ 'active': isLike }">
+                    <div @click.stop="onHandleLikeArticle" class="like-btn" :class="{ 'active': isLike }">
                         <n-icon size="18">
                             <component :is="isLike ? 'LikeFilled' : 'LikeOutlined'"></component>
                         </n-icon>

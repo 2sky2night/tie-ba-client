@@ -7,7 +7,6 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    ArticelSkeleton: typeof import('./src/components/skeleton/views/ArticelSkeleton.vue')['default']
     ArticleItem: typeof import('./src/components/item/ArticleItem.vue')['default']
     ArticleItemSkeleton: typeof import('./src/components/skeleton/item/ArticleItemSkeleton.vue')['default']
     ArticleList: typeof import('./src/components/list/load/ArticleList.vue')['default']
@@ -36,12 +35,6 @@ declare module 'vue' {
     Message: typeof import('./src/components/modal/message/index.vue')['default']
     NAvatar: typeof import('naive-ui')['NAvatar']
     NButton: typeof import('naive-ui')['NButton']
-    NCard: typeof import('naive-ui')['NCard']
-    NCarousel: typeof import('naive-ui')['NCarousel']
-    NCarouselItem: typeof import('naive-ui')['NCarouselItem']
-    NCheck: typeof import('naive-ui')['NCheck']
-    NCheckbox: typeof import('naive-ui')['NCheckbox']
-    NChecked: typeof import('naive-ui')['NChecked']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
     NDivider: typeof import('naive-ui')['NDivider']
     NDropdown: typeof import('naive-ui')['NDropdown']
@@ -49,7 +42,6 @@ declare module 'vue' {
     NEmpty: typeof import('naive-ui')['NEmpty']
     NForm: typeof import('naive-ui')['NForm']
     NFormItem: typeof import('naive-ui')['NFormItem']
-    NFromItem: typeof import('naive-ui')['NFromItem']
     NGlobalStyle: typeof import('naive-ui')['NGlobalStyle']
     NIcon: typeof import('naive-ui')['NIcon']
     NInput: typeof import('naive-ui')['NInput']
@@ -76,7 +68,6 @@ declare module 'vue' {
     UserData: typeof import('./src/components/common/UserData/index.vue')['default']
     UserItem: typeof import('./src/components/item/UserItem.vue')['default']
     UserItemSkeleton: typeof import('./src/components/skeleton/item/UserItemSkeleton.vue')['default']
-    UserList: typeof import('./src/components/list/pagination/UserList.vue')['default']
     UserListInf: typeof import('./src/components/list/load/UserListInf.vue')['default']
     UserListPagination: typeof import('./src/components/list/pagination/UserListPagination.vue')['default']
     UserListSkeleton: typeof import('./src/components/skeleton/list/UserListSkeleton.vue')['default']
