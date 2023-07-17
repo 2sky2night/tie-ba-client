@@ -192,7 +192,7 @@ defineOptions({
     }
 }
 
-@media screen and (max-width:651px) {
+@media screen and (max-width:650px) {
     .comment-container {
         .your-comment {
             display: none;

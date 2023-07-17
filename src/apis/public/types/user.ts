@@ -1,4 +1,5 @@
 import { ListResponse } from ".";
+
 /**
  * 用户文章数据
  */
@@ -28,32 +29,33 @@ export interface UserCommentCount {
 }
 
 /**
- * 用户简要信息
+ * 用户基础信息
  */
-export interface UserBrieflyInfo {
+export interface UserBaseItem {
     avatar: string;
     createTime: string;
-    is_fans: boolean;
-    is_followed: boolean;
     uid: number;
     username: string;
+}
+
+
+/**
+ * 用户简要信息
+ */
+export interface UserBrieflyInfo extends UserBaseItem {
+    is_fans: boolean;
+    is_followed: boolean;
 }
 
 /**
  * 用户信息
  */
-export interface UserItem {
+export interface UserItem extends UserBrieflyInfo {
     article_count: number;
-    avatar: string;
-    createTime: string;
     fans_count: number;
     follow_bar_count: number;
     follow_user_count: number;
     create_bar_count: number;
-    is_fans: boolean;
-    is_followed: boolean;
-    uid: number;
-    username: string;
 }
 
 /**

@@ -1,6 +1,5 @@
 <template>
   <div class="page-container">
-    发现
     <RouterView></RouterView>
   </div>
 </template>

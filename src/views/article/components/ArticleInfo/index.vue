@@ -329,7 +329,7 @@ defineOptions({
   }
 }
 
-@media screen and (max-width:651px) {
+@media screen and (max-width:650px) {
   .article-info-container {
     .article-info {
       .header {

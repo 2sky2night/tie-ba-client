@@ -193,7 +193,7 @@ defineOptions({
     }
 }
 
-@media screen and (max-width:651px) {
+@media screen and (max-width:650px) {
     .comment-item-container {
         .content {
             .img-list {

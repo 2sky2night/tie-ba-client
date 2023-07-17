@@ -24,7 +24,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/discover/hot',
         name: 'discover-hot',
-        component: () => import("@/views/discover/children/hot/index.vue"),
+        component: () => import("@/views/discover/children/hot-article/index.vue"),
         meta: {
           needAuth: false,
           title: '发现热帖'
@@ -42,7 +42,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/discover/comment',
         name: 'discover-comment',
-        component: () => import("@/views/discover/children/comment/index.vue"),
+        component: () => import("@/views/discover/children/hot-comment/index.vue"),
         meta: {
           needAuth: false,
           title: '发现热评'

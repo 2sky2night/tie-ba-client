@@ -68,7 +68,7 @@
   }
 }
 
-@media screen and (max-width:651px) {
+@media screen and (max-width:650px) {
   .bar-page-skeleton {
     .bar-info {
       .header {

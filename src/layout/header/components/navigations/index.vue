@@ -51,4 +51,9 @@ defineOptions({
 .nav-container {
   display: flex;
 }
+@media screen and (max-width: 650px){
+  .nav-container{
+    display: none;
+  }
+}
 </style>

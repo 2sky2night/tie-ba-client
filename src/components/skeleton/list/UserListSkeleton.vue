@@ -16,7 +16,7 @@ defineProps<SkeletonListProps>()
   grid-template-columns: repeat(2,1fr);
   gap:10px;
 }
-@media screen and (max-width:651px) {
+@media screen and (max-width:650px) {
   .list-skeleton{
     display: flex;
     flex-direction: column;

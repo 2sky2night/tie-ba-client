@@ -149,7 +149,7 @@ defineExpose<ListLoadInfIns>({ resetPage })
   }
 }
 
-@media screen and (max-width:651px) {
+@media screen and (max-width:650px) {
   .user-list-inf-container {
     .user-list {
       display: flex;

@@ -140,7 +140,7 @@ defineOptions({
     }
 }
 
-@media screen and (max-width:651px) {
+@media screen and (max-width:650px) {
     .panel-container {
         .panel-tabs {
             padding-right: 0;

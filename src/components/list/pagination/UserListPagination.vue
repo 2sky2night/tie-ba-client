@@ -103,7 +103,7 @@ defineExpose<ListPageIns>({ toResetPage })
     }
 }
 
-@media screen and (max-width:651px) {
+@media screen and (max-width:650px) {
     .user-list-page-container {
 
         .user-list {

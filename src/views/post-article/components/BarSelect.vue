@@ -244,7 +244,7 @@ defineExpose({
 }
 
 // 移动端下的选择框
-@media screen and (max-width:651px) {
+@media screen and (max-width:650px) {
   .select-modal {
     padding: 10px;
     position: fixed;

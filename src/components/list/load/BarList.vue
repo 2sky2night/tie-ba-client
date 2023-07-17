@@ -86,7 +86,7 @@ onBeforeMount(async () => {
     justify-content: center;
 }
 
-@media screen and (max-width:651px) {
+@media screen and (max-width:650px) {
     .bar-list-container {
         .bar-list {
 

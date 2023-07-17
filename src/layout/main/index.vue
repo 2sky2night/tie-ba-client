@@ -18,7 +18,7 @@ defineOptions({
   min-height: calc(100vh - var(--header-hight));
 }
 
-@media screen and (max-width:651px) {
+@media screen and (max-width:650px) {
   .main-container {
     min-height: calc(100vh - var(--header-hight) - var(--footer-hight));
   }

@@ -21,7 +21,7 @@
       <div class="content mb-10">{{ article.content }}</div>
       <template v-if="article.photo">
         <div class="photo-container mb-10" :class="{ 'three': article.photo.length === 3 }">
-          <img v-lazyImg="img" v-for="  img   in article.photo" v-imgPre="img">
+          <img v-lazyImg="img" v-for="img in article.photo" v-imgPre="img">
         </div>
       </template>
       <div class="bar">
@@ -233,10 +233,15 @@ defineOptions({
 
     .photo-container {
       display: flex;
+      &.three{
+        img{
+          flex-grow: 1;
+        }
+      }
       img {
         margin-right: 10px;
-        height: 30vw;
-        width: 30vw;
+        height: 25vw;
+        width: 25vw;
         cursor: pointer;
         object-fit:cover;
       }

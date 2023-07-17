@@ -35,7 +35,7 @@ if (themeStore.isDark) {
   padding: 20px;
 }
 
-@media screen and (max-width:651px) {
+@media screen and (max-width:650px) {
   .page-container {
     min-height: calc(100vh - var(--header-hight) - var(--footer-hight));
     padding: 10px;
