@@ -457,6 +457,101 @@ export const loginRoutesHook: NavigationGuardWithThis<undefined> = (to, from, ne
 
 
 
+#### 6.watch的执行时机
+
+​	watch，千万别写在onMounted等其他任意钩子里面，可能会引发特别奇怪的bug
+
+
+
+#### 7.v-model和自动绑定的自定义事件的执行时机
+
+ 例如当前有个封装好的组件：
+
+（在该例子中当自定义事件update:value触发时，会执行两次回调，一次是v-model，一次是开发者自己绑定的回调）
+
+```vue
+<TypeSelector v-model:value="hotType"  @update:value="onHandleUpdata"></TypeSelector>
+```
+
+该组件的props和emits声明:
+
+```ts
+defineProps<{
+  value:HotType
+}>()
+const emits = defineEmits<{
+  'update:value':[value:HotType]
+}>()
+```
+
+则当内部emit函数执行'update:value'时，外部使用的组件事件触发顺序为 v-model---->自己绑定的回调。
+
+则此时当执行onHandleUpdata时可以获取到最新的值。我们可以通过vue的render函数中，可以看见其自定义事件绑定的顺序
+
+```ts
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_BarListInf = __unplugin_components_0;
+  return _openBlock(), _createElementBlock("div", _hoisted_1, [
+    _createVNode($setup["TypeSelector"], {
+      class: "mb-10",
+      value: $setup.hotType,
+      "onUpdate:value": [
+        _cache[0] || (_cache[0] = ($event) => $setup.hotType = $event),
+        $setup.onHandleUpdata
+      ]
+    }, null, 8, ["value"]),
+    _createVNode(
+      _component_BarListInf,
+      {
+        ref: "listIns",
+        "get-list": $setup.onHandleGetData
+      },
+      null,
+      512
+      /* NEED_PATCH */
+    )
+  ]);
+}
+```
+
+若我们修改v-model和自定义事件的回调的绑定顺序时
+
+```vue
+  <TypeSelector class="mb-10" @update:value="onHandleUpdata" v-model:value="hotType"  ></TypeSelector>
+```
+
+当自定义事件触发时，执行顺序会是：自己绑定的回调---v-model，也就是说开发者自己绑定的回调中此时的依旧是更新前的值
+
+以下为vue给出的渲染函数
+
+```ts
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_BarListInf = __unplugin_components_0;
+  return _openBlock(), _createElementBlock("div", _hoisted_1, [
+    _createVNode($setup["TypeSelector"], {
+      class: "mb-10",
+      "onUpdate:value": [
+        $setup.onHandleUpdata,
+        _cache[0] || (_cache[0] = ($event) => $setup.hotType = $event)
+      ],
+      value: $setup.hotType
+    }, null, 8, ["value"]),
+    _createVNode(
+      _component_BarListInf,
+      {
+        ref: "listIns",
+        "get-list": $setup.onHandleGetData
+      },
+      null,
+      512
+      /* NEED_PATCH */
+    )
+  ]);
+}
+```
+
+
+
 
 
 

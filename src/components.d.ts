@@ -17,6 +17,7 @@ import CommentListInf from '@/components/list/load/CommentListInf.vue'
 import CommentListSkeleton from '@/components/skeleton/list/CommentListSkeleton.vue'
 import UserListInf from '@/components/list/load/UserListInf.vue'
 import ArticleListPagination from '@/components/list/pagination/ArticleListPagination.vue'
+import BarListInf from '@/components/list/load/BarListInf.vue'
 declare module 'vue' {
   export interface GlobalComponents {
     AuthBtn: typeof AuthBtn,
@@ -37,6 +38,7 @@ declare module 'vue' {
     CommentListInf: typeof CommentListInf,
     CommentListSkeleton: typeof CommentListSkeleton,
     UserListInf: typeof UserListInf,
-    ArticleListPagination:typeof ArticleListPagination
+    ArticleListPagination: typeof ArticleListPagination,
+    BarListInf:typeof BarListInf,
   }
 }

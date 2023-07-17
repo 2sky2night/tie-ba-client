@@ -18,6 +18,7 @@ declare module 'vue' {
     BarItem: typeof import('./src/components/item/BarItem.vue')['default']
     BarItemSkeleton: typeof import('./src/components/skeleton/item/BarItemSkeleton.vue')['default']
     BarList: typeof import('./src/components/list/load/BarList.vue')['default']
+    BarListInf: typeof import('./src/components/list/load/BarListInf.vue')['default']
     BarListSkeleton: typeof import('./src/components/skeleton/list/BarListSkeleton.vue')['default']
     BarSkeleton: typeof import('./src/components/skeleton/views/BarSkeleton.vue')['default']
     CommentItem: typeof import('./src/components/item/CommentItem.vue')['default']

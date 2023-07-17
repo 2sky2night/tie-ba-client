@@ -19,11 +19,11 @@ const routes: RouteRecordRaw[] = [
       needAuth: false,
       title: '发现'
     },
-    redirect: '/discover/hot',
+    redirect: '/discover/hot-article',
     children: [
       {
-        path: '/discover/hot',
-        name: 'discover-hot',
+        path: '/discover/hot-article',
+        name: 'discover-hot-article',
         component: () => import("@/views/discover/children/hot-article/index.vue"),
         meta: {
           needAuth: false,
@@ -40,8 +40,8 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/discover/comment',
-        name: 'discover-comment',
+        path: '/discover/hot-comment',
+        name: 'discover-hot-comment',
         component: () => import("@/views/discover/children/hot-comment/index.vue"),
         meta: {
           needAuth: false,

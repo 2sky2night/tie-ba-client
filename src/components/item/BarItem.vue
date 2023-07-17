@@ -16,7 +16,7 @@
                         v-model:follow-count="bar.user_follow_count" />
                 </div>
                 <div class="desc mt-10">
-                    <n-ellipsis :line-clamp="2">
+                    <n-ellipsis :line-clamp="1">
                         {{ bar.bdesc }}
                     </n-ellipsis>
                 </div>

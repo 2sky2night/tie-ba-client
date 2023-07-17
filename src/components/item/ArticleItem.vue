@@ -234,14 +234,18 @@ defineOptions({
     .photo-container {
       display: flex;
       &.three{
+        justify-content: space-between;
         img{
           flex-grow: 1;
         }
       }
       img {
+        display: block;
         margin-right: 10px;
         height: 25vw;
         width: 25vw;
+        max-width: 400px;
+        max-height: 400px;
         cursor: pointer;
         object-fit:cover;
       }

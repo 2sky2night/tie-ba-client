@@ -8,7 +8,7 @@
     <template v-else>
       <template v-if="list.length">
         <div class="article-list">
-          <article-item v-for="item in list" :key="item.aid" :article="item" v-model:is-liked="item.is_liked"
+          <article-item v-for=" item  in list" :key="item.aid" :article="item" v-model:is-liked="item.is_liked"
             v-model:is-star="item.is_star" v-model:star-count="item.star_count" v-model:like-count="item.like_count" />
         </div>
 
@@ -32,7 +32,7 @@
 import { ref, watch, reactive, onMounted, onBeforeUnmount, inject, type Ref } from 'vue'
 // types 
 import type { ArticleItem } from '@/apis/public/types/article';
-import type { ArticleListLoadInfProps,ListLoadInfIns } from '@/types/components/list';
+import type { ArticleListLoadInfProps, ListLoadInfIns } from '@/types/components/list';
 // tools
 import pubsub from 'pubsub-js'
 
@@ -54,8 +54,23 @@ const isFirstLoading = ref(false)
 // 自定义属性
 const props = defineProps<ArticleListLoadInfProps>()
 
+// 监听isBottom 若到底部了就加载下一页内容
+if (isBottom) {
+  watch(isBottom, (v) => {
+    if (isLoading.value || isFirstLoading.value) {
+      // 若当前正在加载不允许获取最新数据 (非常重要)
+      return
+    }
+    if (v) {
+      // 若当前滚动到底部  页码+1 获取最新数据
+      pagination.page++
+      getData()
+    }
+  })
+}
+
 // 获取列表项的函数
-async function getData() {
+async function getData () {
   isLoading.value = true
   const res = await props.getList(pagination.page, pagination.pageSize)
   res.list.forEach(ele => list.push(ele))
@@ -68,7 +83,7 @@ async function getData() {
   }
 }
 // 重置页码 重新获取数据
-async function resetPage() {
+async function resetPage () {
   isFirstLoading.value = true
   // 开启监听
   pubsub.publish('watchScroll', true)
@@ -84,27 +99,13 @@ onMounted(async () => {
   isFirstLoading.value = true
   await getData()
   isFirstLoading.value = false
-  // 监听isBottom 若到底部了就加载下一页内容
-  if (isBottom) {
-    watch(isBottom, (v) => {
-      if (isLoading.value || isFirstLoading.value) {
-        // 若当前正在加载不允许获取最新数据 (非常重要)
-        return
-      }
-      if (v) {
-        // 若当前滚动到底部  页码+1 获取最新数据
-        pagination.page++
-        getData()
-      }
-    })
-  }
 })
 onBeforeUnmount(() => {
   // 通知scroll组件 移除事件监听 节约性能
   pubsub.publish('watchScroll', false)
 })
 
-defineExpose<ListLoadInfIns>({resetPage})
+defineExpose<ListLoadInfIns>({ resetPage })
 </script>
 
 <style scoped lang='scss'>

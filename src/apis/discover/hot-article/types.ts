@@ -1,15 +1,10 @@
-import type { ArticleItem } from '@/apis/public/types/article';
+import type { ArticleItem,ArticleListResponse } from '@/apis/public/types/article';
 
 /**
  * 发现热帖接口的基础响应内容
  */
-export interface DiscoverHotArticleRepsonse {
+export interface DiscoverHotArticleRepsonse extends ArticleListResponse {
   day: number;
-  has_more: boolean;
-  limit: number;
-  list: ArticleItem[];
-  offset: number;
-  total: number;
 }
 
 /**

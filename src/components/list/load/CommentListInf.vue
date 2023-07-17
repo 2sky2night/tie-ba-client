@@ -5,7 +5,7 @@
     </template>
     <template v-else>
       <div class="list" v-if="list.length">
-        <comment-item v-for="item in list" :key="item.cid" :comment="item" v-model:is-like="item.is_liked"
+        <comment-item v-for=" item  in list" :key="item.cid" :comment="item" v-model:is-like="item.is_liked"
           v-model:like-count="item.like_count"></comment-item>
         <div class="spin" v-if="isLoading">
           <span class="sub-text mr-10">正在加载</span>
@@ -47,8 +47,23 @@ const isLoading = ref(false)
 // 是否第一次加载
 const isFirstLoading = ref(false)
 
+// 监听是否滚动到了底部从而改变页码 发送请求加载下一页数据
+if (isBottom) {
+  watch(isBottom, (v) => {
+    if (isLoading.value || isFirstLoading.value) {
+      // 若当前上一个请求还未完成 不允许更新页码
+      return
+    }
+    if (v) {
+      //  滚动到底部页码+1 获取数据
+      pagination.page++
+      getListData()
+    }
+  })
+}
+
 // 获取数据
-async function getListData() {
+async function getListData () {
   isLoading.value = true
   const res = await props.getData(pagination.page, pagination.pageSize)
   res.list.forEach(ele => list.push(ele))
@@ -61,7 +76,7 @@ async function getListData() {
   }
 }
 // 重置页码和列表项 获取数据
-async function resetPage() {
+async function resetPage () {
   isFirstLoading.value = true
   // 元素挂载多个同一个事件且事件处理函数都是同一个指针 则事件触发时只会执行一次 
   // 所以随意开启监听 无论是否取消还是没有取消监听
@@ -77,20 +92,6 @@ onMounted(async () => {
   isFirstLoading.value = true
   await getListData()
   isFirstLoading.value = false
-  // 监听是否滚动到了底部从而改变页码 发送请求加载下一页数据
-  if (isBottom) {
-    watch(isBottom, (v) => {
-      if (isLoading.value || isFirstLoading.value) {
-        // 若当前上一个请求还未完成 不允许更新页码
-        return
-      }
-      if (v) {
-        //  滚动到底部页码+1 获取数据
-        pagination.page++
-        getListData()
-      }
-    })
-  }
 })
 
 onBeforeUnmount(() => {
@@ -98,7 +99,7 @@ onBeforeUnmount(() => {
 })
 
 // 向外暴露重置页码的api 可以在其他场景下重置页码 获取数据
-defineExpose<ListLoadInfIns>({resetPage})
+defineExpose<ListLoadInfIns>({ resetPage })
 
 </script>
 

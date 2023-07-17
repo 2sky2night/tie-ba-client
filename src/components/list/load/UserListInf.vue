@@ -9,7 +9,7 @@
 
       <template v-if="list.length">
         <div class="user-list">
-          <user-item :user="item" v-model:fans-count="item.fans_count" :key="item.uid" v-for=" item  in list"></user-item>
+          <user-item :user="item" v-model:fans-count="item.fans_count" :key="item.uid" v-for="  item   in list"></user-item>
         </div>
         <div class="spin" v-if="isLoading">
           <span class="sub-text mr-10">正在加载</span>
@@ -57,6 +57,21 @@ const isLoading = ref(false)
 // 是否初次加载
 const isFirstLoading = ref(false)
 
+if (isBottom) {
+  watch(isBottom, (v) => {
+    // 滚动到底部的回调
+    if (isLoading.value || isFirstLoading.value) {
+      // 如上一个请求未结束 不能增加页码
+      return
+    }
+    if (v) {
+      // 滚动到底部就加载更多数据
+      pagination.page++
+      onHandleGetList()
+    }
+  })
+}
+
 // 重置页码和列表 获取数据
 const resetPage = async () => {
   isFirstLoading.value = true
@@ -83,20 +98,7 @@ onMounted(async () => {
   isFirstLoading.value = true
   PubSub.publish('watchScroll', true)
   await onHandleGetList()
-  if (isBottom) {
-    watch(isBottom, (v) => {
-      // 滚动到底部的回调
-      if (isLoading.value || isFirstLoading.value) {
-        // 如上一个请求未结束 不能增加页码
-        return
-      }
-      if (v) {
-        // 滚动到底部就加载更多数据
-        pagination.page++
-        onHandleGetList()
-      }
-    })
-  }
+
   isFirstLoading.value = false
 })
 onBeforeUnmount(() => {
