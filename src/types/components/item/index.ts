@@ -34,5 +34,7 @@ export interface UserItemProps {
 export interface CommentItemProps {
   comment: CommentItem
   isLike: boolean;
-  likeCount:number
+  likeCount: number;
+  /**是否可以通过评论组件跳转到对应帖子中去 */
+  goArticle?: boolean;
 }

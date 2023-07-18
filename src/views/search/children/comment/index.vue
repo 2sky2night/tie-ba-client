@@ -12,7 +12,7 @@
     <template v-else>
       <template v-if="list.length">
         <div class="list-container">
-          <comment-item @click="() => onHanldeClick(item.aid)" v-for="item in list" :key="item.cid" :comment="item"
+          <comment-item :go-article="true" v-for="item in list" :key="item.cid" :comment="item"
             v-model:is-like="item.is_liked" v-model:like-count="item.like_count"></comment-item>
         </div>
         <div class="pagination">
@@ -47,8 +47,7 @@ import type { CommentItem, CommentListResponse } from '@/apis/public/types/artic
 import { reactive, ref } from 'vue'
 import useSearch from '@/hooks/useSearch';
 import useNavigation from '@/hooks/useNavigation';
-// render
-import asyncDialog from '@/render/modal/dialog'
+
 
 const { goArticle } = useNavigation()
 const isLoading = ref(false)
@@ -62,16 +61,6 @@ async function getData() {
   res.data.list.forEach(ele => list.push(ele))
   pagination.total = res.data.total
   isLoading.value = false
-}
-
-// 点击评论的回调
-const onHanldeClick = async (aid: number) => {
-  try {
-    await asyncDialog('提示','是否浏览该帖子?')
-    goArticle(aid)
-  } catch (error) {
-    
-  }
 }
 
 defineOptions({

@@ -9,7 +9,7 @@
 
       <template v-if="list.length">
         <div class="list-container">
-          <BarItem v-for=" item  in list" :bar="item" :key="item.bid"></BarItem>
+          <BarItem v-for="  item   in list" :bar="item" :key="item.bid"></BarItem>
         </div>
         <div class="spin" v-if="pagination.isLoading">
           <span class="sub-text mr-10">正在加载</span>
@@ -71,6 +71,8 @@ if (isBottom) {
 // 重置页码 获取数据
 const resetPage = async () => {
   isFirstLoading.value = true
+  list.length = 0
+  pagination.page = 1
   publish('watchScroll', true)
   await getListData()
   isFirstLoading.value = false

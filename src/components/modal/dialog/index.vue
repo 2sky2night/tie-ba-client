@@ -95,6 +95,7 @@ defineOptions({
       }
 
       &:last-child {
+        color:#fff;
         background-color: var(--primary-color);
         margin-left: 10px;
       }

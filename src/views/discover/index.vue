@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <div class="tabs-container">
-      <n-tabs type='bar' :size="isMoblie?'medium':'large'" :value="route.path" :justify-content="isMoblie?'space-around':undefined" @update:value="onHandleChangeTabs">
+      <n-tabs type="bar" :size="isMoblie?'medium':'large'" :value="route.path" :justify-content="isMoblie?'space-around':undefined" @update:value="onHandleChangeTabs">
         <n-tab v-for="item in routeList" :key="item.path" :name="item.path">
           {{ item.title }}
         </n-tab>
@@ -94,6 +94,7 @@ defineOptions({
 <style scoped lang='scss'>
 .page-container {
   .route-enter {
+    overflow: hidden;
     padding: 0 5px;
     margin-top: 10px;
   }

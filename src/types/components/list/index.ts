@@ -60,7 +60,9 @@ export interface CommentListLoadInfProps {
   /**
   * 获取数据的函数
   */
-  getData: (page: number, pageSize: number) => Promise<CommentListResponse>
+  getData: (page: number, pageSize: number) => Promise<CommentListResponse>;
+  /**点击评论项是否进入评论区 */
+  goArticle?: boolean;
 }
 
 /**

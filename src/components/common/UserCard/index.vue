@@ -24,7 +24,7 @@
         <follow-btn class="mr-5" :uid="userData.uid" v-model:is-followed="userData.is_follow" :is-fans="userData.is_fans"
           size="medium">
         </follow-btn>
-        <n-button size='medium' type="primary" :onClick="onHandleGoUser">主页</n-button>
+        <n-button size='medium' type="primary" @click.stop="onHandleGoUser">主页</n-button>
       </div>
     </template>
     <template v-else>

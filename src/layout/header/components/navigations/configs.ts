@@ -22,7 +22,7 @@ export const noAuthNavigations: NavigationItemProps[] = [
       },
       {
         path: '/discover/hot-comment',
-        title:'评论'
+        title:'热评'
       }
     ]
   },
@@ -45,6 +45,10 @@ export const authNavigations: NavigationItemProps[] = [
     title: '发现',
     children: [
       {
+        path: '/discover/article',
+        title:'帖子'
+      },
+      {
         path: '/discover/hot-article',
         title:'热帖'
       },
@@ -54,11 +58,7 @@ export const authNavigations: NavigationItemProps[] = [
       },
       {
         path: '/discover/hot-comment',
-        title:'评论'
-      },
-      {
-        path: '/discover/article',
-        title:'帖子'
+        title:'热评'
       }
     ]
   },

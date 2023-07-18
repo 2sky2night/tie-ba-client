@@ -33,12 +33,6 @@ const onHandleChangeType = () => {
 }
 
 defineOptions({
-  name: 'DiscoverHot'
+  name: 'DiscoverHotArticle'
 })
 </script>
-
-<style scoped lang="scss">
-.sub-page{
-
-}
-</style>

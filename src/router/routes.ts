@@ -177,7 +177,7 @@ const routes: RouteRecordRaw[] = [
       needAuth: false,
       title: '搜索'
     },
-    redirect:'/search/article',
+    redirect: '/search/article',
     children: [
       {
         path: '/search/article',
@@ -218,13 +218,45 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   {
-    path: '/:pathMatch(.*)*',
+    path: '/all-bar',
+    name: 'all-bar',
+    component: () => import('@/views/all-bar/index.vue'),
+    meta: {
+      needAuth: false,
+      title: '浏览所有的吧'
+    }
+  },
+  {
+    path: '/500',
+    name: '500',
+    component: () => import('@/views/500/index.vue'),
+    meta: {
+      needAuth: false,
+      title: '500'
+    }
+  },
+  {
+    path: '/403',
+    name: '403',
+    component: () => import('@/views/403/index.vue'),
+    meta: {
+      needAuth: false,
+      title: '403'
+    }
+  },
+  {
+    path: '/404',
     name: '404',
     component: () => import('@/views/404/index.vue'),
     meta: {
       needAuth: false,
       title: '404'
     }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'catch-any',
+    redirect:'/404'
   },
 ]
 

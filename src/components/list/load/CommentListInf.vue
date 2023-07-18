@@ -5,7 +5,7 @@
     </template>
     <template v-else>
       <div class="list" v-if="list.length">
-        <comment-item v-for=" item  in list" :key="item.cid" :comment="item" v-model:is-like="item.is_liked"
+        <comment-item :go-article="goArticle" v-for="item in list" :key="item.cid" :comment="item" v-model:is-like="item.is_liked"
           v-model:like-count="item.like_count"></comment-item>
         <div class="spin" v-if="isLoading">
           <span class="sub-text mr-10">正在加载</span>
@@ -32,7 +32,9 @@ import PubSub from 'pubsub-js';
 // 帖子列表
 const list = reactive<CommentItemType[]>([])
 // props 通过传入封装的函数获取对应的评论列表数据
-const props = defineProps<CommentListLoadInfProps>()
+const props = withDefaults(defineProps<CommentListLoadInfProps>(), {
+  goArticle:false
+})
 // 分页数据
 const pagination = reactive({
   page: 1,

@@ -26,6 +26,7 @@ http.interceptors.request.use(
   (error) => {
     end()
     window.$message.error('请求失败!')
+    router.replace('/500')
     return Promise.reject(error)
   }
 )
@@ -56,22 +57,26 @@ http.interceptors.response.use(
         // token过期或没有token、token非法的错误 根据登录状态返回登陆页并注销用户
         const userStore = useUserStore()
         if (userStore.isLogin) {
-          // 若用户登陆 则注销用户信息
+          // 若用户登陆 则注销用户信息 返回登录页
           userStore.toLogout()
         } else {
-          // 未登录 返回登陆页
-          router.replace('/login')
+          // 未登录 返回403页面
+          router.replace('/403')
         }
         window.$message.error(error.response.data.message)
       } else if (status === 404) {
-        // 资源请求不存在
+        // 资源请求不存在 跳转404页面
         window.$message.error(tips.notFound)
-        router.replace('/')
+        router.replace('/404')
+      } else if (status === 500) {
+        // 服务器出错 跳转500
+        router.replace('/500')
       } else {
+        // 其他错误
         window.$message.error(error.response.data.message)
       }
     } else {
-      // 其他错误
+      // 除服务器以外的 其他错误
       window.$message.error('响应出错了!')
     }
     return Promise.reject(error)

@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-import type {HotType,DiscoverHotCommentResponse} from './types'
+import type { HotType, DiscoverHotCommentResponse } from './types'
 
 
 /**
@@ -8,12 +8,12 @@ import type {HotType,DiscoverHotCommentResponse} from './types'
  * @param page 页码
  * @param pageSize 页长度
  */
-export const discoverHotComment = (type:HotType,page:number,pageSize:number) => {
+export const discoverHotCommentAPI = (type: HotType, page: number, pageSize: number) => {
   return request.get<DiscoverHotCommentResponse>('/article/comment/discover', {
     params: {
       type,
       limit: pageSize,
-      offset:(page-1)*pageSize
+      offset: (page - 1) * pageSize
     }
   })
 }

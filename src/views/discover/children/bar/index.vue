@@ -1,6 +1,8 @@
 <template>
   <div class="sub-page">
-    <TypeSelector class="mb-10" v-model:value="hotType" @update:value="onHandleUpdata"   ></TypeSelector>
+    <TypeSelector class="mb-10" v-model:value="hotType" @update:value="onHandleUpdata" >
+      <RouterLink class="text sub-text" to="/all-bar">浏览所有吧</RouterLink>
+    </TypeSelector>
     <BarListInf ref="listIns" :get-list="onHandleGetData"></BarListInf>
   </div>
 </template>

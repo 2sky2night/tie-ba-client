@@ -13,7 +13,7 @@
           <SwiperCell v-for="item in list" :key="item.aid">
             <template #default>
               <!--有效的帖子-->
-              <template v-if="item.not_found===undefined">
+              <template v-if="item.not_found === undefined">
                 <article-item v-model:isLiked="item.is_liked" :article="item" v-model:is-star="item.is_star"
                   v-model:star-count="item.star_count" v-model:like-count="item.like_count"></article-item>
               </template>
@@ -35,7 +35,9 @@
           <span class="sub-text mr-10">正在加载</span>
           <n-spin size="small" />
         </div>
-        <div class="divier" v-if="list.length >= pagination.total"><span class="sub-text">没有更多了</span></div>
+        <div class="divier" v-if="!pagination.hasMore">
+          <span class="sub-text">没有更多了</span>
+        </div>
       </template>
       <div class="empty" v-else>
         <Empty></Empty>
@@ -67,7 +69,8 @@ const pagination = ref({
   // total无需响应式 只需要初始化获取总共有多少条记录即可 每次重新加载历史记录都是最新的total
   total: userStore.historyAids.length,
   isLoading: false,
-  pageSize: 10
+  pageSize: 10,
+  hasMore: true
 })
 // 当前需要浏览的帖子id列表
 const aidList = computed(() => {
@@ -79,15 +82,32 @@ const aidList = computed(() => {
 const isBottom = inject<Ref<boolean>>('isBottom')
 // 是否正在加载
 const isLoading = ref(false)
+console.log(isBottom);
+
+// 若当前滚动到底部了 加载更多数据
+if (isBottom) {
+  watch(isBottom, (v) => {
+    if (isLoading.value) {
+      // 若当前加载的帖子还未响应回来禁止加载数据
+      return
+    }
+    if (v) {
+      pagination.value.page++
+      getListData()
+    }
+  })
+}
 
 // 获取数据的函数
 async function getListData () {
   isLoading.value = true
   const res = await getHistoryArticleAPI(aidList.value.join())
   res.data.list.forEach(ele => list.push(ele))
+  
   // 若请求的帖子总数量大于等于总数量 则取消监听视图滚动
   if (list.length >= pagination.value.total) {
     PubSub.publish('watchScroll', false)
+    pagination.value.hasMore=false
   }
   isLoading.value = false
 }
@@ -113,19 +133,6 @@ onBeforeMount(async () => {
 onMounted(() => {
   // 开启监听
   PubSub.publish('watchScroll', true)
-  // 若当前滚动到底部了 加载更多数据
-  if (isBottom) {
-    watch(isBottom, (v) => {
-      if (isLoading.value) {
-        // 若当前加载的帖子还未响应回来禁止加载数据
-        return
-      }
-      if (v) {
-        pagination.value.page++
-        getListData()
-      }
-    })
-  }
   // 卸载时取消监听
   onBeforeUnmount(() => {
     PubSub.publish('watchScroll', false)
@@ -139,15 +146,17 @@ defineOptions({
 
 <style scoped lang='scss'>
 .page-container {
-  .empty-article{
+  .empty-article {
     height: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
-    .face{
+
+    .face {
       font-size: 20px;
     }
   }
+
   .empty {
     padding-top: 100px;
   }

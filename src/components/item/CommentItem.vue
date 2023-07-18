@@ -1,5 +1,5 @@
 <template>
-    <div class="comment-item-container">
+    <div class="comment-item-container" ref="itemIns">
         <div class="header">
             <div class="username">
                 <RouterLink :to="`/user/${ comment.uid }`" @click.stop="">
@@ -9,14 +9,15 @@
                     <span class="text">{{ comment.user.username }}</span>
                 </RouterLink>
                 <Transition name="card">
-                    <UserCard ref="userCardIns" :uid="comment.uid" v-if="showCard" v-model:show="showCard" :top="60" :left="0" />
+                    <UserCard ref="userCardIns" :uid="comment.uid" v-if="showCard" v-model:show="showCard" :top="60"
+                        :left="0" />
                 </Transition>
             </div>
         </div>
         <div class="content">
             <p>{{ comment.content }}</p>
             <div class="img-list mb-10" v-if="comment.photo !== null">
-                <img v-lazyImg="item" v-imgPre="item" v-for="item in comment.photo" :key="item">
+                <img v-lazyImg="item" v-imgPre="item" v-for=" item  in comment.photo" :key="item">
             </div>
             <div class="time">
                 <span class="time sub-text">{{ formatDBDateTime(comment.createTime) }}</span>
@@ -36,7 +37,8 @@
 <script lang='ts' setup>
 // hooks
 import { useMessage } from 'naive-ui';
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import useNavigation from '@/hooks/useNavigation';
 // apis
 import { likeCommentAPI, cancelLikeCommentAPI } from '@/apis/public/article'
 // components
@@ -48,11 +50,19 @@ import type { CommentItemProps } from '@/types/components/item';
 import { formatDBDateTime } from '@/utils/tools'
 // config
 import tips from '@/config/tips';
+// render
+import asyncDialog from '@/render/modal/dialog';
 
+// 导航
+const {goArticle} = useNavigation()
+// 组件DOM
+const itemIns = ref<HTMLDivElement | null>(null)
 // 点赞评论正在加载
 let isLoading = false
 const message = useMessage()
-const props = defineProps<CommentItemProps>()
+const props = withDefaults(defineProps<CommentItemProps>(), {
+    goArticle: false
+})
 const emit = defineEmits<{
     'update:likeCount': [ value: number ];
     'update:isLike': [ value: boolean ]
@@ -97,6 +107,20 @@ const onHandleMouseLeave = () => {
 
     }, 500)
 }
+
+// 通过读取props 给组件实例绑定点击事件 是否点击评论项进入帖子详情页
+onMounted(() => {
+    if (props.goArticle) {
+        itemIns.value?.addEventListener('click', async() => {
+            try {
+                await asyncDialog('提示', '是否浏览该帖子?')
+                goArticle(props.comment.aid)
+            } catch (error) {
+                
+            }
+        })
+    }
+})
 
 defineOptions({
     components: {

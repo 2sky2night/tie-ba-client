@@ -8,6 +8,6 @@ export interface DiscoverHotArticleRepsonse extends ArticleListResponse {
 }
 
 /**
- * 热帖类型
+ * 热帖类型 (1:24小时 2:3天 3:15天 4:3个月 5:1年) 
  */
 export type HotType = 1 | 2 | 3 | 4 | 5

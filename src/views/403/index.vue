@@ -1,8 +1,8 @@
 <template>
   <div class="page-container">
-    <n-result :size="isMobile ? 'medium' : 'huge'" status="404" title="404 资源不存在" description="生活总归带点荒谬">
+    <n-result :size="isMobile?'medium':'huge'" status="403" title="403 禁止访问" description="总有些门是对你关闭的">
       <template #footer>
-        <n-button secondary @click="onHandleClick" :size="isMobile ? 'medium' : 'large'">看看别的 ?</n-button>
+        <n-button :size="isMobile?'medium':'large'" @click="onHandleClick">去登录 ?</n-button>
       </template>
     </n-result>
   </div>
@@ -12,22 +12,23 @@
 import {useRouter} from 'vue-router'
 import useIsMoblie from '@/hooks/useIsMoblie';
 
-const isMobile = useIsMoblie()
+const isMobile=useIsMoblie()
 const router = useRouter()
 
 const onHandleClick = () => {
-  router.replace('/')
+  router.replace('/login')
 }
 
 defineOptions({
-  name: '404'
+  name: '403'
 })
 </script>
 
 <style scoped lang='scss'>
-.page-container {
+.page-container{
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 </style>

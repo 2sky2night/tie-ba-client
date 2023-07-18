@@ -20,7 +20,11 @@ export const beforeEachHook: NavigationGuardWithThis<undefined> = (to, _from, ne
       } else {
         // 未登录
         window.$message.warning(tips.pleaseLogin)
-        next('/login')
+        // 若未登录 进入了需要登录的页面 则跳转到403页面
+        next({
+          path: '403',
+          replace:true
+        })
       }
     } else {
       //不需要鉴权的页面

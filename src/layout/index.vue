@@ -57,7 +57,8 @@ onMounted(() => {
     // 若卷上去的高度 大于等于 （总高度-容器高度） 说明滚动到底部了
     // scolltop是卷上去的高度 clientHight是当前容器高度
     // scrollHiehgt是子容器的高度（是滚动条总的高度）
-    if (div.scrollTop >= div.scrollHeight - div.clientHeight) {
+    // -10为了减小误差
+    if (Math.round(div.scrollTop) >= div.scrollHeight - div.clientHeight-10) {
       console.log('滚动到底部了')
       isBottom.value = true
     } else {
