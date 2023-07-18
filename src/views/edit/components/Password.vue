@@ -1,19 +1,19 @@
 <template>
   <div class="edit-password-container">
     <n-form :show-require-mark="false" ref="formIns" :model="formModel" :rules="rules">
-      <n-form-item path="oldPassword" label="旧密码">
-        <n-input size="large" showPasswordOn="click" type="password" :placeholder="tips.formPlaceholder('旧密码')"
+      <n-form-item :size="isMobile?'medium':'large'" path="oldPassword" label="旧密码">
+        <n-input showPasswordOn="click" type="password" :placeholder="tips.formPlaceholder('旧密码')"
           v-model:value="formModel.oldPassword"></n-input>
       </n-form-item>
-      <n-form-item path="password" label="新密码">
-        <n-input size="large" showPasswordOn="click" type="password" :placeholder="tips.formPlaceholder('密码')"
+      <n-form-item :size="isMobile?'medium':'large'" path="password" label="新密码">
+        <n-input showPasswordOn="click" type="password" :placeholder="tips.formPlaceholder('密码')"
           v-model:value="formModel.password"></n-input>
       </n-form-item>
-      <n-form-item path="rePassword" label="再次输入新密码">
-        <n-input size="large" showPasswordOn="click" type="password" :placeholder="tips.formPlaceholder('密码')"
+      <n-form-item :size="isMobile?'medium':'large'" path="rePassword" label="再次输入新密码">
+        <n-input showPasswordOn="click" type="password" :placeholder="tips.formPlaceholder('密码')"
           v-model:value="formModel.rePassword"></n-input>
       </n-form-item>
-      <n-form-item>
+      <n-form-item :size="isMobile?'medium':'large'">
         <div class="btns">
           <n-button :loading="isLoading" @click="onHandleReset">重置</n-button>
           <n-button :loading="isLoading" class="ml-10" type="primary" @click="onHandleSubmit">确认</n-button>
@@ -33,6 +33,9 @@ import tips from '@/config/tips';
 // types
 import type { FormInst, FormRules } from 'naive-ui';
 
+const props = defineProps < {
+  isMobile:boolean
+}>()
 // 正在加载
 const isLoading = ref(false)
 // 用户仓库

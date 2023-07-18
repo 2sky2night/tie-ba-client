@@ -12,17 +12,19 @@
       </n-tabs>
       <div class="form-container mt-10">
         <n-form ref="formRef" :model="userData" :rules="rules">
-          <n-form-item :show-require-mark="false" path="username" label="用户名">
+          <n-form-item :size="isMobile ? 'medium' : 'large'" :show-require-mark="false" path="username" label="用户名">
             <n-input v-model:value.trim="userData.username" :placeholder="tips.formPlaceholder('用户名')" />
           </n-form-item>
-          <n-form-item :show-require-mark="false" path="password" label="密码">
+          <n-form-item :size="isMobile ? 'medium' : 'large'" :show-require-mark="false" path="password" label="密码">
             <n-input type="password" show-password-on='click' :placeholder="tips.formPlaceholder('密码')"
               v-model:value="userData.password" />
           </n-form-item>
         </n-form>
         <div class="btns mt-10">
-          <n-button class="mr-10" style="width: 50%;" @click="onHandleReset">重置</n-button>
-          <n-button type="primary" style="width: 50%;" @click="onHandleSubmit">登录</n-button>
+          <n-button :size="isMobile ? 'medium' : 'large'" class="mr-10" style="width: 50%;"
+            @click="onHandleReset">重置</n-button>
+          <n-button :size="isMobile ? 'medium' : 'large'" type="primary" style="width: 50%;"
+            @click="onHandleSubmit">登录</n-button>
         </div>
       </div>
     </div>
@@ -31,10 +33,11 @@
 
 <script lang='ts' setup>
 // hooks
-import { reactive, ref,watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import useUserStore from '@/store/user'
 import { useMessage } from 'naive-ui'
+import useIsMoblie from '@/hooks/useIsMobile'
 // types
 import type { FormInst, FormItemRule, FormRules } from 'naive-ui'
 // components
@@ -42,6 +45,7 @@ import Logo from '@/components/common/Logo/index.vue'
 // tips
 import tips from '@/config/tips'
 
+const isMobile = useIsMoblie()
 // 用户仓库
 const userStore = useUserStore()
 // 表单实例
@@ -123,7 +127,7 @@ const onHandleSubmit = async () => {
 
 // 清除用户输入的左右空串
 watch(() => userData.username, () => {
-  userData.username=userData.username.trim()
+  userData.username = userData.username.trim()
 })
 
 defineOptions({

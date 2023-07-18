@@ -13,7 +13,7 @@
         <div @mouseenter="() => isEnterHistory = true" @mouseleave="() => isEnterHistory = false" v-if="isShow"
             :style="{ marginRight: isMoblie ? '49px' : '56px' }" class="search-history-container">
             <span class="title mb-10">搜索历史</span>
-            <ul class="history-list mt-10">
+            <ul class="history-list mt-10" v-if="historySearch.length">
                 <li @click="() => onSearchByHistory(item.title)" class="item mb-10" v-for="item in historySearch"
                     :key="item.time">
                     <span>
@@ -24,6 +24,9 @@
                     </n-icon>
                 </li>
             </ul>
+            <div v-else class="empty">
+                无搜索历史
+            </div>
         </div>
     </div>
 </template>
@@ -197,7 +200,12 @@ if (keywords.value) {
             background-color: var(--scrollbar-color);
             border-radius: 10px;
         }
-
+        .empty{
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .title {
             color: var(--primary-color);
             font-size: 15px;

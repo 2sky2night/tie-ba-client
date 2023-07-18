@@ -10,7 +10,7 @@
 
 <script lang='ts' setup>
 import {useRouter} from 'vue-router'
-import useIsMoblie from '@/hooks/useIsMoblie';
+import useIsMoblie from '@/hooks/useIsMobile';
 
 const isMobile=useIsMoblie()
 const router = useRouter()

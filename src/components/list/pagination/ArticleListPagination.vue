@@ -3,8 +3,15 @@
     <div class="loading" v-if="pagination.isLoading">
       <ArticleListSkeleton :length="pagination.pageSize"></ArticleListSkeleton>
       <div class="pagination" v-if="pagination.total > pagination.pageSize">
-        <n-pagination :page="pagination.page" :item-count="pagination.total" :page-size="pagination.pageSize"
-          :page-sizes="pagination.pageSizes" show-size-picker />
+        <n-pagination
+        :page-slot="isMobile ? 6 : 8" 
+        :size="isMobile ? 'medium' : 'large'"
+        :page="pagination.page" 
+        :item-count="pagination.total" 
+        :page-size="pagination.pageSize"
+        :page-sizes="pagination.pageSizes" 
+        show-size-picker 
+        />
       </div>
     </div>
     <div class="list" v-else>
@@ -14,9 +21,17 @@
           v-model:likeCount="item.like_count"></article-item>
         <!--若帖子总数小于等于pageSize就不显示分页组件-->
         <div class="pagination" v-if="pagination.total > pagination.pageSize">
-          <n-pagination :page="pagination.page" @update:page="onHandlePageUpdate"
-            @update:page-size="onHandlePageSizeUpdate" :item-count="pagination.total" :page-size="pagination.pageSize"
-            :page-sizes="pagination.pageSizes" show-size-picker />
+          <n-pagination
+          :page-slot="isMobile ? 6 : 8" 
+          :size="isMobile ? 'medium' : 'large'" 
+          :page="pagination.page" 
+          @update:page="onHandlePageUpdate"
+          @update:page-size="onHandlePageSizeUpdate" 
+          :item-count="pagination.total" 
+          :page-size="pagination.pageSize"
+          :page-sizes="pagination.pageSizes" 
+          show-size-picker 
+          />
         </div>
       </div>
       <div class="empty" v-else>
@@ -33,9 +48,12 @@ import type { ArticleListResponse } from '@/apis/public/types/article';
 import type { ListPageIns } from '@/types/components/list';
 // hooks
 import { reactive, onBeforeMount } from 'vue';
+import useIsMoblie from '@/hooks/useIsMobile';
 // utils
 import PubSub from 'pubsub-js';
 
+// 是否为移动端布局
+const isMobile=useIsMoblie()
 // 列表数据
 const list = reactive<ArticleItem[]>([])
 // props

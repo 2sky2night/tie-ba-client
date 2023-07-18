@@ -12,19 +12,21 @@
       </n-tabs>
       <div class="form-container mt-10">
         <n-form ref="formRef" :model="userData" :rules="rules">
-          <n-form-item :show-require-mark="false" path="username" label="用户名">
+          <n-form-item :size="isMobile ? 'medium' : 'large'" :show-require-mark="false" path="username" label="用户名">
             <n-input v-model:value="userData.username" placeholder="请输入用户名" />
           </n-form-item>
-          <n-form-item :show-require-mark="false" path="password" label="密码">
+          <n-form-item :size="isMobile ? 'medium' : 'large'" :show-require-mark="false" path="password" label="密码">
             <n-input show-password-on='click' type="password" placeholder="请输入密码" v-model:value="userData.password" />
           </n-form-item>
-          <n-form-item :show-require-mark="false" path="rePassword" label="确认密码">
+          <n-form-item :size="isMobile ? 'medium' : 'large'" :show-require-mark="false" path="rePassword" label="确认密码">
             <n-input show-password-on='click' type="password" placeholder="请再次输入密码" v-model:value="userData.rePassword" />
           </n-form-item>
         </n-form>
         <div class="btns mt-10">
-          <n-button class="mr-10" style="width: 50%;" @click="onHandleReset">重置</n-button>
-          <n-button type="primary" style="width: 50%;" @click="onHandleSubmit">注册</n-button>
+          <n-button :size="isMobile ? 'medium' : 'large'" class="mr-10" style="width: 50%;"
+            @click="onHandleReset">重置</n-button>
+          <n-button :size="isMobile ? 'medium' : 'large'" type="primary" style="width: 50%;"
+            @click="onHandleSubmit">注册</n-button>
         </div>
       </div>
     </div>
@@ -36,6 +38,7 @@
 import { reactive, ref, watch } from 'vue'
 import { useMessage } from 'naive-ui'
 import { useRouter, useRoute } from 'vue-router'
+import useIsMoblie from '@/hooks/useIsMobile'
 // types
 import type { FormInst, FormItemRule, FormRules } from 'naive-ui'
 // components
@@ -45,6 +48,7 @@ import { registerAPI } from '@/apis/register'
 // configs
 import tips from '@/config/tips'
 
+const isMobile = useIsMoblie()
 // 消息组件
 const message = useMessage()
 // 表单实例

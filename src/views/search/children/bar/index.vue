@@ -3,8 +3,14 @@
     <template v-if="isLoading">
       <BarListSkeleton :length="pagination.pageSize"></BarListSkeleton>
       <div class="pagination">
-        <n-pagination :page-size="pagination.pageSize" :page="pagination.page" :item-count="pagination.total"
-          show-size-picker :page-sizes="[20, 30, 40, 50]">
+        <n-pagination
+        :page-slot="isMobile ? 6 : 8" 
+        :size="isMobile ? 'medium' : 'large'"
+        :page-size="pagination.pageSize" 
+        :page="pagination.page" 
+        :item-count="pagination.total"
+        show-size-picker 
+        :page-sizes="[20, 30, 40, 50]">
           <template #prefix="{ itemCount }">
             共 {{ itemCount }} 项
           </template>
@@ -17,9 +23,16 @@
           <bar-item v-for="item in list" :key="item.bid" :bar="item"></bar-item>
         </div>
         <div class="pagination">
-          <n-pagination @update:page="onHandleUpdatePage" @update:page-size="onHandleUpdatePageSize"
-            :page-size="pagination.pageSize" :page="pagination.page" :item-count="pagination.total" show-size-picker
-            :page-sizes="[20, 30, 40, 50]">
+          <n-pagination
+          :page-slot="isMobile ? 6 : 8" 
+          :size="isMobile ? 'medium' : 'large'"
+          @update:page="onHandleUpdatePage" 
+          @update:page-size="onHandleUpdatePageSize"
+          :page-size="pagination.pageSize" 
+          :page="pagination.page" 
+          :item-count="pagination.total" 
+          show-size-picker
+          :page-sizes="[20, 30, 40, 50]">
             <template #prefix="{ itemCount }">
               共 {{ itemCount }} 项
             </template>
@@ -48,7 +61,9 @@ import type { BarItem, BarListResponse } from '@/apis/public/types/bar';
 // hooks
 import { reactive, ref } from 'vue'
 import useSearch from '@/hooks/useSearch'
+import useIsMoblie from '@/hooks/useIsMobile'
 
+const isMobile=useIsMoblie()
 // 吧列表数据
 const list = reactive<BarItem[]>([])
 // 正在加载

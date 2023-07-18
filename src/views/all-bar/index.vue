@@ -50,7 +50,7 @@
 import { getAllBarListAPI } from '@/apis/all-bar';
 // hooks
 import { reactive, onBeforeMount } from 'vue'
-import useIsMoblie from '@/hooks/useIsMoblie'
+import useIsMoblie from '@/hooks/useIsMobile'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router';
 // types
 import type { BarItem as ItemType } from '@/apis/public/types/bar';

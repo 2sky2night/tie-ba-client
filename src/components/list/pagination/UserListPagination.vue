@@ -3,8 +3,15 @@
         <template v-if="pagination.isLoading">
             <user-list-skeleton :length="pagination.pageSize" />
             <div class="pagination" v-if="pagination.total > pagination.pageSize">
-                <n-pagination :page="pagination.page" :page-size="pagination.pageSize" :item-count="pagination.total"
-                    show-size-picker :page-sizes="pagination.pageSizes" />
+                <n-pagination
+                :page-slot="isMobile ? 6 : 8" 
+                :size="isMobile ? 'medium' : 'large'" 
+                :page="pagination.page" 
+                :page-size="pagination.pageSize" 
+                :item-count="pagination.total"
+                show-size-picker 
+                :page-sizes="pagination.pageSizes" 
+                />
             </div>
         </template>
         <template v-else>
@@ -14,9 +21,17 @@
                 </div>
                 <!--若总数小于等于pageSize就不显示分页组件---->
                 <div class="pagination" v-if="pagination.total > pagination.pageSize">
-                    <n-pagination @update:page-size="onHandlePageSizeUpdate" @update:page="onHandlePageUpdate"
-                        :page="pagination.page" :page-size="pagination.pageSize" :item-count="pagination.total"
-                        show-size-picker :page-sizes="pagination.pageSizes" />
+                    <n-pagination
+                    :page-slot="isMobile ? 6 : 8" 
+                    :size="isMobile ? 'medium' : 'large'"
+                    @update:page-size="onHandlePageSizeUpdate" 
+                    @update:page="onHandlePageUpdate"
+                    :page="pagination.page" 
+                    :page-size="pagination.pageSize" 
+                    :item-count="pagination.total"
+                    show-size-picker 
+                    :page-sizes="pagination.pageSizes" 
+                    />
                 </div>
             </template>
             <div class="empty" v-else>
@@ -29,9 +44,12 @@
 <script lang='ts' setup>
 // hooks
 import { reactive, onBeforeMount } from 'vue'
+import useIsMoblie from '@/hooks/useIsMobile'
 // types
 import type { UserItem } from '@/apis/public/types/user'
 import type { UserListPageProps, ListPageIns } from '@/types/components/list';
+
+const isMobile=useIsMoblie()
 // props
 const props = defineProps<UserListPageProps>()
 // 用户列表

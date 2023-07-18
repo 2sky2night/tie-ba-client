@@ -1,6 +1,10 @@
 <template>
   <div class="main-container">
-    <RouterView />
+    <RouterView #default="{Component}">
+      <KeepAlive :includes="['Home']">
+        <component :is="Component" ></component>
+      </KeepAlive>
+    </RouterView>
   </div>
 </template>
 

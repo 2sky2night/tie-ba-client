@@ -9,7 +9,7 @@
 </template>
 
 <script lang='ts' setup>
-import useIsMoblie from '@/hooks/useIsMoblie';
+import useIsMoblie from '@/hooks/useIsMobile';
 import { useRouter } from 'vue-router';
 
 const isMobile = useIsMoblie()

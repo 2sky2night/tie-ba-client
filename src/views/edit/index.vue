@@ -1,12 +1,12 @@
 <template>
     <div class="page-container">
         <div class="page-title mb-10">编辑</div>
-        <n-tabs :type="tabTypes">
+        <n-tabs :type="tabTypes" animated>
             <n-tab-pane name="info" tab="用户信息">
-                <Info />
+                <Info :is-mobile="isMobile" />
             </n-tab-pane>
             <n-tab-pane name="password" tab="用户密码">
-                <Password />
+                <Password :is-mobile="isMobile" />
             </n-tab-pane>
         </n-tabs>
     </div>
@@ -15,11 +15,12 @@
 <script lang='ts' setup>
 // hooks
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import useIsMobile from '@/hooks/useIsMobile'
 // components
 import Password from './components/Password.vue'
 import Info from './components/Info.vue'
 
-
+const isMobile=useIsMobile()
 // 当前tabs标签的样式
 const tabTypes = ref<'segment' | 'card'>('segment')
 

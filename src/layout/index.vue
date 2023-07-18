@@ -22,10 +22,9 @@ import Footer from './footer/index.vue'
 // hooks
 import { useMessage } from 'naive-ui'
 import { useRoute } from 'vue-router';
-import { watch, ref, provide } from 'vue';
+import { watch, ref, provide, onMounted } from 'vue';
 // types 
 import type { ScrollbarInst } from 'naive-ui'
-import { onMounted } from 'vue';
 import pubsub from 'pubsub-js';
 
 const route = useRoute()
@@ -48,17 +47,17 @@ watch(() => route.fullPath, () => {
 onMounted(() => {
 
   // @ts-ignore (给滚动组件容器绑定滚动事件 只要滚动到底部)
-  const t = scrollIns.value.$el.nextElementSibling.children[0] as HTMLDivElement
+  const t = scrollIns.value.$el.nextElementSibling.children[ 0 ] as HTMLDivElement
 
   // 滚动组件的滚动事件
-  function scrollHandle(e: Event) {
+  function scrollHandle (e: Event) {
     const div = e.target as HTMLDivElement
     console.log('滚动条监听....')
     // 若卷上去的高度 大于等于 （总高度-容器高度） 说明滚动到底部了
     // scolltop是卷上去的高度 clientHight是当前容器高度
     // scrollHiehgt是子容器的高度（是滚动条总的高度）
     // -10为了减小误差
-    if (Math.round(div.scrollTop) >= div.scrollHeight - div.clientHeight-10) {
+    if (Math.round(div.scrollTop) >= div.scrollHeight - div.clientHeight - 10) {
       console.log('滚动到底部了')
       isBottom.value = true
     } else {
@@ -79,6 +78,7 @@ onMounted(() => {
       t.removeEventListener('scroll', scrollHandle)
     }
   })
+
   // 监听是否需要让主视图滚动到顶部
   pubsub.subscribe('toScrollTop', () => {
     if (scrollIns.value) {

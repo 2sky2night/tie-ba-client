@@ -1,7 +1,7 @@
 <template>
   <div class="edit-info-container">
     <n-form :show-require-mark="false" ref="formIns" :model="infoData" :rules="rules">
-      <n-form-item path="avatar" label="头像">
+      <n-form-item :size="isMobile?'medium':'large'" path="avatar" label="头像">
         <div class="img-list">
           <div class="item large" @click="onHandleShowModal">
             <img :src="infoData.avatar">
@@ -14,14 +14,14 @@
           </div>
         </div>
       </n-form-item>
-      <n-form-item path="username" label="用户名">
+      <n-form-item :size="isMobile?'medium':'large'" path="username" label="用户名">
         <n-input :placeholder="tips.formPlaceholder('用户名')" v-model:value="infoData.username" @keydown.enter.prevent />
       </n-form-item>
-      <n-form-item label="简介">
+      <n-form-item :size="isMobile?'medium':'large'" label="简介">
         <n-input :placeholder="tips.formPlaceholder('简介')" value="这个人很懒，没有简介呢" type="textarea" @keydown.enter.prevent />
       </n-form-item>
     </n-form>
-    <n-form-item>
+    <n-form-item :size="isMobile?'medium':'large'">
       <div class="btns">
         <n-button :loading="isLoading" attr-type="button" @click="onHandleResetForm">
           重置
@@ -67,6 +67,9 @@ import { uploadImgAPI } from '@/apis/public/file'
 // config
 import tips from '@/config/tips';
 
+const props = defineProps < {
+  isMobile:boolean
+}>()
 // 表单实例
 const formIns = ref<FormInst | null>(null)
 // 用户选择的图片
