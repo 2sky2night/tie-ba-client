@@ -33,15 +33,29 @@ const scrollIns = ref<ScrollbarInst | null>(null)
 const isBottom = ref(false)
 // 向后代组件注入是否滚动到底部了
 provide('isBottom', isBottom)
+// 离开首页时滚动条卷上去的高度
+let homeScrollTop = 0
+
 
 // 监听路由url更新时Main组件视图滚动置顶部
 watch(() => route.fullPath, () => {
-  if (scrollIns.value) {
-    scrollIns.value.scrollTo({
-      top: 0,
-      left: 0
-    })
-  }
+
+  // 为了保证在离开首页时 先触发pubsub的离开首页的消息
+  // 再执行该监听的回调 所以就用了红任务 保证pubsub先执行再执行watch回调
+  setTimeout(() => {
+    console.log('滚动条滚动到顶部---watch');
+    if (route.path === '/') {
+      scrollIns.value?.scrollTo({
+        top: homeScrollTop,
+        left: 0
+      })
+    } else {
+      scrollIns.value?.scrollTo({
+        top: 0,
+        left: 0
+      })
+    }
+  })
 })
 
 onMounted(() => {
@@ -88,6 +102,13 @@ onMounted(() => {
       })
     }
   })
+
+  // 监听离开首页时 记录离开首页时滚动条卷上去的高度
+  pubsub.subscribe('leaveHome', () => {
+    console.log('离开首页了----leaveHome',t.scrollTop);
+    homeScrollTop = t.scrollTop
+  })
+
 })
 
 // 给window属性挂在消息组件API

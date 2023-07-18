@@ -26,6 +26,7 @@
 //apis
 import { getArticleListAPI } from '@/apis/home';
 // hooks
+import { onBeforeRouteLeave } from 'vue-router';
 import { reactive, inject, type Ref, onMounted, onBeforeUnmount, watch, onDeactivated, onActivated } from 'vue'
 // types
 import { ArticleItem as ItemType } from '@/apis/public/types/article';
@@ -96,6 +97,10 @@ onActivated(() => {
   isLeaveThisPage = false
 })
 
+// 离开之前
+onBeforeRouteLeave(() => {
+  publish('leaveHome')
+})
 
 // 组件卸载时 取消主视图滚动条监听
 onBeforeUnmount(() => {

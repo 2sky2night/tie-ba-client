@@ -82,7 +82,6 @@ const aidList = computed(() => {
 const isBottom = inject<Ref<boolean>>('isBottom')
 // 是否正在加载
 const isLoading = ref(false)
-console.log(isBottom);
 
 // 若当前滚动到底部了 加载更多数据
 if (isBottom) {

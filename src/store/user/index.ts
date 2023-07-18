@@ -118,7 +118,6 @@ const useUserStore = defineStore(
         const addHistory = (aid: number) => {
             // 查询历史记录是否存在
             const index = historyAids.value.findIndex(ele => ele === aid)
-            console.log(index);
 
             if (index !== -1) {
                 // 若存在该帖子的历史记录 则删除该帖子记录

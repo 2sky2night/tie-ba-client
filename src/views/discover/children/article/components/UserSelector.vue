@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="empty" v-else>
-        你还没有关注一个用户呢，快快关注吧~
+        还没有关注一个用户呢，快快关注吧~
       </div>
     </div>
   </div>
@@ -113,6 +113,11 @@ onBeforeMount(async () => {
 
 <style scoped lang='scss'>
 .user-selector-container {
+  .empty{
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+  }
   .container {
     background-color: var(--bg-color-3);
     overflow-x: auto;

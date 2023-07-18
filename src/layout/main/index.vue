@@ -1,7 +1,7 @@
 <template>
   <div class="main-container">
     <RouterView #default="{Component}">
-      <KeepAlive :includes="['Home']">
+      <KeepAlive include="Home">
         <component :is="Component" ></component>
       </KeepAlive>
     </RouterView>
