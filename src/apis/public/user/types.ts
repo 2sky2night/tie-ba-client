@@ -1,3 +1,5 @@
+import { UserBaseItem } from '../types/user';
+
 export type FollowUserResponse = null
 export type CancelFollowUserResponse = null
 
@@ -14,4 +16,7 @@ export interface UserCardResponse {
     like_count: number;
     uid: number;
     username: string;
+    udesc: string;
 }
+
+export type UserBaseInfoResponse = UserBaseItem

@@ -9,7 +9,7 @@
         </div>
         <div class="sub-text">收到赞:<span>{{ formatCount(userData.like_count) }}</span></div>
       </div>
-      <div class="desc sub-text mb-10">这个人很懒,简介都不写~</div>
+      <div class="desc sub-text mb-10">{{ userData.udesc }}</div>
       <div class="data mb-10">
         <div class="item mr-10">
           <span>粉丝:</span>

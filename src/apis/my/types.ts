@@ -13,6 +13,7 @@ export interface UserInfoResponse {
     follow_count: number;
     uid: number;
     username: string;
+    udesc: string;
 }
 
 

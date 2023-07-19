@@ -11,7 +11,8 @@
             <div>收到的赞:{{ total }}</div>
           </div>
           <div class="desc">
-            简介:这个人很懒,连简介都不写~
+            <span>简介:</span>
+            <span>{{ userInfor.udesc }}</span>
           </div>
           <div class="data">
             <div style="display: flex;">
@@ -23,7 +24,7 @@
           </div>
           <div class="edit">
             <n-button @click="goEdit" size="small" type="primary">
-              <span style="font-size: 12px; ">
+              <span style="font-size: 12px;position: relative;top:1.5px; ">
                 修改信息
               </span>
               <n-icon style="position: relative;top:0px;left: 5px;">

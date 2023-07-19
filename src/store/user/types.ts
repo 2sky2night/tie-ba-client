@@ -6,4 +6,5 @@ export interface UserData {
     username: string;
     createTime: string;
     avatar: string;
+    udesc: string;
 }

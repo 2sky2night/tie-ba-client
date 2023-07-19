@@ -1,8 +1,7 @@
 import request from '@/utils/request';
-import type { FollowUserResponse, CancelFollowUserResponse, UserCardResponse } from './types';
+import type { FollowUserResponse, CancelFollowUserResponse, UserCardResponse,UserBaseInfoResponse } from './types';
 import type { ArticleListResponse } from '../types/article';
 import type { BarListResponse } from '../types/bar';
-import type { UserListResponse } from '../types/user';
 
 /**
  * 关注用户
@@ -136,4 +135,12 @@ export const getUserBrieflyInfoAPI = (uid: number) => {
       uid
     }
   })
+}
+
+/**
+ * 获取用户基础数据
+ * @returns 
+ */
+export const getUserBaseInfoAPI = () => {
+  return request.get<UserBaseInfoResponse>('/user/base')
 }

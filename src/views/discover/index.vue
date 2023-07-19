@@ -107,6 +107,9 @@ defineOptions({
 .toLeft-enter-active{
   animation: toLeft var(--time-normal) 1  ease;
 }
+.toLeft-leave-active,.toRight-leave-active{
+  display: none;
+}
 
 @keyframes toRight {
   from{

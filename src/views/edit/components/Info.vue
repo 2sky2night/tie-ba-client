@@ -18,7 +18,7 @@
         <n-input :placeholder="tips.formPlaceholder('用户名')" v-model:value="infoData.username" @keydown.enter.prevent />
       </n-form-item>
       <n-form-item :size="isMobile?'medium':'large'" label="简介">
-        <n-input :placeholder="tips.formPlaceholder('简介')" value="这个人很懒，没有简介呢" type="textarea" @keydown.enter.prevent />
+        <n-input :placeholder="tips.formPlaceholder('简介')" v-model:value="infoData.udesc" type="textarea" @keydown.enter.prevent />
       </n-form-item>
     </n-form>
     <n-form-item :size="isMobile?'medium':'large'">
@@ -79,7 +79,8 @@ const userStore = useUserStore()
 // 编辑的用户信息
 const infoData = ref<EditUserInfoBody>({
   username: userStore.userData.username,
-  avatar: userStore.userData.avatar
+  avatar: userStore.userData.avatar,
+  udesc:userStore.userData.udesc,
 })
 // 图片裁剪组件的宽度
 const imgCutterWidth = ref<320 | 500>(320)

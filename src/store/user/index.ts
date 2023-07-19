@@ -5,6 +5,7 @@ import router from '@/router'
 // apis
 import { loginAPI } from '@/apis/login'
 import { getUserInfoAPI } from '@/apis/my/index'
+import { getUserBaseInfoAPI } from '@/apis/public/user'
 import { editUserInfoAPI, editUserPasswordAPI } from '@/apis/edit'
 // types
 import { UserData } from './types'
@@ -28,7 +29,8 @@ const useUserStore = defineStore(
             avatar: '',
             uid: 0,
             username: '',
-            createTime: ''
+            createTime: '',
+            udesc: ''
         })
 
         /**
@@ -36,7 +38,7 @@ const useUserStore = defineStore(
          */
         const historyAids = ref<number[]>([])
 
-        const historySearch = ref<({ time: number; title:string})[]>([])
+        const historySearch = ref<({ time: number; title: string })[]>([])
 
         /**
          * 用户登录
@@ -62,12 +64,13 @@ const useUserStore = defineStore(
          */
         const toGetUserInfo = async () => {
             try {
-                const res = await getUserInfoAPI()
+                const res = await getUserBaseInfoAPI()
                 // 获取当前登录的用户数据
                 userData.value.uid = res.data.uid
                 userData.value.username = res.data.username
                 userData.value.avatar = res.data.avatar
                 userData.value.createTime = res.data.createTime
+                userData.value.udesc = res.data.udesc
             } catch (error) {
                 return Promise.reject(error)
             }
@@ -83,6 +86,7 @@ const useUserStore = defineStore(
                 // 编辑成功 修改用户数据
                 userData.value.avatar = data.avatar
                 userData.value.username = data.username
+                userData.value.udesc = data.udesc
             } catch (error) {
                 return Promise.reject(error)
             }
@@ -153,8 +157,8 @@ const useUserStore = defineStore(
         const addSearchHistroy = (title: string) => {
             const index = historySearch.value.findIndex(ele => ele.title === title)
             // 若存在该搜索词条 则删除该历史记录
-            if (index!==-1) {
-                historySearch.value.splice(index,1)
+            if (index !== -1) {
+                historySearch.value.splice(index, 1)
             }
             // 保存历史记录
             historySearch.value.unshift({
@@ -170,7 +174,7 @@ const useUserStore = defineStore(
         const deleteSearchHistory = (time: number) => {
             historySearch.value.some((ele, index, arr) => {
                 if (ele.time === time) {
-                    arr.splice(index,1)
+                    arr.splice(index, 1)
                 }
             })
         }
@@ -182,7 +186,12 @@ const useUserStore = defineStore(
             return token.value ? true : false
         })
 
-
+        // 若加载页面时 当前已经登录了 就获取最新的用户个人信息来更新本地用户数据
+        setTimeout(() => {
+            if (isLogin.value) {
+                toGetUserInfo()
+            }
+        })
 
         return {
             token,

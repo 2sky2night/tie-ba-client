@@ -36,6 +36,7 @@ export interface UserBaseItem {
     createTime: string;
     uid: number;
     username: string;
+    udesc: string;
 }
 
 

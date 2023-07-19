@@ -1,4 +1,4 @@
-import type {UserArticleCount,UserBarCount,UserCommentCount} from '@/apis/public/types/user'
+import type { UserArticleCount, UserBarCount, UserCommentCount } from '@/apis/public/types/user'
 
 /**
  * 用户信息响应结果
@@ -27,4 +27,5 @@ export interface UserProfileResponse {
     is_followed: boolean;
     uid: number;
     username: string;
+    udesc: string;
 }

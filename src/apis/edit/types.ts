@@ -4,6 +4,7 @@
 export interface EditUserInfoBody {
   username: string;
   avatar: string;
+  udesc: string;
 }
 
 /**
