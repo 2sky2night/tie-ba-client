@@ -33,7 +33,7 @@ import { Actions } from './types'
 // components
 import { UserOutlined } from '@vicons/antd'
 import { SunnyOutline, Moon } from '@vicons/ionicons5'
-
+import asyncDialog from '@/render/modal/dialog'
 // 用户仓库
 const userStore = useUserStore()
 const { userData } = storeToRefs(userStore)
@@ -55,13 +55,22 @@ const onHandleSelect = (key: string) => {
     router.push(key)
   } else {
     // 功能按钮 需要执行对应操作
-    console.log(key)
     switch (key as Actions) {
       case 'theme': themeStore.toToggleTheme(); break;
-      case 'logout': userStore.toLogout(); break;
+      case 'logout': onHandleLogout(); break;
       default: console.log(key)
     }
   }
+}
+
+/**
+ * 登出的回调
+ */
+const onHandleLogout = async () => {
+  try {
+    await asyncDialog('提示', '确认退出?')
+    userStore.toLogout()
+  } catch (error) { }
 }
 
 /**

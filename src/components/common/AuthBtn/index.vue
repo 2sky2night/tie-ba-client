@@ -27,9 +27,6 @@ const onHandleClick =  (e:Event) => {
   }
 }
 
-defineSlots<{
-  default:()=>VNode[]
-}>()
 defineOptions({
   name:'AuthBtn'
 })

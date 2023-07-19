@@ -4,7 +4,7 @@
       <div class="main-container" @touchstart="onHandleStart" @mousedown="onHandleDown" @click.capture="clickCaptrue">
         <slot></slot>
       </div>
-      <div ref="rightContainer" class="right-container" v-if="slots.right">
+      <div ref="rightContainer" class="right-container" v-if="$slots.right">
         <slot name="right"></slot>
       </div>
     </div>
@@ -23,11 +23,11 @@ import type { VNode } from 'vue';
 // hooks
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 
-// 声明的插槽
-const slots = defineSlots<{
-  default: () => VNode[];
-  right?: () => VNode[]
-}>()
+// // 声明的插槽
+// const slots = defineSlots<{
+//   default: () => VNode[];
+//   right?: () => VNode[]
+// }>()
 // 是否满足滑动的动作?
 let isSwiper = false
 // 滑块的DOM元素

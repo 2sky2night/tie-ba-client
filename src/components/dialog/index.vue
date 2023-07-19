@@ -15,9 +15,9 @@
 <script lang='ts' setup>
 import type { VNode } from 'vue';
 
-defineSlots<{
-  default:()=>VNode[]
-}>()
+// defineSlots<{
+//   default:()=>VNode[]
+// }>()
 const props = defineProps<{
   title: string;
 }>()

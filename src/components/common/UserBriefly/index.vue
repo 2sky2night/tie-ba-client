@@ -28,7 +28,8 @@ const user = reactive<UserCardResponse>({
     createTime: '',
     like_count: 0,
     is_fans: false,
-    is_follow: false
+    is_follow: false,
+    udesc:''
 })
 
 async function toGetData () {
@@ -42,6 +43,7 @@ async function toGetData () {
     user.like_count = res.data.like_count
     user.uid = res.data.uid
     user.username = res.data.username
+    user.udesc=res.data.udesc
 }
 
 onBeforeMount(toGetData)

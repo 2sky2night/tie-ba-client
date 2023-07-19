@@ -34,7 +34,7 @@ defineProps<{
   toClose: (flag: boolean) => void
 }>()
 defineOptions({
-  name: 'Dialog'
+  name: 'AsyncDialog'
 })
 </script>
 
