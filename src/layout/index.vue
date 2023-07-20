@@ -31,8 +31,12 @@ const route = useRoute()
 const scrollIns = ref<ScrollbarInst | null>(null)
 // 是否滚动到底部了
 const isBottom = ref(false)
+// 是否滚动到顶部了
+const isTop = ref(true)
 // 向后代组件注入是否滚动到底部了
 provide('isBottom', isBottom)
+// 向后代组件注入是否滚动到顶部了
+provide('isTop', isTop)
 // 离开首页时滚动条卷上去的高度
 let homeScrollTop = 0
 
@@ -45,11 +49,15 @@ watch(() => route.fullPath, () => {
   setTimeout(() => {
     console.log('滚动条滚动到顶部---watch');
     if (route.path === '/') {
+      // 若进入了首页 就根据卷上去的高度来判断是否滚动到了顶部
+      isTop.value = homeScrollTop === 0 ? true : false
       scrollIns.value?.scrollTo({
         top: homeScrollTop,
         left: 0
       })
     } else {
+      // 进入不需要缓存滚动条的其他页面 直接记录isTop=true
+      isTop.value = true
       scrollIns.value?.scrollTo({
         top: 0,
         left: 0
@@ -76,6 +84,12 @@ onMounted(() => {
       isBottom.value = true
     } else {
       isBottom.value = false
+    }
+    // 计算是否滚动到顶部了
+    if (div.scrollTop === 0) {
+      isTop.value = true
+    } else {
+      isTop.value = false
     }
   }
 
@@ -105,7 +119,7 @@ onMounted(() => {
 
   // 监听离开首页时 记录离开首页时滚动条卷上去的高度
   pubsub.subscribe('leaveHome', () => {
-    console.log('离开首页了----leaveHome',t.scrollTop);
+    console.log('离开首页了----leaveHome', t.scrollTop);
     homeScrollTop = t.scrollTop
   })
 

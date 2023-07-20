@@ -1,24 +1,33 @@
 <template>
-  <div class="page-container">
-    <template v-if="pagination.isFirstLoading">
-      <article-list-skeleton :length="pagination.pageSize"></article-list-skeleton>
-    </template>
-    <template v-else>
-      <template v-if="list.length">
-        <div class="list" >
-          <article-item v-for="item in list" :article="item" v-model:isLiked="item.is_liked" v-model:isStar="item.is_star"
-            v-model:starCount="item.star_count" v-model:likeCount="item.like_count"></article-item>
-        </div>
-        <div class="spin" v-if="pagination.isLoading">
-          <span class="sub-text mr-10">正在加载</span>
-          <n-spin size="small" />
-        </div>
-        <div class="divier" v-if="!pagination.hasMore"><span class="sub-text">没有更多了</span></div>
-      </template>
-      <div class="empty" v-else>
-        <empty></empty>
+  <div class="page-container" ref="pageDOM" @click.capture="onHandleClickCapture">
+    <template v-if="loadMoreHight !== null">
+      <div class="load-more-tips" :style="{ height: loadMoreHight + 'px' }">
+        <div v-if="loadMoreHight < 50">继续下拉😘</div>
+        <div v-else>松手加载更多😍</div>
       </div>
     </template>
+    <div class="article-list-container">
+      <template v-if="pagination.isFirstLoading">
+        <article-list-skeleton :length="pagination.pageSize"></article-list-skeleton>
+      </template>
+      <template v-else>
+        <template v-if="list.length">
+          <div class="list">
+            <article-item v-for="                          item                           in list" :article="item"
+              v-model:isLiked="item.is_liked" v-model:isStar="item.is_star" v-model:starCount="item.star_count"
+              v-model:likeCount="item.like_count"></article-item>
+          </div>
+          <div class="spin" v-if="pagination.isLoading">
+            <span class="sub-text mr-10">正在加载</span>
+            <n-spin size="small" />
+          </div>
+          <div class="divier" v-if="!pagination.hasMore"><span class="sub-text">没有更多了</span></div>
+        </template>
+        <div class="empty" v-else>
+          <empty></empty>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -27,12 +36,14 @@
 import { getArticleListAPI } from '@/apis/home';
 // hooks
 import { onBeforeRouteLeave } from 'vue-router';
-import { reactive, inject, type Ref, onMounted, onBeforeUnmount, watch, onDeactivated, onActivated } from 'vue'
+import { reactive, inject, type Ref, onMounted, onBeforeUnmount, watch, onDeactivated, onActivated, ref } from 'vue'
 // types
 import { ArticleItem as ItemType } from '@/apis/public/types/article';
 // utils
 import { publish } from 'pubsub-js';
 
+// 页面DOM
+const pageDOM = ref<HTMLDivElement | null>(null)
 // 帖子列表
 const list = reactive<ItemType[]>([])
 // 分页数据
@@ -45,9 +56,15 @@ const pagination = reactive({
 })
 // 是否离开了该页面
 let isLeaveThisPage = false
-
+// 是否为下拉动作
+let isPullDown = false
 // 是否滚动到了底部
 const isBottom = inject<Ref<boolean>>('isBottom')
+// 是否滚动到了顶部
+const isTop = inject<Ref<boolean>>('isTop')
+// 显示下拉加载更多的高度
+const loadMoreHight = ref<number | null>(null)
+
 
 // 监听是否滚动到底部
 if (isBottom) {
@@ -79,7 +96,176 @@ async function getArticleList () {
   }
 }
 
+// 点击页面的回调
+const onHandleClickCapture = (e: Event) => {
+  if (isPullDown) {
+    // 是下拉动作 禁止执行后代的点击事件
+    e.stopPropagation()
+  }
+}
+
+// 鼠标按下时的回调
+const onHandleMouseDown = (e1: MouseEvent) => {
+  // 按下时重置下拉动作 必须满足下拉动作时才能阻止后代的点击事件执行
+  isPullDown = false
+
+  if (!isTop?.value) {
+    // 未在顶部触发按下操作 则不需要执行下拉加载更多数据
+    console.log('未在顶部进行了按下操作');
+    return
+  }
+  // 在顶部触发了按下操作
+  // 记录鼠标按下时的y坐标 来判断在移动鼠标时是否为下拉动作的阈值
+  // 给页面绑定鼠标移动的事件回调 若用户鼠标往下移动则为下拉操作
+  const downY = e1.pageY
+  // 是否下拉到50px以上
+  let toLoad = false
+
+  // 鼠标移动时的回调
+  const onHandleMouseMove = (e2: MouseEvent) => {
+    // 按下且鼠标开始移动则为滑动的动作
+    isPullDown = true
+    // 记录移动时的鼠标Y坐标
+    const moveY = e2.pageY
+    const temp = downY - moveY
+    if (temp >= 0) {
+      console.log('上拉操作');
+      toLoad = false
+      loadMoreHight.value = null
+      return
+    }
+    // console.log('下拉操作');
+
+    // 调整加载容器的高度
+    loadMoreHight.value = -temp <= 50 ? -temp : 50
+
+    // 拉下到一定程度 松手即可重新加载页面
+    if (-temp >= 50) {
+      toLoad = true
+    } else {
+      toLoad = false
+    }
+
+  }
+
+  // 鼠标松手时的回调
+  const onHandleMouseUp = async () => {
+    (pageDOM.value as HTMLDivElement).removeEventListener('mousemove', onHandleMouseMove);
+    (pageDOM.value as HTMLDivElement).removeEventListener('mouseleave', onHandleMouseLeave);
+    (pageDOM.value as HTMLDivElement).removeEventListener('mouseup', onHandleMouseUp);
+
+    loadMoreHight.value = null
+
+    if (toLoad) {
+      console.log('满足下拉50px且松手了,重新加载页面');
+      // 加载更多数据
+      pagination.isFirstLoading = true
+      publish('watchScroll', true)
+      list.length = 0
+      await getArticleList()
+      pagination.isFirstLoading = false
+    } else {
+      console.log('不满足下拉50px且松手了');
+    }
+
+  }
+
+  // 鼠标离开时的回调
+  const onHandleMouseLeave = () => {
+    loadMoreHight.value = null;
+    (pageDOM.value as HTMLDivElement).removeEventListener('mousemove', onHandleMouseMove);
+    (pageDOM.value as HTMLDivElement).removeEventListener('mouseup', onHandleMouseUp);
+    (pageDOM.value as HTMLDivElement).removeEventListener('mouseleave', onHandleMouseLeave);
+  }
+
+  // 给页面DOM绑定鼠标事件
+  (pageDOM.value as HTMLDivElement).addEventListener('mousemove', onHandleMouseMove);
+  // 解除副作用的事件监听
+  (pageDOM.value as HTMLDivElement).addEventListener('mouseup', onHandleMouseUp);
+  (pageDOM.value as HTMLDivElement).addEventListener('mouseleave', onHandleMouseLeave);
+}
+
+// 手指按下时的回调
+const onHandleTouchStar = (e1: TouchEvent) => {
+  // 重置下拉操作
+  isPullDown = false
+
+  if (!isTop?.value) {
+    // 未在顶部触发按下操作 则不需要执行下拉加载更多数据
+    console.log('未在顶部进行了按下操作');
+    return
+  }
+
+
+  const downY = e1.touches[ 0 ].pageY
+
+  // 是否下拉到50px以上
+  let toLoad = false
+
+  // 手指移动的回调
+  const onHandleTouchMove = (e2: TouchEvent) => {
+    // 在滑动了
+    isPullDown = true
+
+    // 记录滑动时的位置
+    const moveY = e2.touches[ 0 ].pageY
+    // 记录滑动的相距差
+    const temp = downY - moveY
+
+    if (temp >= 0) {
+      console.log('上拉操作');
+      toLoad = false
+      loadMoreHight.value = null
+      return
+    }
+
+    // 调整加载容器的高度
+    loadMoreHight.value = -temp <= 50 ? -temp : 50
+    if (-temp >= 50) {
+      // 下拉到50px以上了 则可以加载更多数据
+      toLoad = true
+    } else {
+      toLoad = false
+    }
+  }
+
+  // 手指抬起时的回调
+  const onHandleTouchEnd = async () => {
+    (pageDOM.value as HTMLDivElement).removeEventListener('touchmove', onHandleTouchMove);
+    (pageDOM.value as HTMLDivElement).removeEventListener('touchend', onHandleTouchEnd);
+    (pageDOM.value as HTMLDivElement).removeEventListener('touchcancel', onHandleTouchCancel);
+    loadMoreHight.value = null
+    if (toLoad) {
+      console.log('满足下拉50px且松手了,重新加载页面');
+      // 加载更多数据
+      pagination.isFirstLoading = true
+      publish('watchScroll', true)
+      list.length = 0
+      await getArticleList()
+      pagination.isFirstLoading = false
+    } else {
+      console.log('不满足下拉50px且松手了');
+    }
+  }
+
+  // 手指取消移动的回调
+  const onHandleTouchCancel = () => {
+    (pageDOM.value as HTMLDivElement).removeEventListener('touchmove', onHandleTouchMove);
+    (pageDOM.value as HTMLDivElement).removeEventListener('touchend', onHandleTouchEnd);
+    (pageDOM.value as HTMLDivElement).removeEventListener('touchcancel', onHandleTouchCancel);
+  }
+
+  // 绑定事件回调
+  (pageDOM.value as HTMLDivElement).addEventListener('touchmove', onHandleTouchMove);
+  (pageDOM.value as HTMLDivElement).addEventListener('touchend', onHandleTouchEnd);
+  (pageDOM.value as HTMLDivElement).addEventListener('touchcancel', onHandleTouchCancel);
+
+}
+
+
 onMounted(async () => {
+  pageDOM.value?.addEventListener('mousedown', onHandleMouseDown)
+  pageDOM.value?.addEventListener('touchstart', onHandleTouchStar)
   pagination.isFirstLoading = true
   publish('watchScroll', true)
   await getArticleList()
@@ -88,11 +274,15 @@ onMounted(async () => {
 
 // 缓存该页面
 onDeactivated(() => {
+  pageDOM.value?.removeEventListener('mousedown', onHandleMouseDown)
+  publish('watchScroll', false)
   isLeaveThisPage = true
 })
 
 // 激活该页面
 onActivated(() => {
+  pageDOM.value?.addEventListener('mousedown', onHandleMouseDown)
+  pageDOM.value?.addEventListener('touchstart', onHandleTouchStar)
   publish('watchScroll', true)
   isLeaveThisPage = false
 })
@@ -107,6 +297,8 @@ onBeforeUnmount(() => {
   if (pagination.hasMore === false) {
     publish('watchScroll', false)
   }
+  pageDOM.value?.removeEventListener('mousedown', onHandleMouseDown)
+  pageDOM.value?.removeEventListener('touchstart', onHandleTouchStar)
 })
 
 defineOptions({
@@ -116,6 +308,12 @@ defineOptions({
 
 <style scoped lang='scss'>
 .page-container {
+  .load-more-tips {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .divier {
     text-align: center;
     padding: 10px;
