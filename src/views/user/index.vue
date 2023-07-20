@@ -198,6 +198,10 @@ defineOptions({
       cursor: pointer;
       height: 150px;
       margin-right: 30px;
+      img{
+        height: 100%;
+        height: 100%;
+      }
     }
   }
 }

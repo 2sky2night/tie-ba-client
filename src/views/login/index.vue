@@ -56,8 +56,8 @@ const router = useRouter()
 const route = useRoute()
 // 用户数据
 const userData = reactive({
-  username: 'admin',
-  password: '123456'
+  username: '',
+  password: ''
 })
 // 表单验证规则
 const rules: FormRules = {

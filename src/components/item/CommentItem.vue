@@ -169,7 +169,6 @@ defineOptions({
                 height: 30vh;
                 object-fit: cover;
                 margin-bottom: 10px;
-
                 &:not(:last-child) {
                     margin-right: 10px;
                 }
@@ -227,7 +226,6 @@ defineOptions({
                 img {
                     width: unset;
                     height: unset;
-                    object-fit: contain;
 
                     &:not(:last-child) {
                         margin-bottom: 10px;

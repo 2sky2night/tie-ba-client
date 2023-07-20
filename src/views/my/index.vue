@@ -17,14 +17,15 @@
           <div class="data">
             <div style="display: flex;">
               <div class="mr-10 data-item">来到贴吧:<span>{{ getTempDays(userInfor.createTime) }}</span></div>
-              <div class="text mr-10 data-item" @click="onHandleToFollow">关注: <span>{{ userInfor.follow_count }}</span></div>
+              <div class="text mr-10 data-item" @click="onHandleToFollow">关注: <span>{{ userInfor.follow_count }}</span>
+              </div>
               <div class="text mr-10 data-item" @click="onHandleToFans">粉丝: <span>{{ userInfor.fans_count }}</span></div>
             </div>
             <n-button size="small" text style="font-size: 13px;" @click="onHandleShowMore">更多信息</n-button>
           </div>
           <div class="edit">
             <n-button @click="goEdit" size="small" type="primary">
-              <span style="font-size: 12px;position: relative;top:1.5px; ">
+              <span style="font-size: 12px;position: relative;top:1px; ">
                 修改信息
               </span>
               <n-icon style="position: relative;top:0px;left: 5px;">
@@ -59,7 +60,7 @@ import { getTempDays } from '@/utils/tools'
 // 用户信息
 const userInfor = ref<UserInfoResponse | null>(null)
 // 导航
-const { goEdit,goFans,goFollow } = useNavigation()
+const { goEdit, goFans, goFollow } = useNavigation()
 // 收到的赞
 const total = computed(() => {
   if (userInfor.value) {
@@ -163,6 +164,12 @@ defineOptions({
 
     .image {
       cursor: pointer;
+
+      img {
+        height: 100%;
+        width: 100%;
+      }
+
       width: 150px;
       height: 150px;
       margin-right: 30px;
@@ -196,5 +203,4 @@ defineOptions({
       }
     }
   }
-}
-</style>
+}</style>
