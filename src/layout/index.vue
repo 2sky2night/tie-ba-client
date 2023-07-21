@@ -85,13 +85,27 @@ onMounted(() => {
     } else {
       isBottom.value = false
     }
-    // 计算是否滚动到顶部了
-    if (div.scrollTop === 0) {
-      isTop.value = true
+  }
+
+  // 为首页专门配置的滚动事件监听 监听是否滚动到顶部
+  function scrollHandleForHome () {
+    if (t.scrollTop === 0) {
+      isTop.value=true   
     } else {
-      isTop.value = false
+      isTop.value=false
     }
   }
+
+  // 为首页配置的是否滚动到顶部的监听
+  pubsub.subscribe('watchScrollForHome', (_,value:boolean) => {
+    if (value) {
+      // 开启监听
+      t.addEventListener('scroll',scrollHandleForHome)
+    } else {
+      // 取消监听
+      t.removeEventListener('scroll',scrollHandleForHome)
+    }
+  })
 
   // 监听后代组件是否监听滚动条高度
   pubsub.subscribe('watchScroll', (_, v: boolean) => {

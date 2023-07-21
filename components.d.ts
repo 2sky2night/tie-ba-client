@@ -34,6 +34,7 @@ declare module 'vue' {
     ImgPreview: typeof import('./src/components/common/ImgPreview/index.vue')['default']
     Logo: typeof import('./src/components/common/Logo/index.vue')['default']
     Message: typeof import('./src/components/modal/message/index.vue')['default']
+    NAlert: typeof import('naive-ui')['NAlert']
     NAvatar: typeof import('naive-ui')['NAvatar']
     NButton: typeof import('naive-ui')['NButton']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']

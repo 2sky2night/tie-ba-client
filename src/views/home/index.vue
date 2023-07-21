@@ -6,6 +6,12 @@
         <div v-else>松手加载更多😍</div>
       </div>
     </template>
+    <transition name="new">
+      <div v-if="hasNewArticle" class="new-article-tips">
+        <span class="mr-10">有新帖子了✨!</span>
+        <span class="refresh" @click="onHandleRefresh">刷新</span>
+      </div>
+    </transition>
     <div class="article-list-container">
       <template v-if="pagination.isFirstLoading">
         <article-list-skeleton :length="pagination.pageSize"></article-list-skeleton>
@@ -13,8 +19,8 @@
       <template v-else>
         <template v-if="list.length">
           <div class="list">
-            <article-item v-for="                          item                           in list" :article="item"
-              v-model:isLiked="item.is_liked" v-model:isStar="item.is_star" v-model:starCount="item.star_count"
+            <article-item v-for="   item    in list" :article="item" v-model:isLiked="item.is_liked"
+              v-model:isStar="item.is_star" v-model:starCount="item.star_count"
               v-model:likeCount="item.like_count"></article-item>
           </div>
           <div class="spin" v-if="pagination.isLoading">
@@ -64,7 +70,10 @@ const isBottom = inject<Ref<boolean>>('isBottom')
 const isTop = inject<Ref<boolean>>('isTop')
 // 显示下拉加载更多的高度
 const loadMoreHight = ref<number | null>(null)
-
+// 首次进入页面
+let isFirstEnter = true
+// 是否有新帖子发送了?
+const hasNewArticle = ref(false)
 
 // 监听是否滚动到底部
 if (isBottom) {
@@ -83,6 +92,13 @@ if (isBottom) {
 
   })
 }
+
+/**
+ * 1.开启滚动条监听（是否滚动到底部） 滚动到底部就加载更多数据 若无更多数据就取消监听
+ * 2.开启滚动条监听（是否滚动到顶部） 可以实时获取到主视图是否滚动到了顶部没
+ * 3.在顶部进行下拉操作可以进行下拉刷新更多数据，若鼠标按下时的y坐标与滑动时的y坐标要小则为下拉操作，若大于50px就为刷新页面获取最新数据
+ * 4.第n次（n>1）进入进入页面时 都会向服务器获取最新的帖子 来判断是否有新帖子发送了，提示用户可以点击刷新页面获取最新帖子
+ */
 
 // 获取帖子列表的函数
 async function getArticleList () {
@@ -159,11 +175,7 @@ const onHandleMouseDown = (e1: MouseEvent) => {
     if (toLoad) {
       console.log('满足下拉50px且松手了,重新加载页面');
       // 加载更多数据
-      pagination.isFirstLoading = true
-      publish('watchScroll', true)
-      list.length = 0
-      await getArticleList()
-      pagination.isFirstLoading = false
+      onHandleResetPage()
     } else {
       console.log('不满足下拉50px且松手了');
     }
@@ -238,11 +250,7 @@ const onHandleTouchStar = (e1: TouchEvent) => {
     if (toLoad) {
       console.log('满足下拉50px且松手了,重新加载页面');
       // 加载更多数据
-      pagination.isFirstLoading = true
-      publish('watchScroll', true)
-      list.length = 0
-      await getArticleList()
-      pagination.isFirstLoading = false
+      onHandleResetPage()
     } else {
       console.log('不满足下拉50px且松手了');
     }
@@ -262,29 +270,79 @@ const onHandleTouchStar = (e1: TouchEvent) => {
 
 }
 
+// 重置页码 获取最新数据
+const onHandleResetPage = async () => {
+  pagination.isFirstLoading = true
+  list.length = 0
+  pagination.page = 1
+  publish('watchScroll', true)
+  await getArticleList()
+  pagination.isFirstLoading = false
+}
+
+// 当前列表的第一条帖子与服务器中最新的帖子的发帖时间进行比较
+const toGetNewestArticle = async () => {
+  const { data: { list: serverList } } = await getArticleListAPI(1, 1, true)
+  // 服务器最新的帖子时间
+  if (serverList.length && list.length) {
+    // 新帖时间
+    const newestTime = +new Date(serverList[ 0 ].createTime)
+    // 当前列表中首个帖子的时间
+    const firstTime = +new Date(list[ 0 ].createTime)
+    if (newestTime > firstTime) {
+      // 有新帖子了!
+      return true
+    }
+  }
+  return false
+}
+
+// 点击刷新获取新帖子的回调
+const onHandleRefresh = () => {
+  hasNewArticle.value = false
+  onHandleResetPage()
+}
 
 onMounted(async () => {
+  // 开启下滑事件监听
   pageDOM.value?.addEventListener('mousedown', onHandleMouseDown)
   pageDOM.value?.addEventListener('touchstart', onHandleTouchStar)
+  // 加载数据
   pagination.isFirstLoading = true
-  publish('watchScroll', true)
+  // 由active钩子开启滚动条的监听
+  // 下滑底部滚动条的监听
+  // publish('watchScroll', true)
+  // 上滑顶部滚动条的监听
+  // publish('watchScrollForHome', true)
   await getArticleList()
   pagination.isFirstLoading = false
 })
 
 // 缓存该页面
 onDeactivated(() => {
-  pageDOM.value?.removeEventListener('mousedown', onHandleMouseDown)
+  publish('watchScrollForHome', false)
   publish('watchScroll', false)
   isLeaveThisPage = true
+  // 重置有无新帖子
+  hasNewArticle.value=false
+  // 后续进入页面就不再是第一次进入了
+  if (isFirstEnter) {
+    isFirstEnter = false
+  }
 })
 
 // 激活该页面
-onActivated(() => {
-  pageDOM.value?.addEventListener('mousedown', onHandleMouseDown)
-  pageDOM.value?.addEventListener('touchstart', onHandleTouchStar)
-  publish('watchScroll', true)
+onActivated(async () => {
+  if (isFirstEnter || pagination.hasMore) {
+    // 若在激活页面时还有更多就可以加载更多数据或在首次访问该页面时
+    publish('watchScroll', true)
+  }
+  publish('watchScrollForHome', true)
   isLeaveThisPage = false
+  if (isFirstEnter === false) {
+    // 不是第一次进入该页面 则判断当前第一条帖子与服务器最新的帖子创建时间进行比较 提醒用户刷新页面
+    hasNewArticle.value = await toGetNewestArticle()
+  }
 })
 
 // 离开之前
@@ -308,7 +366,23 @@ defineOptions({
 
 <style scoped lang='scss'>
 .page-container {
-  .load-more-tips {
+  position: relative;
+  .new-article-tips {
+    background-color: var(--primary-color);
+    margin: 0 -10px;
+    margin-top: -10px;
+    padding: 5px 0;
+    color: #fff;
+    font-size: 12px;
+
+    .refresh {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  .load-more-tips,
+  .new-article-tips {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -352,4 +426,32 @@ defineOptions({
     justify-content: center;
   }
 }
-</style>
+
+.new-enter-active {
+  animation: newMove var(--time-normal) ease 1;
+}
+
+.new-leave-active {
+  animation: newMove var(--time-normal) ease 1 reverse;
+  position: absolute;
+  left: 0;
+  right:0;
+}
+
+@keyframes newMove {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+@media screen and (min-width:651px) {
+  .page-container {
+    .new-article-tips {
+      margin-top: -20px;
+    }
+  }
+}</style>
