@@ -15,3 +15,18 @@ export interface BarInfoResponse {
   user: UserBrieflyInfo;
   user_follow_count: number;
 }
+
+/**
+ * 编辑吧的请求体
+ */
+export interface EditBarBody {
+  bid: number;
+  bname: string;
+  bdesc: string;
+  photo: string;
+}
+
+/**
+ * 编辑吧成功的响应结果
+ */
+export type EditBarResponse = null

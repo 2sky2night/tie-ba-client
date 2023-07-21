@@ -40,5 +40,6 @@ export default {
   successPostArticle: '发帖成功!',
   pleaseSelectBar: '请选择吧!',
   successCreateBar: '创建吧成功!',
-  searchPleaseholder:'请输入内容来搜索'
+  searchPleaseholder: '请输入内容来搜索',
+  successEditBar:'修改吧信息成功!'
 }

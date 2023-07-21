@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-import type { BarInfoResponse } from './types';
+import type { BarInfoResponse,EditBarBody,EditBarResponse } from './types';
 import type { ArticleListResponse } from '../public/types/article';
 import { UserListResponse } from '../public/types/user';
 
@@ -54,4 +54,13 @@ export const getBarFollowUserAPI = (bid: number, page: number, pageSize: number,
       limit: pageSize
     }
   })
+}
+
+/**
+ * 编辑吧信息
+ * @param data 
+ * @returns 
+ */
+export const editBarInfoAPI = (data: EditBarBody) => {
+  return request.put<EditBarResponse>('/bar/edit',data)
 }

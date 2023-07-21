@@ -31,7 +31,7 @@ export const darkCSSVarList = {
     '--bg-color-5': '#2d2d2d',
     '--bg-color-6': '#292929',
     '--scrollbar-color':'rgba(255, 255, 255, 0.2)',
-    '--bg-mask': '#65656575',
+    '--bg-mask': '#0000006e',
     '--text-color-2': '#929293',
     '--text-color-1':'#fff',
 }
