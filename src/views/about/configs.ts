@@ -32,5 +32,11 @@ export const updateLogs:LogsItem[] = [
     title: '功能增加',
     content: '首页增加检测新帖子功能+关于页面',
     time:'2023-07-21 12:00:00'
+  },
+  {
+    type: 'info',
+    title: '功能增加',
+    content: '修改吧信息',
+    time:'2023-07-21 17:40:00'
   }
 ]
