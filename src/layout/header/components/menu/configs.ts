@@ -2,7 +2,7 @@
 import { type DropdownOption, NIcon } from 'naive-ui'
 import { type Component, h } from 'vue'
 // components
-import { LogInOutline, LogOutOutline,DocumentTextSharp,Cafe } from '@vicons/ionicons5'
+import { LogInOutline, LogOutOutline,DocumentTextSharp,Cafe,InformationCircle } from '@vicons/ionicons5'
 import { HistoryOutlined } from '@vicons/antd'
 import { UserEdit, UserPlus, UserCircleRegular,User } from '@vicons/fa'
 import { NAvatar } from 'naive-ui'
@@ -38,6 +38,11 @@ export const noAuthMenu: DropdownOption[] = [
     key: '/history',
     icon: renderIcon(HistoryOutlined)
   },
+  {
+    label: '关于',
+    key: '/about',
+    icon: renderIcon(InformationCircle)
+  },
 ]
 
 /**
@@ -68,6 +73,11 @@ export const authMenu: DropdownOption[] = [
     label: '浏览的历史',
     key: '/history',
     icon: renderIcon(HistoryOutlined)
+  },
+  {
+    label: '关于',
+    key: '/about',
+    icon: renderIcon(InformationCircle)
   },
   {
     label: '登出',

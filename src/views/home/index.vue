@@ -19,7 +19,7 @@
       <template v-else>
         <template v-if="list.length">
           <div class="list">
-            <article-item v-for="   item    in list" :article="item" v-model:isLiked="item.is_liked"
+            <article-item v-for="     item      in list" :article="item" v-model:isLiked="item.is_liked"
               v-model:isStar="item.is_star" v-model:starCount="item.star_count"
               v-model:likeCount="item.like_count"></article-item>
           </div>
@@ -174,6 +174,8 @@ const onHandleMouseDown = (e1: MouseEvent) => {
 
     if (toLoad) {
       console.log('满足下拉50px且松手了,重新加载页面');
+      // 隐藏新帖子提示
+      hasNewArticle.value = false
       // 加载更多数据
       onHandleResetPage()
     } else {
@@ -249,6 +251,8 @@ const onHandleTouchStar = (e1: TouchEvent) => {
     loadMoreHight.value = null
     if (toLoad) {
       console.log('满足下拉50px且松手了,重新加载页面');
+      // 隐藏新帖子提示
+      hasNewArticle.value = false
       // 加载更多数据
       onHandleResetPage()
     } else {
@@ -324,7 +328,7 @@ onDeactivated(() => {
   publish('watchScroll', false)
   isLeaveThisPage = true
   // 重置有无新帖子
-  hasNewArticle.value=false
+  hasNewArticle.value = false
   // 后续进入页面就不再是第一次进入了
   if (isFirstEnter) {
     isFirstEnter = false
@@ -367,6 +371,7 @@ defineOptions({
 <style scoped lang='scss'>
 .page-container {
   position: relative;
+
   .new-article-tips {
     background-color: var(--primary-color);
     margin: 0 -10px;
@@ -435,7 +440,7 @@ defineOptions({
   animation: newMove var(--time-normal) ease 1 reverse;
   position: absolute;
   left: 0;
-  right:0;
+  right: 0;
 }
 
 @keyframes newMove {
@@ -454,4 +459,5 @@ defineOptions({
       margin-top: -20px;
     }
   }
-}</style>
+}
+</style>

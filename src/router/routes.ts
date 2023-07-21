@@ -227,6 +227,15 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
+    path: '/about',
+    name: 'about',
+    component: () => import('@/views/about/index.vue'),
+    meta: {
+      needAuth: false,
+      title: '关于'
+    }
+  },
+  {
     path: '/500',
     name: '500',
     component: () => import('@/views/500/index.vue'),
@@ -256,7 +265,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/:pathMatch(.*)*',
     name: 'catch-any',
-    redirect:'/404'
+    redirect: '/404'
   },
 ]
 
