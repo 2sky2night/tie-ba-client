@@ -41,5 +41,9 @@ export default {
   pleaseSelectBar: '请选择吧!',
   successCreateBar: '创建吧成功!',
   searchPleaseholder: '请输入内容来搜索',
-  successEditBar:'修改吧信息成功!'
+  successEditBar: '修改吧信息成功!',
+  successLikeReply: '点赞回复成功!',
+  successCancleLikeReply: '取消点赞回复成功!',
+  replyPlaceholder: '输入内容进行回复',
+  hasReplyPlaceholder:(name:string)=>`回复@${name}`
 }

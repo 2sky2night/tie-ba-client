@@ -14,10 +14,39 @@
                 </Transition>
             </div>
         </div>
-        <div class="content">
+        <div class="content" @click="onHandleLookReply">
             <p>{{ comment.content }}</p>
             <div class="img-list mb-10" v-if="comment.photo !== null">
-                <img v-lazyImg="item" v-imgPre="item" v-for=" item  in comment.photo" :key="item">
+                <img v-lazyImg="item" v-imgPre="item" v-for="      item       in comment.photo" :key="item">
+            </div>
+            <div class="reply-container mb-10" v-if="comment.reply.total">
+                <div class="reply-pre">
+                    <div class="reply-pre-item" v-for="item in comment.reply.list.slice(0, 3)" :key="item.rid">
+                        <div class="user">
+                            <img class="mr-5" v-lazyImg="item.user.avatar">
+                            <RouterLink :to="`/user/${ item.uid }`" @click.stop="">
+                                <span class="text">{{ item.user.username }}</span>
+                            </RouterLink>
+                        </div>
+                        <div class="reply-content">
+                            <div class="reply-comment ml-5" v-if="item.type === 1">
+                                <span>:</span>
+                                <span class="content-text">{{ item.content }}</span>
+                            </div>
+                            <div class="reply ml-5" v-if="item.reply">
+                                <span>回复</span>
+                                <RouterLink :to="`/user/${ item.reply.uid }`" @click.stop="">
+                                    <span class="text">@{{ item.reply.user.username }}</span>
+                                </RouterLink>
+                                <span>:</span>
+                                <span class="content-text">{{ item.content }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="show-more mt-5" v-if="comment.reply.total > 3">
+                    <span class="text" @click.stop="onHandleLookReply">查看全部{{ comment.reply.total }}项</span>
+                </div>
             </div>
             <div class="time">
                 <span class="time sub-text">{{ formatDBDateTime(comment.createTime) }}</span>
@@ -48,13 +77,15 @@ import UserCard from '@/components/common/UserCard/index.vue'
 import type { CommentItemProps } from '@/types/components/item';
 // utils
 import { formatDBDateTime } from '@/utils/tools'
+import PubSub from 'pubsub-js';
 // config
 import tips from '@/config/tips';
 // render
 import asyncDialog from '@/render/modal/dialog';
+import replyDrawer from '@/render/drawer/replyDrawer'
 
 // 导航
-const {goArticle} = useNavigation()
+const { goArticle } = useNavigation()
 // 组件DOM
 const itemIns = ref<HTMLDivElement | null>(null)
 // 点赞评论正在加载
@@ -107,16 +138,29 @@ const onHandleMouseLeave = () => {
 
     }, 500)
 }
+// 点击查看当前评论的全部回复的回调
+const onHandleLookReply = () => {
+    // 若点击评论要跳转到对应帖子中去 则点击评论不显示回复详情
+    !props.goArticle&&replyDrawer(props.comment.cid)
+}
+// 监听抽屉的点赞评论 从而给对应评论点赞
+PubSub.subscribe('to-like-comment', async (_, cid: number) => {
+    // 若收到的是当前评论需要点赞 则发送请求点赞评论
+    if (props.comment.cid === cid) {
+        // 是当前评论需要点赞 发送请求获取数据
+        await onHandleLikeArticle()
+    }
+})
 
 // 通过读取props 给组件实例绑定点击事件 是否点击评论项进入帖子详情页
 onMounted(() => {
     if (props.goArticle) {
-        itemIns.value?.addEventListener('click', async() => {
+        itemIns.value?.addEventListener('click', async () => {
             try {
                 await asyncDialog('提示', '是否浏览该帖子?')
                 goArticle(props.comment.aid)
             } catch (error) {
-                
+
             }
         })
     }
@@ -153,8 +197,8 @@ defineOptions({
     }
 
     .content {
-        padding-left: 60px;
-
+        margin-left: 60px;
+        cursor: pointer;
         p {
             word-break: break-all;
             margin-bottom: 15px;
@@ -169,8 +213,57 @@ defineOptions({
                 height: 30vh;
                 object-fit: cover;
                 margin-bottom: 10px;
+
                 &:not(:last-child) {
                     margin-right: 10px;
+                }
+            }
+        }
+
+        .reply-container {
+            padding: 10px;
+            background-color: var(--bg-color-3);
+
+            .reply-pre {
+                .reply-pre-item {
+                    padding: 5px 0;
+
+                    .user {
+                        img {
+                            width: 30px;
+                            border-radius: 50%;
+                            height: 30px;
+                        }
+
+                        span {
+                            font-size: 13px;
+                        }
+                    }
+
+                    .reply-content {
+                        padding-left: 35px;
+
+                        .content-text {
+                            font-size: 14px;
+                            // word-break: break-all;
+                            // overflow: hidden;
+                            // display: -webkit-box;
+                            // -webkit-line-clamp: 2;
+                            // -webkit-box-orient: vertical;
+                        }
+
+                        .reply {
+                            font-size: 14px;
+                        }
+
+                        .reply-comment {
+                            display: flex;
+
+                            span:first-child {
+                                display: none;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -232,7 +325,57 @@ defineOptions({
                     }
                 }
             }
+
+            .reply-container {
+                .show-more {
+                    font-size: 13px;
+                }
+
+                .reply-pre {
+
+                    .reply-pre-item {
+                        display: flex;
+
+                        .user {
+                            span {
+                                white-space: nowrap;
+                            }
+
+                            img {
+                                display: none;
+                            }
+                        }
+
+                        .reply-content {
+                            padding: 0;
+                            font-size: 14px;
+
+                            .reply {
+                                position: relative;
+                                top: 2px;
+                                font-size: 12px;
+
+                                .content-text {
+                                    margin-left: 5px;
+                                    font-size: 12px;
+                                }
+                            }
+
+                            .reply-comment {
+                                .content-text {
+                                    position: relative;
+                                    top: 2px;
+                                    font-size: 12px;
+                                }
+
+                                span:first-child {
+                                    display: inline;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
-}
-</style>
+}</style>

@@ -28,6 +28,10 @@ if (themeStore.isDark) {
 <style  lang="scss">
 @import url('@/styles/reset.scss');
 
+.n-message-container{
+  z-index: 99999;
+}
+
 .page-container {
   max-width: 100vw;
   box-sizing: border-box;

@@ -890,7 +890,49 @@ export default function (cb: any) {
     </script>
 ```
 
+### 3.h函数渲染插槽和组件的自定义事件
 
+#### 	1.h函数渲染插槽的方式:
+
+```ts
+import Drawer from '@/components/drawer/index.vue'	
+   // 渲染抽屉
+  const drawerIns = h(Drawer, { title }, {
+    //@ts-ignore 渲染插槽 component为对应引入的组件，props为该组件的自定义属性
+    default: () => h(component, props)
+  })
+```
+
+​	h函数的第三个参数可以给组件渲染插槽，为一个对象，对象的每一个key都为插槽的名称，这里只用了默认插槽所以为default，每个插槽的值都为一个函数，每个函数的返回值都为一个虚拟DOM，所以可以通过h函数来帮助渲染对应组件的虚拟DOM或者也可以直接调用组件的render函数也可以获取组件的虚拟DOM，下面为案例:
+```ts
+  const drawerIns = h(Drawer, { title }, {
+     // 每个key都为插槽的名称
+    default: () => component.render()
+  })
+```
+因为在SFC中，组件的tempplate部分最终都会被编译成render函数，render函数的返回值为虚拟DOM，该虚拟DOM就是根据template模板内容来进行生成的，例如：
+```vue
+<template>
+	<h1>你好!</h1>
+</template>
+```
+都会变成
+```ts
+export default {
+	render(){
+		return h('h1','你好!')
+	}
+}
+```
+
+### 	2.h函数绑定自定义事件
+
+​	其实就和用h函数给原生html元素绑定事件一样的，on事件名=方法
+
+```ts
+  // 渲染抽屉
+  const drawerIns = h(Drawer, { title,onCloseDrawer:()=>console.log('h函数绑定的自定义事件触发了') })
+```
 
 ## 零、time
 
