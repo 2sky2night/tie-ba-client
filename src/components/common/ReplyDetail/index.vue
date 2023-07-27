@@ -244,6 +244,8 @@ const onHandleSendReply = async() => {
   replyValue.value = ''
   currentRid.value=null
   resetReplyList()
+  // 通知article--comment组件重新加载评论
+  PubSub.publish('reloadComment')
 }
 
 // 获取数据 并 给容器绑定滚动事件,滚动到底部就加载更多数据

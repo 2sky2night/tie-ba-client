@@ -3,7 +3,7 @@
     <template v-if="loadMoreHight !== null">
       <div class="load-more-tips" :style="{ height: loadMoreHight + 'px' }">
         <div v-if="loadMoreHight < 50">继续下拉😘</div>
-        <div v-else>松手加载更多😍</div>
+        <div v-else>松手刷新😍</div>
       </div>
     </template>
     <transition name="new">
@@ -19,7 +19,7 @@
       <template v-else>
         <template v-if="list.length">
           <div class="list">
-            <article-item v-for="     item      in list" :article="item" v-model:isLiked="item.is_liked"
+            <article-item v-for="item in list" :article="item" v-model:isLiked="item.is_liked"
               v-model:isStar="item.is_star" v-model:starCount="item.star_count"
               v-model:likeCount="item.like_count"></article-item>
           </div>

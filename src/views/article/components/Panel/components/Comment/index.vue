@@ -140,6 +140,8 @@ const handleUpdateOrder = async (value: 1 | 2) => {
 
 // 通过评论列表组件实例暴露的api重置页码
 const toResetPage = async () => {
+    // 重置时 将页面滚动到顶部
+    PubSub.publish('toScrollTop')
     if (listIns.value) {
         await listIns.value.resetPage()
     }
