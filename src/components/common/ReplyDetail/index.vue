@@ -227,7 +227,10 @@ const resetReplyList = async () => {
 }
 
 // 发送回复
-const onHandleSendReply = async() => {
+const onHandleSendReply = async () => {
+  if (!isLogin.value) {
+    return window.$message.warning(tips.pleaseLogin)
+  }
   if (!replyValue.value.trim()) {
     window.$message.warning(tips.textNameNotEmpty('回复'))
     return 
