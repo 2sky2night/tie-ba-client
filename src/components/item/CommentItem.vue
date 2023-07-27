@@ -36,7 +36,7 @@
                             <div class="reply ml-5" v-if="item.reply">
                                 <span>回复</span>
                                 <RouterLink :to="`/user/${ item.reply.uid }`" @click.stop="">
-                                    <span class="text">@{{ item.reply.user.username }}</span>
+                                    <span class="text ml-5">@{{ item.reply.user.username }}</span>
                                 </RouterLink>
                                 <span>:</span>
                                 <span class="content-text">{{ item.content }}</span>
@@ -44,9 +44,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="show-more mt-5" v-if="comment.reply.total > 3">
-                    <span class="text" @click.stop="onHandleLookReply">查看全部{{ comment.reply.total }}项</span>
-                </div>
+                <template v-if="props.goArticle">
+                    <div class="sub-text">共{{ comment.reply.total }}个回复</div>
+                </template>
+                <template v-else>
+                    <div class="show-more mt-5" v-if="comment.reply.total > 3">
+                        <span class="text" @click.stop="onHandleLookReply">查看全部{{ comment.reply.total }}项</span>
+                    </div>
+                </template>
             </div>
             <div class="time">
                 <span class="time sub-text">{{ formatDBDateTime(comment.createTime) }}</span>

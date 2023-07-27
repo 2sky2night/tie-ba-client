@@ -72,7 +72,7 @@ export interface SendReplyBody {
    */
   id: number;
   /**
-   * 回复类型，1对评论进行恢复，2对回复进行恢复
+   * 回复类型，1对评论进行回复，2对回复进行回复
    */
   type: number;
 }

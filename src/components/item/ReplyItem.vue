@@ -1,11 +1,11 @@
 <template>
-  <div class="reply-item">
+  <div class="reply-item" :class="{active}">
     <div class="header mb-5">
       <div class="user">
         <img class="mr-5" v-lazyImg="reply.user.avatar">
-        <span class="username text" @click="()=>onHandleGoUser(reply.uid)">{{ reply.user.username }}</span>
+        <span class="username text" @click.stop="()=>onHandleGoUser(reply.uid)">{{ reply.user.username }}</span>
       </div>
-      <div class="btn">
+      <div class="btn" @click.stop="">
         <n-icon @click="toLikeReply" size="18" :color="props.reply.is_liked ? 'red' : ''">
           <component :is="likeIcon"></component>
         </n-icon>
@@ -13,12 +13,12 @@
       </div>
     </div>
     <div class="content">
-      <div class="times">
+      <div class="times" v-once>
         {{ formatDBDateTime(reply.createTime) }}
       </div>
       <span v-if="reply.type === 2 && reply.reply">
         <span>回复</span>
-        <span class="username text" @click="()=>onHandleGoUser(reply.reply?.uid as number)">
+        <span class="username text" @click.stop="()=>onHandleGoUser(reply.reply?.uid as number)">
           @{{ reply.reply.user.username }}
         </span>
         :
@@ -64,6 +64,10 @@ const props = defineProps<{
   reply: ReplyItem;
   isLiked: boolean;
   likeCount: number;
+  /**
+   * 当前是否在回复这个回复？
+   */
+  active: boolean;
 }>()
 // emits
 const emit = defineEmits<{
@@ -105,6 +109,7 @@ const toLikeReply = async () => {
   emit('update:isLiked', !props.isLiked)
   isLoading = false
 }
+
 // 点击进入回复人的用户页
 const onHandleGoUser = (uid:number) => {
   onHandleToClose && onHandleToClose()
@@ -126,8 +131,13 @@ defineOptions({
 
 <style scoped lang='scss'>
 .reply-item {
-  padding: 10px 0;
-
+  padding: 10px 5px;
+  border-radius: 5px;
+  transition: var(--time-normal);
+  cursor: pointer;
+  &.active{
+    background-color: var(--bg-color-5);
+  }
   .header {
     display: flex;
     justify-content: space-between;
@@ -166,7 +176,6 @@ defineOptions({
 
   .content {
     padding-left: 35px;
-    cursor: pointer;
     padding-top: 10px;
     font-size: 13px;
     position: relative;

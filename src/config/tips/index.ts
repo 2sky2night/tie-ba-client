@@ -45,5 +45,6 @@ export default {
   successLikeReply: '点赞回复成功!',
   successCancleLikeReply: '取消点赞回复成功!',
   replyPlaceholder: '输入内容进行回复',
-  hasReplyPlaceholder:(name:string)=>`回复@${name}`
+  hasReplyPlaceholder: (name: string) => `回复@${ name }`,
+  successSendReply:'发送回复成功!'
 }

@@ -22,7 +22,7 @@ export const lightCSSVarList = {
  */
 export const darkCSSVarList = {
     '--primary-color': '#2080f0',
-    '--border-color-1': '#262629',
+    '--border-color-1': '#59595e',
     '--shadow-color-1': '#6e6e6e6b',
     '--bg-color-1': '#48484e',
     '--bg-color-2': '#111',
