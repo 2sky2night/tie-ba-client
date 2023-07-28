@@ -1,125 +1,160 @@
 <template>
-  <div class="bar-info-container">
+  <div class="bar-info mb-10">
     <template v-if="barInfo">
-      <div class="bar-img">
-        <img v-imgPre="barInfo.photo" :src="barInfo.photo">
+      <div class="bar-info-container mb-10">
+        <div class="bar-img">
+          <img v-imgPre="barInfo.photo" :src="barInfo.photo">
+        </div>
+        <div class="bar-info ml-10">
+          <div class="header mb-10">
+            <div class="bar-title">
+              <img class="mr-10" v-imgPre="barInfo.photo" :src="barInfo.photo">
+              <div class="title">{{ barInfo.bname }}吧</div>
+            </div>
+            <div class="btns">
+              <follow-bar-btn @update:isFollowed="onHandleFollowBar" :bid="barInfo.bid"
+                v-model:isFollowed="barInfo.is_followed" size="small"
+                v-model:follow-count="barInfo.user_follow_count"></follow-bar-btn>
+              <n-button v-if="isShowEditBtn" size="small" type='primary' class="ml-10"
+                @click="onHandleShowModel">编辑</n-button>
+            </div>
+          </div>
+          <div title="查看吧简介" class="desc mb-10" @click="onHandleShowDesc">
+            <span>简介:</span>
+            {{ barInfo.bdesc }}
+          </div>
+          <div class="data mb-10">
+            <div class="item sub-text">
+              <span>帖子:</span>
+              <span>{{ formatCount(barInfo.article_count) }}</span>
+            </div>
+            <div class="item sub-text ml-10">
+              <span>关注:</span>
+              <span>{{ formatCount(barInfo.user_follow_count) }}</span>
+            </div>
+          </div>
+          <div class="user">
+            <div class="username">
+              <span class="mr-5">吧主</span>
+              <RouterLink :to="`/user/${ barInfo.uid }`">
+                <img :src="barInfo.user.avatar" class="mr-5">
+              </RouterLink>
+              <RouterLink :to="`/user/${ barInfo.uid }`">
+                <span class="text">{{ barInfo.user.username }}</span>
+              </RouterLink>
+            </div>
+            <follow-btn :uid="barInfo.uid" size="small" v-model:isFollowed="barInfo.user.is_followed"
+              :is-fans="barInfo.user.is_fans"></follow-btn>
+          </div>
+          <div class="user-check-bar-info" v-if="barInfo.my_bar_rank && barInfo.my_bar_rank.level > 0">
+        <div class="mb-5">
+          <span>LV{{ barInfo.my_bar_rank.level }} {{ barInfo.my_bar_rank.label }}</span>
+          <ProgressBar :value="barInfo.my_bar_rank.progress" size="small" />
+        </div>
+        <div class="current-exp mb-5">
+          <div>
+            <span class="text">经验:</span>
+            <span>{{ currentExp }}</span>
+          </div>
+          <n-button @click="onHandleSignInBar" :disabled="barInfo.is_checked" size="small"
+            :type="barInfo.is_checked ? 'primary' : 'default'">
+            <span style="font-size: 12px;"> {{ barInfo.is_checked ? '已签到' : '签到' }}</span>
+          </n-button>
+        </div>
       </div>
-      <div class="bar-info ml-10">
-        <div class="header mb-10">
-          <div class="bar-title">
-            <img class="mr-10" v-imgPre="barInfo.photo" :src="barInfo.photo">
-            <div class="title">{{ barInfo.bname }}</div>
-          </div>
-          <div class="btns">
-            <follow-bar-btn @update:isFollowed="onHandleFollowBar" :bid="barInfo.bid"
-              v-model:isFollowed="barInfo.is_followed" size="small"
-              v-model:follow-count="barInfo.user_follow_count"></follow-bar-btn>
-            <n-button v-if="isShowEditBtn" size="small" type='primary' class="ml-10" @click="onHandleShowModel">编辑</n-button>
-          </div>
         </div>
-        <div title="查看吧简介" class="desc mb-10" @click="onHandleShowDesc">
-          <span>简介:</span>
-          {{ barInfo.bdesc }}
+      </div>
+      <div class="user-check-bar-info" v-if="barInfo.my_bar_rank && barInfo.my_bar_rank.level > 0">
+        <div class="mb-5">
+          <span>LV{{ barInfo.my_bar_rank.level }} {{ barInfo.my_bar_rank.label }}</span>
+          <ProgressBar :value="barInfo.my_bar_rank.progress" />
         </div>
-        <div class="data mb-10">
-          <div class="item sub-text">
-            <span>帖子:</span>
-            <span>{{ formatCount(barInfo.article_count) }}</span>
+        <div class="current-exp mb-5">
+          <div>
+            <span class="text">经验:</span>
+            <span>{{ currentExp }}</span>
           </div>
-          <div class="item sub-text ml-10">
-            <span>关注:</span>
-            <span>{{ formatCount(barInfo.user_follow_count) }}</span>
-          </div>
-        </div>
-        <div class="user">
-          <div class="username">
-            <span class="mr-5">吧主</span>
-            <RouterLink :to="`/user/${ barInfo.uid }`">
-              <img :src="barInfo.user.avatar" class="mr-5">
-            </RouterLink>
-            <RouterLink :to="`/user/${ barInfo.uid }`">
-              <span class="text">{{ barInfo.user.username }}</span>
-            </RouterLink>
-          </div>
-          <follow-btn :uid="barInfo.uid" size="small" v-model:isFollowed="barInfo.user.is_followed"
-            :is-fans="barInfo.user.is_fans"></follow-btn>
+          <n-button @click="onHandleSignInBar" :disabled="barInfo.is_checked" size="small"
+            :type="barInfo.is_checked ? 'primary' : 'default'">
+            <span style="font-size: 12px;"> {{ barInfo.is_checked ? '已签到' : '签到' }}</span>
+          </n-button>
         </div>
       </div>
     </template>
     <BarSkeleton v-else></BarSkeleton>
-    <!--修改吧信息的模态框-->
-    <Teleport to="body">
-      <Transition :name="isMoblie ? 'moblie' : 'pc'">
-        <div class="edit-bar-modal" v-if="isShowModal">
-          <div class="edit-bar-modal-container">
-            <div class="title mb-10">
-              <span>编辑吧信息</span>
-              <div class="btns">
-                <n-button :size="isMoblie ? 'large' : 'small'" class="mr-5" @click="onHandleCancelEdit">取消</n-button>
-                <n-button type="primary" :size="isMoblie ? 'large' : 'small'" :loading="isLoading"
-                  @click="onHandleSubmitEdit">确认</n-button>
-              </div>
-            </div>
-            <div class="edit-form">
-              <n-form :rules="rules" ref="formIns" :model="model" :size="isMoblie ? 'large' : 'small'">
-                <n-form-item path="bname" label="吧名">
-                  <n-input maxlength="15" show-count :placeholder="tips.formPlaceholder('吧名')"
-                    v-model:value="model.bname"></n-input>
-                </n-form-item>
-                <n-form-item path="bdesc" label="吧简介">
-                  <n-input :resizable="false" type="textarea" show-count maxlength="120"
-                    :placeholder="tips.formPlaceholder('吧简介')" v-model:value="model.bdesc"></n-input>
-                </n-form-item>
-                <n-form-item path="photo" label="头像">
-                  <div class="photo-item">
-                    <div class="selector mb-10">
-                      <n-button type="primary" @click="() => isShowCutter = true"
-                        :size="isMoblie ? 'large' : 'small'">选择</n-button>
-                    </div>
-                    <div class="img-pre">
-                      <img class="mr-10" :src="model.photo">
-                      <img class="mr-10" :src="model.photo">
-                      <img :src="model.photo">
-                    </div>
-                  </div>
-                </n-form-item>
-              </n-form>
+  </div>
+  <!--修改吧信息的模态框-->
+  <Teleport to="body">
+    <Transition :name="isMoblie ? 'moblie' : 'pc'">
+      <div class="edit-bar-modal" v-if="isShowModal">
+        <div class="edit-bar-modal-container">
+          <div class="title mb-10">
+            <span>编辑吧信息</span>
+            <div class="btns">
+              <n-button :size="isMoblie ? 'large' : 'small'" class="mr-5" @click="onHandleCancelEdit">取消</n-button>
+              <n-button type="primary" :size="isMoblie ? 'large' : 'small'" :loading="isLoading"
+                @click="onHandleSubmitEdit">确认</n-button>
             </div>
           </div>
+          <div class="edit-form">
+            <n-form :rules="rules" ref="formIns" :model="model" :size="isMoblie ? 'large' : 'small'">
+              <n-form-item path="bname" label="吧名">
+                <n-input maxlength="15" show-count :placeholder="tips.formPlaceholder('吧名')"
+                  v-model:value="model.bname"></n-input>
+              </n-form-item>
+              <n-form-item path="bdesc" label="吧简介">
+                <n-input :resizable="false" type="textarea" show-count maxlength="120"
+                  :placeholder="tips.formPlaceholder('吧简介')" v-model:value="model.bdesc"></n-input>
+              </n-form-item>
+              <n-form-item path="photo" label="头像">
+                <div class="photo-item">
+                  <div class="selector mb-10">
+                    <n-button type="primary" @click="() => isShowCutter = true"
+                      :size="isMoblie ? 'large' : 'small'">选择</n-button>
+                  </div>
+                  <div class="img-pre">
+                    <img class="mr-10" :src="model.photo">
+                    <img class="mr-10" :src="model.photo">
+                    <img :src="model.photo">
+                  </div>
+                </div>
+              </n-form-item>
+            </n-form>
+          </div>
         </div>
-      </Transition>
-    </Teleport>
-    <!--裁剪吧头像的模态框-->
-    <n-modal v-model:show="isShowCutter">
-      <div class="img-cutter">
-        <ImgCutter :isModal="false" @onChooseImg="onHandleChoose" @cutDown="onHandleCutDown"
-          :boxWidth="isMoblie ? 300 : 500">
-          <template #open>
-            <n-button type="primary" size='medium'>选择</n-button>
-          </template>
-          <template #choose>
-            <n-button type="primary" size='medium'>选择</n-button>
-          </template>
-          <template #cancel>
-            <n-button class="mr-5" size='medium' @click="() => isShowCutter = false">取消</n-button>
-          </template>
-          <template #confirm>
-            <n-button type="primary" size='medium'>确认</n-button>
-          </template>
-        </ImgCutter>
       </div>
-    </n-modal>
-  </div>
+    </Transition>
+  </Teleport>
+  <!--裁剪吧头像的模态框-->
+  <n-modal v-model:show="isShowCutter">
+    <div class="img-cutter">
+      <ImgCutter :isModal="false" @onChooseImg="onHandleChoose" @cutDown="onHandleCutDown"
+        :boxWidth="isMoblie ? 300 : 500">
+        <template #open>
+          <n-button type="primary" size='medium'>选择</n-button>
+        </template>
+        <template #choose>
+          <n-button type="primary" size='medium'>选择</n-button>
+        </template>
+        <template #cancel>
+          <n-button class="mr-5" size='medium' @click="() => isShowCutter = false">取消</n-button>
+        </template>
+        <template #confirm>
+          <n-button type="primary" size='medium'>确认</n-button>
+        </template>
+      </ImgCutter>
+    </div>
+  </n-modal>
 </template>
 
 <script lang='ts' setup>
 // hooks
-import { ref, onBeforeMount, watch, h, reactive,computed } from 'vue'
+import { ref, onBeforeMount, watch, h, reactive, computed } from 'vue'
 import useIsMobile from '@/hooks/useIsMobile';
 import { type FormInst, type FormRules, useMessage } from 'naive-ui';
 import useUserStore from '@/store/user';
 // apis
-import { getBarInfoAPI, editBarInfoAPI } from '@/apis/bar'
+import { getBarInfoAPI, editBarInfoAPI, signInBarAPI } from '@/apis/bar'
 import { uploadImgAPI } from '@/apis/public/file';
 // types
 import type { BarInfoResponse } from '@/apis/bar/types';
@@ -131,12 +166,13 @@ import tips from '@/config/tips';
 // components
 import BarSkeleton from '@/components/skeleton/views/BarSkeleton.vue'
 import ImgCutter from 'vue-img-cutter'
+import ProgressBar from '@/components/progress-bar/index.vue'
 
 // 用户仓库
 const userStore = useUserStore()
 // 是否显示编辑吧按钮
 const isShowEditBtn = computed(() => {
-  if (barInfo.value&&userStore.isLogin) {
+  if (barInfo.value && userStore.isLogin) {
     if (barInfo.value.uid === userStore.userData.uid) {
       return true
     }
@@ -196,6 +232,19 @@ const model = reactive({
   bname: '',
   bdesc: '',
   photo: ''
+})
+// 当前用户的经验比
+const currentExp = computed(() => {
+  if (barInfo.value && barInfo.value.my_bar_rank) {
+    if (barInfo.value.my_bar_rank.score===0) {
+      // 若用户经验为0
+            return `${ barInfo.value.my_bar_rank.score } / 15 `
+    } else {      
+      return `${ barInfo.value.my_bar_rank.score } / ${ Math.round(barInfo.value.my_bar_rank.score / barInfo.value.my_bar_rank.progress) }`
+    }
+  } else {
+    return null
+  }
 })
 
 // 获取吧的信息
@@ -261,6 +310,18 @@ const onHandleSubmitEdit = async () => {
   message.success(tips.successEditBar)
   isShowModal.value = false
   isLoading.value = false
+}
+// 用户签到吧的回调
+const onHandleSignInBar = async () => {
+  const res = await signInBarAPI(props.bid);
+  if (barInfo.value && barInfo.value.my_bar_rank) {
+    barInfo.value.is_checked = true;
+    barInfo.value.my_bar_rank.progress = res.data.progress
+    barInfo.value.my_bar_rank.level = res.data.level
+    barInfo.value.my_bar_rank.score = res.data.score
+    barInfo.value.my_bar_rank.label=res.data.label
+  }
+  message.success(tips.successSignIn)
 }
 
 // 路由更新 获取最新的吧数据
@@ -346,86 +407,96 @@ defineOptions({
   }
 }
 
-.bar-info-container {
-  display: flex;
-  align-items: center;
-
-  .bar-img {
-    img {
-      width: 180px;
-      height: 180px;
-      min-width: 180px;
-      min-height: 180px;
-      object-fit: contain;
-      cursor: pointer;
+.bar-info {
+  .user-check-bar-info {
+    .current-exp {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
   }
 
-  .bar-info {
-    height: 180px;
+  .bar-info-container {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex-grow: 1;
-    box-sizing: border-box;
-    padding: 10px;
+    align-items: center;
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-      padding-right: 120px;
-
-      .btns {
-        align-items: center;
-        position: absolute;
-        right: 0;
-        display: flex;
-      }
-
-      .bar-title {
-        display: flex;
-        align-items: center;
-      }
-
+    .bar-img {
       img {
-        width: 50px;
+        width: 180px;
+        height: 180px;
+        min-width: 180px;
+        min-height: 180px;
+        object-fit: contain;
         cursor: pointer;
-        height: 50px;
-        display: none;
-      }
-
-      .title {
-        font-size: 18px;
-        font-weight: 600;
       }
     }
 
-    .desc {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      cursor: pointer;
-    }
-
-
-    .data {
+    .bar-info {
+      height: 180px;
       display: flex;
-      align-items: center;
-    }
-
-    .user {
-      display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: space-between;
+      flex-grow: 1;
+      box-sizing: border-box;
+      padding: 10px;
 
-      img {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        padding-right: 120px;
+
+        .btns {
+          align-items: center;
+          position: absolute;
+          right: 0;
+          display: flex;
+        }
+
+        .bar-title {
+          display: flex;
+          align-items: center;
+        }
+
+        img {
+          width: 50px;
+          cursor: pointer;
+          height: 50px;
+          display: none;
+        }
+
+        .title {
+          font-size: 18px;
+          font-weight: 600;
+        }
+      }
+
+      .desc {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        cursor: pointer;
+      }
+
+
+      .data {
+        display: flex;
+        align-items: center;
+      }
+
+      .user {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        img {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+        }
       }
     }
   }
@@ -448,22 +519,24 @@ defineOptions({
     }
   }
 
-  .bar-info-container {
-    .bar-img {
-      img {
-        display: none;
-      }
-    }
-
-    .bar-info {
-      padding: 0;
-
-      .header {
+  .bar-info {
+    .bar-info-container {
+      .bar-img {
         img {
-          display: inline;
+          display: none;
         }
       }
 
+      .bar-info {
+        padding: 0;
+
+        .header {
+          img {
+            display: inline;
+          }
+        }
+
+      }
     }
   }
 }
@@ -547,4 +620,5 @@ defineOptions({
   .copyright {
     display: none !important;
   }
-}</style>
+}
+</style>

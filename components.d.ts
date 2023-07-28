@@ -64,6 +64,7 @@ declare module 'vue' {
     NTimelineItem: typeof import('naive-ui')['NTimelineItem']
     NUpload: typeof import('naive-ui')['NUpload']
     Pagination: typeof import('./src/components/pagination/index.vue')['default']
+    ProgressBar: typeof import('./src/components/progress-bar/index.vue')['default']
     ReplyDetail: typeof import('./src/components/common/ReplyDetail/index.vue')['default']
     ReplyItem: typeof import('./src/components/item/ReplyItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

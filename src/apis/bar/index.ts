@@ -1,7 +1,7 @@
 import request from '@/utils/request';
-import type { BarInfoResponse,EditBarBody,EditBarResponse } from './types';
+import type { BarInfoResponse,EditBarBody,EditBarResponse,UserSignInResponse } from './types';
 import type { ArticleListResponse } from '../public/types/article';
-import { UserListResponse } from '../public/types/user';
+import type { UserListResponse } from '../public/types/user';
 
 /**
  * 获取吧的详情数据
@@ -63,4 +63,17 @@ export const getBarFollowUserAPI = (bid: number, page: number, pageSize: number,
  */
 export const editBarInfoAPI = (data: EditBarBody) => {
   return request.put<EditBarResponse>('/bar/edit',data)
+}
+
+/**
+ * 用户签到吧
+ * @param bid 吧id
+ * @returns 
+ */
+export const signInBarAPI = (bid: number) => {
+  return request.get<UserSignInResponse>('/bar/signIn', {
+    params: {
+      bid
+    }
+  })
 }
