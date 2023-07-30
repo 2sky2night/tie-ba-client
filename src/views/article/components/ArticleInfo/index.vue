@@ -27,6 +27,7 @@
               <RouterLink class="text" :to="`/user/${articleInfo.uid}`">
                 {{ articleInfo.user.username }}
               </RouterLink>
+              <BarRank class="ml-5" :level="articleInfo.user.bar_rank.level" :label="articleInfo.user.bar_rank.label"></BarRank>
             </div>
             <follow-btn :uid="articleInfo.user.uid" v-model:is-followed="articleInfo.user.is_followed"
               :is-fans="articleInfo.user.is_fans" size="small" />
@@ -94,6 +95,7 @@ import { Star } from '@vicons/ionicons5'
 import { MdThumbsUp } from '@vicons/ionicons4'
 import Actions from './components/Actions.vue';
 import ArticelSkeleton from '@/components/skeleton/views/ArticleSkeleton.vue'
+import BarRank from '@/components/common/BarRank/index.vue'
 
 const props = defineProps<{ aid: number }>()
 const articleInfo = ref<ArticleInfoResponse | null>(null)
@@ -197,6 +199,16 @@ defineOptions({
         align-items: center;
 
         .username {
+          display:flex;
+          align-items: center;
+          .rank-info{
+            display: flex;
+            align-items: center;
+            span{
+              color:var(--text-color-2);
+              font-size: 12px;
+            }
+          }
           img {
             cursor: pointer;
             border-radius: 50%;
@@ -287,7 +299,7 @@ defineOptions({
 
           &:hover,
           &.active {
-            color: yellow;
+            color: #f5b44b;
           }
         }
       }

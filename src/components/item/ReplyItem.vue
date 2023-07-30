@@ -4,6 +4,7 @@
       <div class="user">
         <img class="mr-5" v-lazyImg="reply.user.avatar">
         <span class="username text" @click.stop="()=>onHandleGoUser(reply.uid)">{{ reply.user.username }}</span>
+        <BarRank class="ml-5" :label="reply.user.bar_rank.label" :level="reply.user.bar_rank.level"></BarRank>
       </div>
       <div class="btn" @click.stop="">
         <n-icon @click="toLikeReply" size="18" :color="props.reply.is_liked ? 'red' : ''">
@@ -46,6 +47,7 @@ import { formatDBDateTime, formatCount } from '@/utils/tools';
 // components
 import { NIcon } from 'naive-ui';
 import { LikeFilled, LikeOutlined } from '@vicons/antd';
+import BarRank from '@/components/common/BarRank/index.vue'
 // hooks
 import { computed, inject } from 'vue'
 import useUserStore from '@/store/user';
@@ -161,6 +163,7 @@ defineOptions({
     }
 
     .user {
+      display: flex;
       img {
         width: 30px;
         height: 30px;

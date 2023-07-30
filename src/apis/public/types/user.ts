@@ -1,4 +1,5 @@
-import { ListResponse } from ".";
+import type { ListResponse } from ".";
+import type { BarRank } from "./bar";
 
 /**
  * 用户文章数据
@@ -57,6 +58,20 @@ export interface UserItem extends UserBrieflyInfo {
     follow_bar_count: number;
     follow_user_count: number;
     create_bar_count: number;
+}
+
+/**
+ * 用户简要信息+吧等级信息
+ */
+export interface UserBrieflyInfoWithBarRank extends UserBrieflyInfo {
+    bar_rank: BarRank
+}
+
+/**
+ * 用户基本信息+吧等级信息
+ */
+export interface UserBaseWithBarRank extends UserBaseItem {
+    bar_rank: BarRank
 }
 
 /**

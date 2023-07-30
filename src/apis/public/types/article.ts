@@ -1,5 +1,5 @@
 import type { BarBriefInfo } from './bar';
-import type { UserBaseItem, UserBrieflyInfo } from './user';
+import type { UserBaseItem, UserBaseWithBarRank, UserBrieflyInfo, UserBrieflyInfoWithBarRank } from './user';
 import type { ListResponse } from '.';
 /**
  * 帖子项信息
@@ -33,7 +33,7 @@ export interface CommentItemWithout {
   like_count: number;
   photo: string[] | null;
   uid: number;
-  user: UserBrieflyInfo;
+  user: UserBrieflyInfoWithBarRank;
 }
 
 
@@ -68,7 +68,7 @@ export interface ReplyItem {
    */
   type: 1 | 2;
   uid: number;
-  user: UserBaseItem;
+  user: UserBaseWithBarRank;
 }
 
 /**

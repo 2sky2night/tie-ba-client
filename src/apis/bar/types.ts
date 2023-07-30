@@ -63,3 +63,50 @@ export interface UserSignInResponse {
    */
   progress: number;
 }
+
+/**
+ * 吧等级制度的响应结果
+ */
+export interface BarRankRuleResponse {
+  bdesc: string;
+  bid: number;
+  bname: string;
+  createTime: string;
+  photo: string;
+  rank_rules: BarRankItem[];
+  uid: number;
+}
+
+/**
+ * 吧等级规则项
+ */
+export interface BarRankItem {
+  /**
+   * 等级
+   */
+  level: number;
+  /**
+   * 等级昵称
+   */
+  label: string;
+  /**
+   * 对应所需的经验
+   */
+  score: number;
+}
+
+/**
+ * 编辑吧的请求体
+ */
+export interface EditBarRankRuleBody {
+  bid: number;
+  /**
+   * 等级头衔昵称列表
+   */
+  rankLableList: string[];
+}
+
+/**
+ * 编辑吧等级的响应结果
+ */
+export type EditBarRankResponse = null

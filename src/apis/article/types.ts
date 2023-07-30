@@ -1,4 +1,4 @@
-import type { UserBrieflyInfo } from '../public/types/user';
+import type { UserBrieflyInfoWithBarRank } from '../public/types/user';
 import type { BarBase } from '../public/types/bar';
 
 /**
@@ -18,7 +18,7 @@ export interface ArticleInfoResponse {
   star_count: number;
   title: string;
   uid: number;
-  user: UserBrieflyInfo;
+  user: UserBrieflyInfoWithBarRank;
 }
 
 /**

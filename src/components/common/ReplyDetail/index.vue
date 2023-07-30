@@ -17,6 +17,7 @@
             <div class="user-info">
               <img class="mr-10" :src="comment.user.avatar">
               <span class="text" @click.stop="onHandleGoUser">{{ comment.user.username }}</span>
+              <BarRank class="ml-5" :level="comment.user.bar_rank.level" :label="comment.user.bar_rank.label"></BarRank>
             </div>
             <div class="like-data">
               <n-icon @click.stop="toLikeComment" size="20" :color="comment?.is_liked ? 'red' : ''">
@@ -77,6 +78,7 @@ import useThemeStore from '@/store/theme';
 import ReplyItem from '@/components/item/ReplyItem.vue';
 import { NIcon } from 'naive-ui';
 import { LikeFilled, LikeOutlined } from '@vicons/antd';
+import BarRank from '@/components/common/BarRank/index.vue'
 // directives
 import imgPre from '@/directives/imgPre';
 // utils
@@ -112,7 +114,7 @@ const placeholderTips = computed(() => {
   } else {
     // 根据当前rid找到需要回复的用户
     const item = list.find(ele => ele.rid === currentRid.value)
-    const text = item ? tips.hasReplyPlaceholder(item?.user.username) : null
+    const text = item ? tips.hasReplyPlaceholder(item.user.username) : null
     return text
   }
 })
@@ -342,7 +344,9 @@ defineOptions({
     .comment-infor {
       padding: 10px;
       cursor: pointer;
-
+      .user-info{
+        display: flex;
+      }
       .user {
         display: flex;
         align-items: center;
@@ -381,7 +385,7 @@ defineOptions({
           color: var(--text-color-2);
           font-size: 12px;
           position: absolute;
-          top: -12px;
+          top: -18px;
           left: 50px;
         }
 

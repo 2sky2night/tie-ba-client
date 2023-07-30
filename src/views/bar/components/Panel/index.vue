@@ -7,6 +7,9 @@
       <n-tab-pane name="user" tab="关注">
         <FollowedUser :bid="bid" />
       </n-tab-pane>
+      <n-tab-pane name="rank" tab="吧等级">
+        <RankInfoVue :bid="bid" />
+      </n-tab-pane>
     </n-tabs>
   </div>
 </template>
@@ -15,6 +18,7 @@
 // components
 import Articles from './components/Articles.vue'
 import FollowedUser from './components/FollowedUser.vue';
+import RankInfoVue from './components/RankInfo.vue';
 // hooks
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
@@ -23,7 +27,7 @@ const tabIsCenter = ref(false)
 defineProps<{ bid: number }>()
 // 根据视口宽度调整tab布局
 onMounted(() => {
-  function checkWindow () {
+  function checkWindow() {
     if (window.innerWidth <= 650) {
       tabIsCenter.value = true
     } else {

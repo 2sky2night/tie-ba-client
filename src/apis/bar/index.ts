@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-import type { BarInfoResponse,EditBarBody,EditBarResponse,UserSignInResponse } from './types';
+import type { BarInfoResponse, EditBarBody, EditBarResponse, UserSignInResponse, BarRankRuleResponse,EditBarRankResponse,EditBarRankRuleBody } from './types';
 import type { ArticleListResponse } from '../public/types/article';
 import type { UserListResponse } from '../public/types/user';
 
@@ -76,4 +76,26 @@ export const signInBarAPI = (bid: number) => {
       bid
     }
   })
+}
+
+/**
+ * 获取吧等级制度信息
+ * @param bid 吧id
+ * @returns 
+ */
+export const getBarRankRuleAPI = (bid: number) => {
+  return request.get<BarRankRuleResponse>('/bar/rank/info', {
+    params: {
+      bid
+    }
+  })
+}
+
+/**
+ * 编辑吧等级头衔昵称
+ * @param data 头衔昵称列表
+ * @returns 
+ */
+export const editBarBankRuleAPI = (data: EditBarRankRuleBody) => {
+  return request.put<EditBarRankResponse>('/bar/edit/rank',data)
 }

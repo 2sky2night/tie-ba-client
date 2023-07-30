@@ -2,12 +2,14 @@
     <div class="comment-item-container" ref="itemIns">
         <div class="header">
             <div class="username">
-                <RouterLink :to="`/user/${ comment.uid }`" @click.stop="">
+                <RouterLink :to="`/user/${comment.uid}`" @click.stop="">
                     <img v-lazyImg="comment.user.avatar" @mouseenter="showCard = true" @mouseleave="onHandleMouseLeave">
                 </RouterLink>
-                <RouterLink class="ml-10" :to="`/user/${ comment.uid }`" @click.stop="">
+                <RouterLink :to="`/user/${comment.uid}`" @click.stop="">
                     <span class="text">{{ comment.user.username }}</span>
                 </RouterLink>
+                <BarRank v-if="!props.goArticle" :level="comment.user.bar_rank.level"
+                    :label="comment.user.bar_rank.label" />
                 <Transition name="card">
                     <UserCard ref="userCardIns" :uid="comment.uid" v-if="showCard" v-model:show="showCard" :top="60"
                         :left="0" />
@@ -17,14 +19,14 @@
         <div class="content" @click="onHandleLookReply">
             <p>{{ comment.content }}</p>
             <div class="img-list mb-10" v-if="comment.photo !== null">
-                <img v-lazyImg="item" v-imgPre="item" v-for="      item       in comment.photo" :key="item">
+                <img v-lazyImg="item" v-imgPre="item" v-for="item in comment.photo" :key="item">
             </div>
             <div class="reply-container mb-10" v-if="comment.reply.total">
                 <div class="reply-pre">
                     <div class="reply-pre-item" v-for="item in comment.reply.list.slice(0, 3)" :key="item.rid">
                         <div class="user">
                             <img class="mr-5" v-lazyImg="item.user.avatar">
-                            <RouterLink :to="`/user/${ item.uid }`" @click.stop="">
+                            <RouterLink :to="`/user/${item.uid}`" @click.stop="">
                                 <span class="text">{{ item.user.username }}</span>
                             </RouterLink>
                         </div>
@@ -35,7 +37,7 @@
                             </div>
                             <div class="reply ml-5" v-if="item.reply">
                                 <span>回复</span>
-                                <RouterLink :to="`/user/${ item.reply.uid }`" @click.stop="">
+                                <RouterLink :to="`/user/${item.reply.uid}`" @click.stop="">
                                     <span class="text ml-5">@{{ item.reply.user.username }}</span>
                                 </RouterLink>
                                 <span>:</span>
@@ -78,6 +80,7 @@ import { likeCommentAPI, cancelLikeCommentAPI } from '@/apis/public/article'
 // components
 import { LikeOutlined, LikeFilled } from '@vicons/antd'
 import UserCard from '@/components/common/UserCard/index.vue'
+import BarRank from '@/components/common/BarRank/index.vue'
 // types
 import type { CommentItemProps } from '@/types/components/item';
 // utils
@@ -100,8 +103,8 @@ const props = withDefaults(defineProps<CommentItemProps>(), {
     goArticle: false
 })
 const emit = defineEmits<{
-    'update:likeCount': [ value: number ];
-    'update:isLike': [ value: boolean ]
+    'update:likeCount': [value: number];
+    'update:isLike': [value: boolean]
 }>()
 // 是否显示用户卡片
 const showCard = ref(false)
@@ -146,7 +149,7 @@ const onHandleMouseLeave = () => {
 // 点击查看当前评论的全部回复的回调
 const onHandleLookReply = () => {
     // 若点击评论要跳转到对应帖子中去 则点击评论不显示回复详情
-    !props.goArticle&&replyDrawer(props.comment.cid)
+    !props.goArticle && replyDrawer(props.comment.cid)
 }
 // 监听抽屉的点赞评论 从而给对应评论点赞
 PubSub.subscribe('to-like-comment', async (_, cid: number) => {
@@ -192,7 +195,11 @@ defineOptions({
 
         .username {
             position: relative;
-
+            display: flex;
+            align-items: center;
+            a{
+                margin-right:10px ;
+            }
             img {
                 border-radius: 50%;
                 width: 50px;
@@ -204,6 +211,7 @@ defineOptions({
     .content {
         margin-left: 60px;
         cursor: pointer;
+
         p {
             word-break: break-all;
             margin-bottom: 15px;
@@ -316,7 +324,23 @@ defineOptions({
 
 @media screen and (max-width:650px) {
     .comment-item-container {
+        .header {
+            .username {
+                a{
+                    span{
+                        font-size: 13px;
+                    }
+                    margin-right: 3px;
+                }
+                img {
+                    width: 35px;
+                    height: 35px;
+                }
+            }
+        }
+
         .content {
+            margin-left: 40px;
             .img-list {
                 display: flex;
                 flex-direction: column;

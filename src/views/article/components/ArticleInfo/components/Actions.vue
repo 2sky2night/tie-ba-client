@@ -234,7 +234,7 @@ function toCommentArea() {
         &:nth-child(2) {
           .item {
             &.active {
-              color: yellow;
+              color: #f5b44b;
             }
           }
         }

@@ -3,7 +3,7 @@
     <div class="order mb-10">
       <n-select :loading="isLoading" :value="order.type" :default-value="order.type" @update:value="onHandleTypeUpdate"
         :options="selectOption" />
-      <n-switch size="large" :loading="isLoading" :round="false" :vlaue="order.desc" @update:value="onHandleDescUpdate">
+      <n-switch size="large" :loading="isLoading" :round="false" :value="order.desc" @update:value="onHandleDescUpdate">
         <template #checked>
           降序
         </template>
@@ -34,7 +34,7 @@ const listIns = ref<ListPageIns>()
 // 排序
 const order = reactive<{ desc: boolean, type: 1 | 2 }>({
   desc: true,
-  type: 1
+  type: 2
 })
 // 排序依据下拉框选项
 const selectOption: SelectOption[] = [

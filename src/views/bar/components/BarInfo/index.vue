@@ -5,16 +5,15 @@
         <div class="bar-img">
           <img v-imgPre="barInfo.photo" :src="barInfo.photo">
         </div>
-        <div class="bar-info ml-10">
+        <div class="bar-info ml-10" :class="{ 'has-check': barInfo.is_followed }">
           <div class="header mb-10">
             <div class="bar-title">
               <img class="mr-10" v-imgPre="barInfo.photo" :src="barInfo.photo">
               <div class="title">{{ barInfo.bname }}吧</div>
             </div>
             <div class="btns">
-              <follow-bar-btn @update:isFollowed="onHandleFollowBar" :bid="barInfo.bid"
-                v-model:isFollowed="barInfo.is_followed" size="small"
-                v-model:follow-count="barInfo.user_follow_count"></follow-bar-btn>
+              <follow-bar-btn :bid="barInfo.bid" v-model:isFollowed="barInfo.is_followed" size="small"
+                v-model:follow-count="barInfo.user_follow_count" @update:isFollowed="onHandleFollowBar"></follow-bar-btn>
               <n-button v-if="isShowEditBtn" size="small" type='primary' class="ml-10"
                 @click="onHandleShowModel">编辑</n-button>
             </div>
@@ -36,35 +35,35 @@
           <div class="user">
             <div class="username">
               <span class="mr-5">吧主</span>
-              <RouterLink :to="`/user/${ barInfo.uid }`">
+              <RouterLink :to="`/user/${barInfo.uid}`">
                 <img :src="barInfo.user.avatar" class="mr-5">
               </RouterLink>
-              <RouterLink :to="`/user/${ barInfo.uid }`">
+              <RouterLink :to="`/user/${barInfo.uid}`">
                 <span class="text">{{ barInfo.user.username }}</span>
               </RouterLink>
             </div>
             <follow-btn :uid="barInfo.uid" size="small" v-model:isFollowed="barInfo.user.is_followed"
               :is-fans="barInfo.user.is_fans"></follow-btn>
           </div>
-          <div class="user-check-bar-info" v-if="barInfo.my_bar_rank && barInfo.my_bar_rank.level > 0">
-        <div class="mb-5">
-          <span>LV{{ barInfo.my_bar_rank.level }} {{ barInfo.my_bar_rank.label }}</span>
-          <ProgressBar :value="barInfo.my_bar_rank.progress" size="small" />
-        </div>
-        <div class="current-exp mb-5">
-          <div>
-            <span class="text">经验:</span>
-            <span>{{ currentExp }}</span>
+          <div class="user-check-bar-info" id="check-pc" v-if="barInfo.my_bar_rank && barInfo.my_bar_rank.level > 0">
+            <div class="mb-5">
+              <span style="font-size: 13px;">LV{{ barInfo.my_bar_rank.level }} {{ barInfo.my_bar_rank.label }}</span>
+              <ProgressBar :value="barInfo.my_bar_rank.progress" size="small" />
+            </div>
+            <div class="current-exp mb-5">
+              <div>
+                <span class="text">经验:</span>
+                <span>{{ currentExp }}</span>
+              </div>
+              <n-button @click="onHandleSignInBar" :disabled="barInfo.is_checked" size="small"
+                :type="barInfo.is_checked ? 'primary' : 'default'">
+                <span style="font-size: 12px;"> {{ barInfo.is_checked ? '已签到' : '签到' }}</span>
+              </n-button>
+            </div>
           </div>
-          <n-button @click="onHandleSignInBar" :disabled="barInfo.is_checked" size="small"
-            :type="barInfo.is_checked ? 'primary' : 'default'">
-            <span style="font-size: 12px;"> {{ barInfo.is_checked ? '已签到' : '签到' }}</span>
-          </n-button>
         </div>
       </div>
-        </div>
-      </div>
-      <div class="user-check-bar-info" v-if="barInfo.my_bar_rank && barInfo.my_bar_rank.level > 0">
+      <div class="user-check-bar-info" id="check-pe" v-if="barInfo.my_bar_rank && barInfo.my_bar_rank.level > 0">
         <div class="mb-5">
           <span>LV{{ barInfo.my_bar_rank.level }} {{ barInfo.my_bar_rank.label }}</span>
           <ProgressBar :value="barInfo.my_bar_rank.progress" />
@@ -151,13 +150,14 @@
 // hooks
 import { ref, onBeforeMount, watch, h, reactive, computed } from 'vue'
 import useIsMobile from '@/hooks/useIsMobile';
-import { type FormInst, type FormRules, useMessage } from 'naive-ui';
+import { useMessage } from 'naive-ui'
 import useUserStore from '@/store/user';
 // apis
-import { getBarInfoAPI, editBarInfoAPI, signInBarAPI } from '@/apis/bar'
+import { getBarInfoAPI, editBarInfoAPI, signInBarAPI, getBarRankRuleAPI } from '@/apis/bar'
 import { uploadImgAPI } from '@/apis/public/file';
 // types
-import type { BarInfoResponse } from '@/apis/bar/types';
+import { type FormInst, type FormRules } from 'naive-ui';
+import type { BarInfoResponse, BarRankItem } from '@/apis/bar/types';
 // utils
 import { formatCount } from '@/utils/tools';
 import modal from '@/render/modal/message';
@@ -184,27 +184,27 @@ const formIns = ref<FormInst | null>(null)
 // 编辑的表单规则
 const rules: FormRules = {
   bname: {
-    validator (_, value: string) {
+    validator(_, value: string) {
       if (value.trim()) {
         return true
       } else {
         return new Error(tips.formNotEmpty('吧名'))
       }
     },
-    trigger: [ 'input', 'blur' ]
+    trigger: ['input', 'blur']
   },
   bdesc: {
-    validator (_, value: string) {
+    validator(_, value: string) {
       if (value.trim()) {
         return true
       } else {
         return new Error(tips.formNotEmpty('吧简介'))
       }
     },
-    trigger: [ 'input', 'blur' ]
+    trigger: ['input', 'blur']
   },
   photo: {
-    validator (_, value: string) {
+    validator(_, value: string) {
       if (value.trim()) {
         return true
       } else {
@@ -236,11 +236,13 @@ const model = reactive({
 // 当前用户的经验比
 const currentExp = computed(() => {
   if (barInfo.value && barInfo.value.my_bar_rank) {
-    if (barInfo.value.my_bar_rank.score===0) {
+    if (barInfo.value.my_bar_rank.score === 0) {
       // 若用户经验为0
-            return `${ barInfo.value.my_bar_rank.score } / 15 `
-    } else {      
-      return `${ barInfo.value.my_bar_rank.score } / ${ Math.round(barInfo.value.my_bar_rank.score / barInfo.value.my_bar_rank.progress) }`
+      return `${barInfo.value.my_bar_rank.score} / 15 `
+    } else if (barInfo.value.my_bar_rank.score >= 20000) {
+      return `${barInfo.value.my_bar_rank.score} / 0`
+    } else {
+      return `${barInfo.value.my_bar_rank.score} / ${Math.round(barInfo.value.my_bar_rank.score / barInfo.value.my_bar_rank.progress)}`
     }
   } else {
     return null
@@ -248,7 +250,7 @@ const currentExp = computed(() => {
 })
 
 // 获取吧的信息
-async function getBarData () {
+async function getBarData() {
   const res = await getBarInfoAPI(props.bid)
   barInfo.value = res.data
   model.bdesc = res.data.bdesc
@@ -262,9 +264,33 @@ const onHandleShowDesc = () => {
   ])
 }
 // 关注吧状态更新的回调 (自定义事件可以绑定多个处理函数?)
-const onHandleFollowBar = () => {
+const onHandleFollowBar = async (v: boolean) => {
   // 通知panel下的用户关注列表组件重新加载
   Pubsub.publish('toFollowBar')
+  // 通过当前用户关注吧的状态来显示签到模块
+  if (v) {
+    // 关注了 更新用户签到信息为1级
+    // 需要先发送请求获取吧等级制度获取1级的头衔昵称
+    const res = await getBarRankRuleAPI(props.bid);
+
+    (barInfo.value as BarInfoResponse).my_bar_rank = {
+      // 获取一级的吧等级头衔
+      label: res.data.rank_rules[0].label,
+      level: 1,
+      score: 0,
+      progress: 0
+    }
+  } else {
+    // 取消关注了 清除用户签到信息
+    (barInfo.value as BarInfoResponse).my_bar_rank = {
+      label: '绿牌页友',
+      level: 0,
+      score: 0,
+      progress: 0
+    };
+    // 清空签到状态
+    (barInfo.value as BarInfoResponse).is_checked = false
+  }
 }
 // 点击编辑吧的回调
 const onHandleShowModel = () => isShowModal.value = true
@@ -319,10 +345,16 @@ const onHandleSignInBar = async () => {
     barInfo.value.my_bar_rank.progress = res.data.progress
     barInfo.value.my_bar_rank.level = res.data.level
     barInfo.value.my_bar_rank.score = res.data.score
-    barInfo.value.my_bar_rank.label=res.data.label
+    barInfo.value.my_bar_rank.label = res.data.label
   }
   message.success(tips.successSignIn)
 }
+// 若吧主修改了吧头衔信息 需要同步更新当前等级信息
+PubSub.subscribe('updateRank', (_, list: BarRankItem[]) => {
+  if (barInfo.value && barInfo.value.my_bar_rank) {
+    barInfo.value.my_bar_rank.label = list[barInfo.value.my_bar_rank.level - 1].label
+  }
+})
 
 // 路由更新 获取最新的吧数据
 watch(() => props.bid, () => {
@@ -408,6 +440,14 @@ defineOptions({
 }
 
 .bar-info {
+  #check-pc {
+    display: block;
+  }
+
+  #check-pe {
+    display: none;
+  }
+
   .user-check-bar-info {
     .current-exp {
       display: flex;
@@ -422,8 +462,8 @@ defineOptions({
 
     .bar-img {
       img {
-        width: 180px;
-        height: 180px;
+        width: 200px;
+        height: 200px;
         min-width: 180px;
         min-height: 180px;
         object-fit: contain;
@@ -432,13 +472,18 @@ defineOptions({
     }
 
     .bar-info {
-      height: 180px;
+      height: 200px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       flex-grow: 1;
       box-sizing: border-box;
       padding: 10px;
+      transition: var(--time-normal) ease;
+
+      &.has-check {
+        height: 230px;
+      }
 
       .header {
         display: flex;
@@ -520,6 +565,18 @@ defineOptions({
   }
 
   .bar-info {
+    &.has-check {
+      height: 200px !important;
+    }
+
+    #check-pc {
+      display: none;
+    }
+
+    #check-pe {
+      display: block;
+    }
+
     .bar-info-container {
       .bar-img {
         img {
