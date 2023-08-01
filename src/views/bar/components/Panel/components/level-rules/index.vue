@@ -171,7 +171,9 @@ watch(() => props.bid, () => {
   barRank.length = 0
   getData()
 })
-
+defineOptions({
+  name:'BarLevelRules'
+})
 </script>
 
 <style scoped lang="scss">

@@ -64,7 +64,9 @@ PubSub.subscribe('toFollowBar', async () => {
 watch(() => props.bid, () => {
   onHandleReset()
 })
-
+defineOptions({
+  name:'BarFollowedUser'
+})
 </script>
 
 <style scoped lang='scss'>

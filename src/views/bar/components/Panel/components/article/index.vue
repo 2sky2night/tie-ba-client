@@ -77,7 +77,9 @@ const onHandleDescUpdate = async (value: boolean) => {
 watch(() => props.bid, () => {
   (listIns.value as ListPageIns).toResetPage()
 })
-
+defineOptions({
+  name:'BarArticle'
+})
 </script>
 
 <style scoped lang='scss'>

@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-import type { BarInfoResponse, EditBarBody, EditBarResponse, UserSignInResponse, BarRankRuleResponse,EditBarRankResponse,EditBarRankRuleBody } from './types';
+import type { BarInfoResponse, EditBarBody, EditBarResponse, UserSignInResponse, BarRankRuleResponse, EditBarRankResponse, EditBarRankRuleBody, BarRankingResponse, BarDistributionResponse } from './types';
 import type { ArticleListResponse } from '../public/types/article';
 import type { UserListResponse } from '../public/types/user';
 
@@ -62,7 +62,7 @@ export const getBarFollowUserAPI = (bid: number, page: number, pageSize: number,
  * @returns 
  */
 export const editBarInfoAPI = (data: EditBarBody) => {
-  return request.put<EditBarResponse>('/bar/edit',data)
+  return request.put<EditBarResponse>('/bar/edit', data)
 }
 
 /**
@@ -97,5 +97,37 @@ export const getBarRankRuleAPI = (bid: number) => {
  * @returns 
  */
 export const editBarBankRuleAPI = (data: EditBarRankRuleBody) => {
-  return request.put<EditBarRankResponse>('/bar/edit/rank',data)
+  return request.put<EditBarRankResponse>('/bar/edit/rank', data)
+}
+
+/**
+ * 分页获取本吧等级排行榜
+ * @param bid 吧id
+ * @param page 页码
+ * @param pageSize 页长度
+ * @param desc 根据经验分数降序
+ * @returns 
+ */
+export const getBarRankingAPI = (bid: number, page: number, pageSize: number, desc: boolean) => {
+  return request.get<BarRankingResponse>('/bar/ranking', {
+    params: {
+      bid,
+      desc: desc ? 1 : 0,
+      limit: pageSize,
+      offset: (page - 1) * pageSize
+    }
+  })
+}
+
+/**
+ * 获取本吧等级人数分布
+ * @param bid 吧id
+ * @returns 
+ */
+export const getBarRankDisAPI = (bid: number) => {
+  return request.get<BarDistributionResponse>('/bar/rank/distribution', {
+    params: {
+      bid
+    }
+  })
 }

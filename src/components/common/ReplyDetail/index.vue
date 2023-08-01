@@ -28,7 +28,7 @@
           </div>
           <div class="content">
             <span class="times" v-once>{{ formatDBDateTime(comment.createTime) }}</span>
-            <p>{{ comment.content }}</p>
+            <pre>{{ comment.content }}</pre>
             <div v-if="comment.photo !== null" class="img-list mt-10">
               <img v-imgPre="item" v-for="item in comment.photo" :src="item">
             </div>
@@ -380,7 +380,9 @@ defineOptions({
         padding-left: 50px;
         position: relative;
         padding-top: 10px;
-
+        pre{
+          font-family: v-sans, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
         .times {
           color: var(--text-color-2);
           font-size: 12px;

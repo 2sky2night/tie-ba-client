@@ -8,7 +8,7 @@
             :placeholder="tips.formPlaceholder('帖子标题')"></n-input>
         </n-form-item>
         <n-form-item label="内容" path="content">
-          <n-input v-model:value="model.content" type="textarea" :placeholder="tips.formPlaceholder('帖子内容')"></n-input>
+          <MdEdit style="width: 100%;" v-model:value="model.content"></MdEdit>
         </n-form-item>
         <n-form-item label="配图" path="photo">
           <UploadImg ref="uploadIns" v-model:photo="model.photo" />
@@ -41,6 +41,7 @@ import tips from '@/config/tips';
 // components
 import BarSelect from './components/BarSelect.vue'
 import UploadImg from './components/UploadImg.vue';
+import MdEdit from '@/components/common/MdEdit/index.vue'
 
 // 表单实例
 const formIns = ref<FormInst | null>(null)
@@ -82,6 +83,9 @@ const rules: FormRules = {
     required: true,
     validator (_, value: string) {
       if (value.trim()) {
+        if (value.trim().length > 9999) {
+          return new Error(tips.textAllowSize(9999))
+        }
         return true
       } else {
         return new Error(tips.textNameNotEmpty('帖子内容'))

@@ -2,10 +2,10 @@
     <div class="comment-item-container" ref="itemIns">
         <div class="header">
             <div class="username">
-                <RouterLink :to="`/user/${comment.uid}`" @click.stop="">
+                <RouterLink :to="`/user/${ comment.uid }`" @click.stop="">
                     <img v-lazyImg="comment.user.avatar" @mouseenter="showCard = true" @mouseleave="onHandleMouseLeave">
                 </RouterLink>
-                <RouterLink :to="`/user/${comment.uid}`" @click.stop="">
+                <RouterLink :to="`/user/${ comment.uid }`" @click.stop="">
                     <span class="text">{{ comment.user.username }}</span>
                 </RouterLink>
                 <BarRank v-if="!props.goArticle" :level="comment.user.bar_rank.level"
@@ -17,16 +17,16 @@
             </div>
         </div>
         <div class="content" @click="onHandleLookReply">
-            <p>{{ comment.content }}</p>
+            <pre>{{ comment.content }}</pre>
             <div class="img-list mb-10" v-if="comment.photo !== null">
-                <img v-lazyImg="item" v-imgPre="item" v-for="item in comment.photo" :key="item">
+                <img v-lazyImg="item" v-imgPre="item" v-for=" item  in comment.photo" :key="item">
             </div>
             <div class="reply-container mb-10" v-if="comment.reply.total">
                 <div class="reply-pre">
-                    <div class="reply-pre-item" v-for="item in comment.reply.list.slice(0, 3)" :key="item.rid">
+                    <div class="reply-pre-item" v-for=" item  in comment.reply.list.slice(0, 3)" :key="item.rid">
                         <div class="user">
                             <img class="mr-5" v-lazyImg="item.user.avatar">
-                            <RouterLink :to="`/user/${item.uid}`" @click.stop="">
+                            <RouterLink :to="`/user/${ item.uid }`" @click.stop="">
                                 <span class="text">{{ item.user.username }}</span>
                             </RouterLink>
                         </div>
@@ -37,7 +37,7 @@
                             </div>
                             <div class="reply ml-5" v-if="item.reply">
                                 <span>回复</span>
-                                <RouterLink :to="`/user/${item.reply.uid}`" @click.stop="">
+                                <RouterLink :to="`/user/${ item.reply.uid }`" @click.stop="">
                                     <span class="text ml-5">@{{ item.reply.user.username }}</span>
                                 </RouterLink>
                                 <span>:</span>
@@ -103,8 +103,8 @@ const props = withDefaults(defineProps<CommentItemProps>(), {
     goArticle: false
 })
 const emit = defineEmits<{
-    'update:likeCount': [value: number];
-    'update:isLike': [value: boolean]
+    'update:likeCount': [ value: number ];
+    'update:isLike': [ value: boolean ]
 }>()
 // 是否显示用户卡片
 const showCard = ref(false)
@@ -197,9 +197,11 @@ defineOptions({
             position: relative;
             display: flex;
             align-items: center;
-            a{
-                margin-right:10px ;
+
+            a {
+                margin-right: 10px;
             }
+
             img {
                 border-radius: 50%;
                 width: 50px;
@@ -212,7 +214,8 @@ defineOptions({
         margin-left: 60px;
         cursor: pointer;
 
-        p {
+        pre {
+            font-family: v-sans, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
             word-break: break-all;
             margin-bottom: 15px;
         }
@@ -326,12 +329,14 @@ defineOptions({
     .comment-item-container {
         .header {
             .username {
-                a{
-                    span{
+                a {
+                    span {
                         font-size: 13px;
                     }
+
                     margin-right: 3px;
                 }
+
                 img {
                     width: 35px;
                     height: 35px;
@@ -341,6 +346,7 @@ defineOptions({
 
         .content {
             margin-left: 40px;
+
             .img-list {
                 display: flex;
                 flex-direction: column;

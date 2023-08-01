@@ -21,22 +21,23 @@
           </div>
           <div class="user-info">
             <div class="username">
-              <RouterLink class="mr-10" :to="`/user/${articleInfo.uid}`">
+              <RouterLink class="mr-10" :to="`/user/${ articleInfo.uid }`">
                 <img :src="articleInfo.user.avatar">
               </RouterLink>
-              <RouterLink class="text" :to="`/user/${articleInfo.uid}`">
+              <RouterLink class="text" :to="`/user/${ articleInfo.uid }`">
                 {{ articleInfo.user.username }}
               </RouterLink>
-              <BarRank class="ml-5" :level="articleInfo.user.bar_rank.level" :label="articleInfo.user.bar_rank.label"></BarRank>
+              <BarRank class="ml-5" :level="articleInfo.user.bar_rank.level" :label="articleInfo.user.bar_rank.label">
+              </BarRank>
             </div>
             <follow-btn :uid="articleInfo.user.uid" v-model:is-followed="articleInfo.user.is_followed"
               :is-fans="articleInfo.user.is_fans" size="small" />
           </div>
         </div>
         <div class="article-content mb-10">
-          <p class="mb-10">{{ articleInfo.content }}</p>
+          <MdPre class="mb-10" :value="articleInfo.content"/>
           <div class="img-container" v-if="articleInfo.photo !== null">
-            <img v-imgPre="item" v-lazyImg="item" v-for=" item  in articleInfo.photo">
+            <img v-imgPre="item" v-lazyImg="item" v-for="item in articleInfo.photo">
           </div>
         </div>
         <!-- <div class="tips sub-text">到底了</div> -->
@@ -61,7 +62,7 @@
           </auth-btn>
         </div>
         <div class="bar-info">
-          <RouterLink :to="`/bar/${articleInfo.bid}`">
+          <RouterLink :to="`/bar/${ articleInfo.bid }`">
             <img :src="articleInfo.bar.photo" class="mr-5">
             <span>
               {{ articleInfo.bar.bname }}吧
@@ -96,6 +97,7 @@ import { MdThumbsUp } from '@vicons/ionicons4'
 import Actions from './components/Actions.vue';
 import ArticelSkeleton from '@/components/skeleton/views/ArticleSkeleton.vue'
 import BarRank from '@/components/common/BarRank/index.vue'
+import MdPre from '@/components/common/MdPre/index.vue'
 
 const props = defineProps<{ aid: number }>()
 const articleInfo = ref<ArticleInfoResponse | null>(null)
@@ -106,13 +108,13 @@ const showAction = ref(false)
 
 
 // 获取帖子详情数据
-async function getData() {
+async function getData () {
   const res = await getArticleInfoAPI(props.aid)
   articleInfo.value = res.data
 }
 
 // 点赞或取消点赞帖子
-async function toLikeArticle() {
+async function toLikeArticle () {
   if (articleInfo.value) {
     likeIsLoading.value = true
     const res = articleInfo.value.is_liked ?
@@ -128,7 +130,7 @@ async function toLikeArticle() {
 }
 
 // 收藏或取消收藏帖子
-async function toStarArticle() {
+async function toStarArticle () {
   if (articleInfo.value) {
     starIsLoading.value = true
     const res = articleInfo.value.is_star ?
@@ -145,7 +147,7 @@ async function toStarArticle() {
 
 onMounted(() => {
 
-  function checkResize() {
+  function checkResize () {
     if (window.innerWidth > 650) {
       showAction.value = false
     } else {
@@ -199,16 +201,19 @@ defineOptions({
         align-items: center;
 
         .username {
-          display:flex;
+          display: flex;
           align-items: center;
-          .rank-info{
+
+          .rank-info {
             display: flex;
             align-items: center;
-            span{
-              color:var(--text-color-2);
+
+            span {
+              color: var(--text-color-2);
               font-size: 12px;
             }
           }
+
           img {
             cursor: pointer;
             border-radius: 50%;
@@ -220,8 +225,8 @@ defineOptions({
     }
 
     .article-content {
-      p {
-        text-indent: .5cm;
+      pre {
+        font-family: v-sans, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         word-break: break-all;
       }
 
@@ -234,7 +239,7 @@ defineOptions({
           width: 100%;
           height: 100%;
           max-height: 350px;
-          object-fit:cover;
+          object-fit: cover;
         }
       }
     }
@@ -375,5 +380,4 @@ defineOptions({
       }
     }
   }
-}
-</style>
+}</style>

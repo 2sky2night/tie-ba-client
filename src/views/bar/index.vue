@@ -24,7 +24,8 @@ const checkRoute = useCheckRoutes('bid')
 const bid = ref(checkRoute())
 
 // 路由更新的回调 获取最新的参数值
-onBeforeRouteUpdate(to => {
+onBeforeRouteUpdate((to, from) => {
+  if(to.params.bid===from.params.bid)return
   bid.value = checkRoute(to)
 })
 defineOptions({

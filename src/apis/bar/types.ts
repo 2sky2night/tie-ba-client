@@ -1,5 +1,77 @@
-import { UserBrieflyInfo } from '../public/types/user';
+import { UserBaseItem, UserBrieflyInfo } from '../public/types/user';
 import type { BarRankInfo } from '../public/bar/types';
+import type { BarBase, BarRank } from '../public/types/bar';
+
+
+/**
+ * 编辑吧的请求体
+ */
+export interface EditBarBody {
+  bid: number;
+  bname: string;
+  bdesc: string;
+  photo: string;
+}
+
+/**
+ * 编辑吧的请求体
+*/
+export interface EditBarRankRuleBody {
+  bid: number;
+  /**
+   * 等级头衔昵称列表
+  */
+  rankLableList: string[];
+}
+
+
+/**
+ * 吧等级规则项
+*/
+export interface BarRankItem {
+  /**
+   * 等级
+  */
+  level: number;
+  /**
+   * 等级昵称
+    */
+  label: string;
+  /**
+   * 对应所需的经验
+  */
+  score: number;
+}
+
+/**
+ * 吧等级排行项
+*/
+export interface BarRankingItem {
+  bar_rank: BarRank;
+  bid: number;
+  is_checked: number;
+  /**
+   * 该用户的排名
+   */
+  ranking: number;
+  score: number;
+  uid: number;
+  user: UserBaseItem;
+}
+
+/**
+ * 吧人数等级分布项
+ */
+export interface BarDistributionItem {
+  count: number;
+  /**
+   * 当前用户是否在这个分区
+   */
+  current_uid_in: boolean;
+  label: string;
+  level: number;
+}
+
 /**
  * 获取吧详情信息的响应结果
  */
@@ -28,13 +100,28 @@ export interface BarInfoResponse {
 }
 
 /**
- * 编辑吧的请求体
+ * 获取吧等级排行榜的响应结果
  */
-export interface EditBarBody {
-  bid: number;
-  bname: string;
-  bdesc: string;
-  photo: string;
+export interface BarRankingResponse {
+  desc: boolean;
+  has_more: boolean;
+  limit: number;
+  list: BarRankingItem[];
+  /**
+   * 当前用户的排名 未登录或未关注返回null
+   */
+  my_bar_rank_info: {
+    label: string;
+    level: number;
+    progress: number;
+    /**
+     * 我的排名
+     */
+    ranking: number;
+    score: number;
+  } | null;
+  offset: number;
+  total: number;
 }
 
 /**
@@ -78,35 +165,21 @@ export interface BarRankRuleResponse {
 }
 
 /**
- * 吧等级规则项
- */
-export interface BarRankItem {
-  /**
-   * 等级
-   */
-  level: number;
-  /**
-   * 等级昵称
-   */
-  label: string;
-  /**
-   * 对应所需的经验
-   */
-  score: number;
-}
-
-/**
- * 编辑吧的请求体
- */
-export interface EditBarRankRuleBody {
-  bid: number;
-  /**
-   * 等级头衔昵称列表
-   */
-  rankLableList: string[];
-}
-
-/**
  * 编辑吧等级的响应结果
- */
+*/
 export type EditBarRankResponse = null
+
+
+/**
+ * 吧等级分布的响应结果
+ */
+export interface BarDistributionResponse extends BarBase {
+  /**
+   * 分布数据
+   */
+  list: BarDistributionItem[];
+  /**
+   * 总共多少个人在此吧
+   */
+  total: number;
+}

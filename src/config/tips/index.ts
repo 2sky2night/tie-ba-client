@@ -48,5 +48,6 @@ export default {
   hasReplyPlaceholder: (name: string) => `回复@${ name }`,
   successSendReply: '发送回复成功!',
   successSignIn: '签到成功!',
-  successEditBarRankRule:'编辑吧等级头衔昵称成功!'
+  successEditBarRankRule: '编辑吧等级头衔昵称成功!',
+  levelUp:'恭喜您,升级了!'
 }

@@ -35,10 +35,10 @@
           <div class="user">
             <div class="username">
               <span class="mr-5">吧主</span>
-              <RouterLink :to="`/user/${barInfo.uid}`">
+              <RouterLink :to="`/user/${ barInfo.uid }`">
                 <img :src="barInfo.user.avatar" class="mr-5">
               </RouterLink>
-              <RouterLink :to="`/user/${barInfo.uid}`">
+              <RouterLink :to="`/user/${ barInfo.uid }`">
                 <span class="text">{{ barInfo.user.username }}</span>
               </RouterLink>
             </div>
@@ -80,7 +80,7 @@
         </div>
       </div>
     </template>
-    <BarSkeleton v-else></BarSkeleton>
+    <BarSkeleton class="mb-10" v-else></BarSkeleton>
   </div>
   <!--修改吧信息的模态框-->
   <Teleport to="body">
@@ -184,27 +184,27 @@ const formIns = ref<FormInst | null>(null)
 // 编辑的表单规则
 const rules: FormRules = {
   bname: {
-    validator(_, value: string) {
+    validator (_, value: string) {
       if (value.trim()) {
         return true
       } else {
         return new Error(tips.formNotEmpty('吧名'))
       }
     },
-    trigger: ['input', 'blur']
+    trigger: [ 'input', 'blur' ]
   },
   bdesc: {
-    validator(_, value: string) {
+    validator (_, value: string) {
       if (value.trim()) {
         return true
       } else {
         return new Error(tips.formNotEmpty('吧简介'))
       }
     },
-    trigger: ['input', 'blur']
+    trigger: [ 'input', 'blur' ]
   },
   photo: {
-    validator(_, value: string) {
+    validator (_, value: string) {
       if (value.trim()) {
         return true
       } else {
@@ -238,11 +238,11 @@ const currentExp = computed(() => {
   if (barInfo.value && barInfo.value.my_bar_rank) {
     if (barInfo.value.my_bar_rank.score === 0) {
       // 若用户经验为0
-      return `${barInfo.value.my_bar_rank.score} / 15 `
+      return `${ barInfo.value.my_bar_rank.score } / 15 `
     } else if (barInfo.value.my_bar_rank.score >= 20000) {
-      return `${barInfo.value.my_bar_rank.score} / 0`
+      return `${ barInfo.value.my_bar_rank.score } / 0`
     } else {
-      return `${barInfo.value.my_bar_rank.score} / ${Math.round(barInfo.value.my_bar_rank.score / barInfo.value.my_bar_rank.progress)}`
+      return `${ barInfo.value.my_bar_rank.score } / ${ Math.round(barInfo.value.my_bar_rank.score / barInfo.value.my_bar_rank.progress) }`
     }
   } else {
     return null
@@ -250,7 +250,7 @@ const currentExp = computed(() => {
 })
 
 // 获取吧的信息
-async function getBarData() {
+async function getBarData () {
   const res = await getBarInfoAPI(props.bid)
   barInfo.value = res.data
   model.bdesc = res.data.bdesc
@@ -275,7 +275,7 @@ const onHandleFollowBar = async (v: boolean) => {
 
     (barInfo.value as BarInfoResponse).my_bar_rank = {
       // 获取一级的吧等级头衔
-      label: res.data.rank_rules[0].label,
+      label: res.data.rank_rules[ 0 ].label,
       level: 1,
       score: 0,
       progress: 0
@@ -341,18 +341,24 @@ const onHandleSubmitEdit = async () => {
 const onHandleSignInBar = async () => {
   const res = await signInBarAPI(props.bid);
   if (barInfo.value && barInfo.value.my_bar_rank) {
+    if (res.data.level > barInfo.value.my_bar_rank.level) {
+      // 升级了
+      message.success(tips.levelUp)
+    } else {
+      // 签到成功
+      message.success(tips.successSignIn)
+    }
     barInfo.value.is_checked = true;
     barInfo.value.my_bar_rank.progress = res.data.progress
     barInfo.value.my_bar_rank.level = res.data.level
     barInfo.value.my_bar_rank.score = res.data.score
     barInfo.value.my_bar_rank.label = res.data.label
   }
-  message.success(tips.successSignIn)
 }
 // 若吧主修改了吧头衔信息 需要同步更新当前等级信息
 PubSub.subscribe('updateRank', (_, list: BarRankItem[]) => {
   if (barInfo.value && barInfo.value.my_bar_rank) {
-    barInfo.value.my_bar_rank.label = list[barInfo.value.my_bar_rank.level - 1].label
+    barInfo.value.my_bar_rank.label = list[ barInfo.value.my_bar_rank.level - 1 ].label
   }
 })
 

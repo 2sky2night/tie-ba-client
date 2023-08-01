@@ -1,9 +1,9 @@
 <template>
-  <div class="reply-item" :class="{active}">
+  <div class="reply-item" :class="{ active }">
     <div class="header mb-5">
       <div class="user">
         <img class="mr-5" v-lazyImg="reply.user.avatar">
-        <span class="username text" @click.stop="()=>onHandleGoUser(reply.uid)">{{ reply.user.username }}</span>
+        <span class="username text" @click.stop="() => onHandleGoUser(reply.uid)">{{ reply.user.username }}</span>
         <BarRank class="ml-5" :label="reply.user.bar_rank.label" :level="reply.user.bar_rank.level"></BarRank>
       </div>
       <div class="btn" @click.stop="">
@@ -19,15 +19,15 @@
       </div>
       <span v-if="reply.type === 2 && reply.reply">
         <span>回复</span>
-        <span class="username text" @click.stop="()=>onHandleGoUser(reply.reply?.uid as number)">
+        <span class="username text" @click.stop="() => onHandleGoUser(reply.reply?.uid as number)">
           @{{ reply.reply.user.username }}
         </span>
         :
       </span>
-      <span>{{ reply.content }}</span>
+      <pre>{{ reply.content }}</pre>
       <div class="reply-reply" v-if="reply.type === 2 && reply.reply">
         <span class="user">{{ reply.reply.user.username }}</span>:
-        <span>{{ reply.reply.content}}</span>
+        <span>{{ reply.reply.content }}</span>
       </div>
     </div>
   </div>
@@ -113,7 +113,7 @@ const toLikeReply = async () => {
 }
 
 // 点击进入回复人的用户页
-const onHandleGoUser = (uid:number) => {
+const onHandleGoUser = (uid: number) => {
   onHandleToClose && onHandleToClose()
   router.push(`/user/${ uid }`)
 }
@@ -137,9 +137,11 @@ defineOptions({
   border-radius: 5px;
   transition: var(--time-normal);
   cursor: pointer;
-  &.active{
+
+  &.active {
     background-color: var(--bg-color-5);
   }
+
   .header {
     display: flex;
     justify-content: space-between;
@@ -164,6 +166,7 @@ defineOptions({
 
     .user {
       display: flex;
+
       img {
         width: 30px;
         height: 30px;
@@ -182,11 +185,18 @@ defineOptions({
     padding-top: 10px;
     font-size: 13px;
     position: relative;
-    .reply-reply{
+
+    pre {
+      display: inline-block;
+      font-family: v-sans, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    }
+
+    .reply-reply {
       background-color: var(--bg-color-3);
       padding: 10px;
       border-radius: 10px;
     }
+
     .times {
       color: var(--text-color-2);
       font-size: 12px;
@@ -195,5 +205,4 @@ defineOptions({
       left: 35px;
     }
   }
-}
-</style>
+}</style>
