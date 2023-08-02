@@ -73,7 +73,7 @@ const goNavToBar = () => [
         img {
             position: relative;
             top: -5px;
-            width: 50px;
+            min-width: 50px;
             height: 50px;
         }
 

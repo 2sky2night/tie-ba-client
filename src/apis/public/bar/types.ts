@@ -1,3 +1,5 @@
+import type { BarBase } from '../types/bar';
+import type { UserBaseItem } from '../types/user';
 /**
  * 关注吧的响应结果
  */
@@ -28,4 +30,14 @@ export interface BarRankInfo {
    * 签到得分
    */
   score: number;
+}
+
+/**
+ * 获取吧简要信息
+ */
+export interface BarBrieflyResponse extends BarBase {
+  is_followed: boolean,
+  article_count: number,
+  followCount: number,
+  user: UserBaseItem
 }

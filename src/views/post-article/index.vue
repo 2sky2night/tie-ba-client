@@ -34,6 +34,7 @@ import type { FormRules, FormInst } from 'naive-ui';
 import { reactive, ref } from 'vue'
 import useNavigation from '@/hooks/useNavigation';
 import { useMessage } from 'naive-ui';
+import { onBeforeRouteLeave } from 'vue-router'
 // apis
 import { postArticleAPI } from '@/apis/post-article';
 // configs
@@ -42,6 +43,7 @@ import tips from '@/config/tips';
 import BarSelect from './components/BarSelect.vue'
 import UploadImg from './components/UploadImg.vue';
 import MdEdit from '@/components/common/MdEdit/index.vue'
+import asyncDialog from '@/render/modal/dialog';
 
 // 表单实例
 const formIns = ref<FormInst | null>(null)
@@ -141,6 +143,15 @@ const onHandleSubmit = async () => {
 
 }
 
+// // 离开页面时的提示
+// onBeforeRouteLeave(async(_to,_from,next) => {
+//   try {
+//     await asyncDialog('提示', '是否离开该页面? (注意:所填写的内容不会被保存!)')
+//     next()
+//   } catch (error) {
+//     next(false)
+//   }
+// })
 
 defineOptions({
   name: 'PostArticle'

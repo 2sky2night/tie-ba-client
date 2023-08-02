@@ -4,7 +4,7 @@
       <div class="list" v-if="list.length">
         <div class="item" :class="{ 'active': selectUser === item.uid }" @click="() => onHandleSelectUser(item.uid)"
           v-for="item in list" :key="item.uid">
-          <img draggable="false" :src="item.avatar">
+          <img draggable="false" :src="'http://127.0.0.1:3000'+item.avatar">
         </div>
       </div>
       <div class="empty" v-else>
@@ -80,9 +80,9 @@ const onHandleDown = (event: MouseEvent) => {
     // 获取鼠标移动时的坐标
     const moveX = e.pageX
     if (moveX < downX) {
-      target.scroll({ left: target.scrollLeft + 5 })
+      target.scroll({ left: target.scrollLeft + 10 })
     } else {
-      target.scroll({ left: target.scrollLeft - 5 })
+      target.scroll({ left: target.scrollLeft - 10 })
     }
   }
 
@@ -137,7 +137,9 @@ onBeforeMount(async () => {
         cursor: pointer;
         padding: 5px;
         &.active {
-          background-color: var(--bg-color-3);
+          // 激活选择的用户后 执行一段动画
+          animation: onSelect 1 var(--time-normal) ease;
+          background-color: var(--bg-color-2);
         }
 
         &:not(:last-child) {
@@ -151,6 +153,17 @@ onBeforeMount(async () => {
         }
       }
     }
+  }
+}
+@keyframes  onSelect {
+  from{
+    transform: scale(.8); 
+  }
+  50%{
+    transform: scale(1.2);
+  }
+  to{
+    transform: none;
   }
 }
 </style>

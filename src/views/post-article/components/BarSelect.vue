@@ -1,6 +1,6 @@
 <template>
   <div class="bar-select-container">
-    <n-input :value="`${ select?currentBarLabel+'吧':'未选择' }`"></n-input>
+    <n-input :value="`${ select ? currentBarLabel + '吧' : '未选择' }`"></n-input>
     <n-button class="ml-10" type="primary" @click="onHandleOpen">选择</n-button>
   </div>
   <Teleport to="body">
@@ -20,7 +20,7 @@
           <div ref="listDOM" class="select-container">
             <div class="list">
               <div @click="() => onHandleSelect(item.bid)" :class="{ 'active': item.bid === currentBid }" class="item"
-                v-for="item in list" :key="item.bid">
+                v-for="     item      in list" :key="item.bid">
                 <span>
                   {{ item.bname }}
                 </span>
@@ -31,6 +31,10 @@
               </div>
             </div>
           </div>
+          <div class="switch mt-10">
+            <span class="sub-text mr-5">只看关注的吧</span>
+            <n-switch :loading="isLoading" v-model:value="type" @update:value="onHandleTypeChange"></n-switch>
+          </div>
         </div>
       </div>
     </Transition>
@@ -40,11 +44,23 @@
 <script lang='ts' setup>
 // apis
 import { getUserFollowBarListAPI, getAllBarListAPI } from '@/apis/post-article';
+import { getBarBriefly } from '@/apis/public/bar'
 // types 
 import type { BarBase } from '@/apis/public/types/bar';
+import type { NavigationGuardNext } from 'vue-router'
 // hooks
-import { reactive, computed, ref, onMounted, onBeforeUnmount } from 'vue'
+import { reactive, computed, ref, onMounted, onBeforeUnmount, onBeforeMount } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+// utils
+import { formatNumber } from '@/utils/tools'
+import { onBeforeRouteUpdate } from 'vue-router';
 
+// 是否只看关注的吧
+const type = ref(false)
+// 路由对象
+const router = useRouter()
+// 路由元信息
+const route = useRoute()
 // 吧列表容器的DOM
 const listDOM = ref<HTMLDivElement | null>(null)
 // 吧列表
@@ -61,7 +77,7 @@ const props = defineProps<{
 }>()
 // emit
 const emit = defineEmits<{
-  'update:select': [ value: number|null ]
+  'update:select': [ value: number | null ]
 }>()
 // 格式化当前选择的吧
 const currentBarLabel = computed(() => {
@@ -86,13 +102,20 @@ const isLoading = ref(false)
 // 获取数据的api
 const getListData = async () => {
   isLoading.value = true
-  const res = await getAllBarListAPI(pagination.page, pagination.pageSize, true)
-  res.data.list.forEach(ele => list.push(ele))
+  const res = type.value ? await getUserFollowBarListAPI(pagination.page, pagination.pageSize, true) : await getAllBarListAPI(pagination.page, pagination.pageSize, true)
+  if (currentBid.value === null) {
+    // 当前未选择吧时 无需去重
+    res.data.list.forEach(ele => list.push(ele))
+  } else {
+    setTimeout(() => {
+      // 当前选择了吧 需要对请求来的数据进行去重
+      res.data.list.filter(ele => !list.some(bar => bar.bid === ele.bid)).forEach(ele => list.push(ele))
+    })
+  }
   pagination.total = res.data.total
   isLoading.value = false
   return res.data.has_more
 }
-
 // 取消模态框的回调
 const onHandleCancel = () => {
   showModal.value = false
@@ -137,9 +160,60 @@ const removeScrollListener = () => {
 // 重置当前选择的吧
 const onHandleReset = () => {
   emit('update:select', null)
-  currentBid.value=null
+  currentBid.value = null
+}
+// 路由更新时解析query参数
+const onParseRouteQuery = async (currentRoute = route, next?: NavigationGuardNext) => {
+  if (currentRoute.query.bid === undefined) {
+    // 未携带bid参数 
+    onHandleReset()
+  } else {
+    // 携带了 需要检测bid参数
+    const bid = formatNumber(currentRoute.query.bid as string)
+    if (bid === false) {
+      // bid不为数字 重置为null
+      onHandleReset()
+      if (next) {
+        next({ replace: true, ...currentRoute, query: { ...currentRoute.query } })
+      } else {
+        router.replace({ ...currentRoute, query: { ...currentRoute.query } })
+      }
+    } else {
+      // bid为数字 需要发送请求获取吧的数据
+      const res = await getBarBriefly(bid)
+      // 请求成功 将吧记录在列表中 且选中
+      list.unshift(res.data)
+      currentBid.value = res.data.bid
+      emit('update:select', res.data.bid)
+    }
+  }
+}
+// 是否只看关注的吧更新
+const onHandleTypeChange = async () => {
+  // 移除滚动监听
+  removeScrollListener()
+  // 重置选择的吧
+  onHandleReset()
+  // 重置页码
+  pagination.page = 1;
+  // 重置列表
+  list.length = 0;
+  // 获取数据
+  const hasMore = await getListData()
+  if (hasMore) {
+    console.log('绑定事件监听');
+    const dom = listDOM.value as HTMLDivElement
+    // 添加事件监听
+    dom.addEventListener('scroll', onHandleScroll)
+  }
 }
 
+// 解析路由解析出query中的bid
+onBeforeMount(onParseRouteQuery)
+// 路由更新时的回调
+onBeforeRouteUpdate((to, _from, next) => {
+  onParseRouteQuery(to, next)
+})
 // 初始化获取数据 并添加滚动事件监听
 onMounted(async () => {
   const dom = listDOM.value as HTMLDivElement
@@ -148,6 +222,7 @@ onMounted(async () => {
   const hasMore = await getListData()
   // 根据结果来移除滚动事件监听
   if (hasMore === false) {
+    console.log('绑定事件监听');
     removeScrollListener()
   }
 })
@@ -185,6 +260,17 @@ defineExpose({
     width: 500px;
     display: flex;
     flex-direction: column;
+
+    .switch {
+      align-self: end;
+      display: flex;
+      align-items: center;
+
+      span {
+        position: relative;
+        top: 1px;
+      }
+    }
 
     .spin {
       padding: 20px 0;
@@ -224,6 +310,7 @@ defineExpose({
           border-radius: 5px;
           cursor: pointer;
           position: relative;
+
           &:not(:last-child) {
             margin-bottom: 5px;
           }
@@ -232,7 +319,8 @@ defineExpose({
           &:hover {
             background-color: var(--bg-color-4);
           }
-          &.active::after{
+
+          &.active::after {
             content: '√';
             position: absolute;
             right: 10px;
@@ -260,6 +348,7 @@ defineExpose({
       width: 100%;
       background-color: var(--bg-color-2);
       padding: 0;
+
       .page-title {
         display: flex;
         align-items: center;
